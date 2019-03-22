@@ -1,12 +1,24 @@
 Package: SNS
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Sequential Normal Scores in Statistical Process Management
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(person("Victor", "Tercero", email = "victor.tercero@tec.mx", role=c("aut")),
+  person("Luis", "Benavides", email = "luisbv@tec.mx", role = c("aut", "cre")))
+Author: Victor Tercero [aut],
+  Luis Benavides [aut, cre]
+Maintainer: Luis Benavides <luisbv@tec.mx>
+Description: The methods discussed in this paper are new nonparametric methods
+  based on sequential normal scores (SNS), designed for sequences of observations,
+  usually time series data, which may occur singly or in batches, and may be univariate
+  or multivariate. These methods are designed to detect changes in the process,
+  which may occur as changes in location (mean or median), changes in scale
+  (standard deviation, or variance), or other changes of interest in the distribution
+  of the observations, over the time observed. They usually apply to large data sets,
+  so computations need to be simple enough to be done in a reasonable time on a computer,
+  and easily updated as each new observation (or batch of observations) becomes available.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0.9000
+RoxygenNote: 6.1.1
+Imports: 
+    parallel

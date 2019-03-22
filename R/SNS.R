@@ -1,77 +1,63 @@
-#####################################################################################
-#
-#     SEQUENTIAL NORMAL SCORES
-#
-#     Authors:  Dr. Victor G. Tercero-Gomez
-#               Dr. Luis A. Benavices-Vazquez
-#     Affiliation: Tecnologico de Monterrey
-#
-#     Date: August 23, 2018
-#     Version: 1.0
-#
-#     DESCRIPTION
-#
-#     Transform a vector X into SNS using initial observations Y if available
-#     SNS follow the order of X.
-#     Procedure follows Conover et al. (2017)
-#
-#     Function requires NS, NS1 and NS2 to work.
-#
-#     X: is a numerical vector.
-#     Y: is a numerical vector. Y = NULL if undefined.
-#     theta: is a constant
-#     Ftheta: is a constant between (0,1)
-#
-#     COMMENTS
-#
-#     If ties, average ranks are used.
-#     If Y = NULL, normal scores are set relative to X.
-#
-#     EXAMPLE CONDITIONAL WITH REFERENCE SAMPLE
-#
-#     Y = c(10,20,30,40,50,60,70,80,90,100)
-#     X = c(30, 35, 45)
-#     theta = 40
-#     Ftheta = 0.5
-#     sample.id = c("a", "b", "c")
-#     > SNS(X=X, sample.id=sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-#     [1] -0.52440051 -0.31863936  0.08964235
-#
-#     EXAMPLE UNCONDITIONAL WITH REFERENCE SAMPLE
-#
-#     Y = c(10,20,30,40,50,60,70,80,90,100)
-#     X = c(30, 35, 45)
-#     theta = NULL
-#     Ftheta = NULL
-#     sample.id = c("a", "b", "c")
-#     > SNS(X=X, sample.id=sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-#     [1] -0.6045853 -0.3186394  0.0000000
-#
-#     EXAMPLE CONDITIONAL WITHOUT REFERENCE SAMPLE
-#
-#     Y = NULL#c(10,20,30,40,50,60,70,80,90,100)
-#     X = c(30, 35, 45)
-#     theta = 40
-#     Ftheta = 0.5
-#     sample.id = c("a", "b", "c")
-#     > SNS(X=X, sample.id=sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-#     [1] -0.6744898 -0.3186394  0.6744898
-#
-#     EXAMPLE UNCONDITIONAL WITHOUT REFERENCE SAMPLE
-#
-#     Y = NULL
-#     X = c(30, 35, 45)
-#     theta = NULL
-#     Ftheta = NULL
-#     sample.id = c("a", "b", "c")
-#     > SNS(X=X, sample.id=sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-#     [1] 0.0000000 0.6744898 0.9674216
-#
-#     References
-#     Conover, W. J., Tercero-Gomez, V. G., & Cordero-Franco, A. E. (2017).
-#     The sequential normal scores transformation. Sequential Analysis, 36(3), 397-414.
+#' Sequential normal scores
+#'
+#' Transform a vector X into SNS using initial observations Y if available
+#' SNS follow the order of X.
+#'
+#' If ties, average ranks are used.
+#' If Y = NULL, normal scores are set relative to X.
+#'
+#' @param X is a numerical vector.
+#' @param Y is a numerical vector. Y = NULL if undefined.
+#' @param theta is a constant
+#' @param Ftheta is a constant between (0,1)
+#' @param X.id is the id of the vector X
+#' @export
+#' @examples
+#' #EXAMPLE CONDITIONAL WITH REFERENCE SAMPLE
+#' Y = c(10,20,30,40,50,60,70,80,90,100)
+#' X = c(30, 35, 45)
+#' theta = 40
+#' Ftheta = 0.5
+#' sample.id = c("a", "b", "c")
+#' SNS(X=X, X.id=sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
+#' #[1] -0.52440051 -0.31863936  0.08964235
+#'
+#' #EXAMPLE CONDITIONAL WITH REFERENCE SAMPLE
+#' Y = c(10,20,30,40,50,60,70,80,90,100)
+#' X = c(30, 35, 45)
+#' theta = 40
+#' Ftheta = 0.5
+#' sample.id = c("a", "b", "c")
+#' SNS(X=X, X.id=sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
+#' #[1] -0.52440051 -0.31863936  0.08964235
+#'
+#' #EXAMPLE UNCONDITIONAL WITH REFERENCE SAMPLE
+#' Y = c(10,20,30,40,50,60,70,80,90,100)
+#' X = c(30, 35, 45)
+#' theta = NULL
+#' Ftheta = NULL
+#' sample.id = c("a", "b", "c")
+#' SNS(X=X, X.id=sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
+#' #[1] -0.6045853 -0.3186394  0.0000000
+#'
+#' #EXAMPLE CONDITIONAL WITHOUT REFERENCE SAMPLE
+#' Y = NULL#c(10,20,30,40,50,60,70,80,90,100)
+#' X = c(30, 35, 45)
+#' theta = 40
+#' Ftheta = 0.5
+#' sample.id = c("a", "b", "c")
+#' SNS(X=X, X.id=sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
+#' #[1] -0.6744898 -0.3186394  0.6744898
+#'
+#' #EXAMPLE UNCONDITIONAL WITHOUT REFERENCE SAMPLE
+#' Y = NULL
+#' X = c(30, 35, 45)
+#' theta = NULL
+#' Ftheta = NULL
+#' sample.id = c("a", "b", "c")
+#' SNS(X=X, X.id=sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
+#' #[1] 0.0000000 0.6744898 0.9674216
 
-source("NS.r")
 SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL){
   o.id = unique(X.id)#originalid
   if(is.null(theta) != is.null(Ftheta)){ #in case one is NULL and not the other
@@ -114,32 +100,6 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL){
       i = i + 1 #continue with the next group
     }
   }
-
-  UCL = 3/sqrt(n)
-  LCL = -UCL
-  par(mar = c(6,6,4,2))
-
-  difMaxZ = abs(max(z) - UCL)
-  difMinZ = abs(min(z) - LCL)
-
-  ymax = UCL
-  if(difMaxZ > difMinZ){
-    ymax = ymax + difMaxZ
-  }else{
-    ymax = ymax + difMinZ
-  }
-  ymin = - ymax
-  print(o.id)
-  plot(o.id, z, pch=19, ylim=c(ymin, ymax), xlab = "Sample",ylab="Mean SNS",cex.lab=2.5, cex.axis=1.5, cex=2)
-  lines(o.id, z, lt=2, lwd=3)
-
-  change = 1
-  if(o.id[1] > o.id[length(o.id)]){
-    change = -1
-  }
-
-  lines(c(o.id[1]-10*change,o.id,o.id[length(o.id)]+10*change), rep(UCL,length(groups)+2),lt=4, lwd=3)
-  lines(c(o.id[1]-10*change,o.id,o.id[length(o.id)]+10*change), rep(LCL,length(groups)+2),lt=4, lwd=3)
 
   return(z) # return the sequential normal score
 }

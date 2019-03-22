@@ -1,6 +1,4 @@
-source("ARL.r")
-
-calibrateARL <- function(targetARL=NULL, targetMRL=NULL, n, m, theta=NULL, Ftheta=NULL, dist, mu, sigma, dist.par=c(0, 1, 1), initial.par, replicates=50000, chart, progress=FALSE, parallel=FALSE, maxIter=20){
+calibrateControlLimit <- function(targetARL=NULL, targetMRL=NULL, n, m, theta=NULL, Ftheta=NULL, dist, mu, sigma, dist.par=c(0, 1, 1), initial.par, replicates=50000, chart, progress=FALSE, parallel=FALSE, maxIter=20){
   #Check for errors
   if(is.null(targetARL) && is.null(targetMRL)){
     print("ERROR: Target ARL or target mRL missing")
