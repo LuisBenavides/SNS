@@ -2,3 +2,10 @@
 
 export(NS)
 export(SNS)
+export(calibrateControlLimit)
+export(dataAlignment)
+export(getARL)
+export(getDist)
+export(getRL)
+import(parallel)
+import(stats)
