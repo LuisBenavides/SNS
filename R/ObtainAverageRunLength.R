@@ -1,0 +1,234 @@
+#' @title Run Length (RL)
+#' @description Get the rung length
+#' @inheritParams getDist
+#' @inheritParams NS
+#' @param replica is a numeric value. It is used for the parallel version of the function, it is set to 1 by default.
+#' @param n is the subroup size
+#' @param m is the reference sample size
+#' @param chart is the selected type of chart. Three options are available: Shewhart, CUSUM, EWMA
+#' @param chart.par is a vector of one, or two elements depending
+#' on the chart selected:
+#' \describe{
+#'   \item{For Shewhart scheme}{is c(k), where k comes from \eqn{UCL = mu + k*sigma, LCL = mu - k*sigma.}}
+#'   \item{For CUSUM scheme}{is c(k, h, t) where k is the reference value and h is the control limit,
+#'   and t is the type of the chart (1:positive, 2:negative, 3:two sides)}
+#'   \item{For EWMA scheme}{is c(lambda, L), where lambda is the smoothing constant
+#'   and L multiplies standard deviation to get the control limit}
+#' }
+#' @param calibrate is a boolean. If is TRUE the RL is limit to 10 times the target ARL
+#' @param arl0 is a numeric value. Is the expected value of the RL, by default is set to 370
+#' @export
+#' @import stats
+#' @examples
+#' n <- 5 # subgroup size
+#' m <- 100 # reference-sample size
+#' dist <- "Normal"
+#' mu <- c(0, 0) # c(reference sample mean, monitoring sample mean)
+#' sigma <- c(1, 1) # c(reference sample sd, monitoring sample sd)
+#'
+#' #### Distribution parameters
+#' dist.par <- c(0, 1, 1) # c(location, scale, shape)
+#'
+#' #### Other Parameters
+#' replicates <- 2
+#' print.RL <- TRUE
+#' calibrate <- FALSE
+#' progress <- TRUE
+#' arl0 <- 370
+#'
+#' #### Control chart parameters
+#' chart <- "Shewhart"
+#' chart.par <- c(3)
+#' shewhart <- getRL(1, n, m,
+#'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
+#'   chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0
+#' )
+#'
+#' chart <- "CUSUM"
+#' chart.par <- c(0.25, 4.4181, 3)
+#' cusum <- getRL(1, n, m,
+#'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
+#'   chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0
+#' )
+#'
+#' chart <- "EWMA"
+#' chart.par <- c(0.2, 2.962)
+#' shewhart <- getRL(1, n, m,
+#'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
+#'   chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0
+#' )
+getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par, chart, chart.par, calibrate = FALSE, arl0 = 370, alignment = "unadjusted", constant = NULL) {
+  # initilize the reference sample
+  Y <- NULL
+  if (m > 0) { # if there are reference sample
+    # generate the reference sample
+    Y <- getDist(n = m, dist = dist, mu = mu[1], stdev = sigma[1], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
+  }
+  RL <- 0
+  in.Control <- TRUE
+
+  switch(chart,
+    Shewhart = {
+      k <- chart.par[1]
+    },
+    CUSUM = {
+      k <- chart.par[1]
+      h <- chart.par[2]
+      type <- chart.par[3]
+      Cplus <- 0
+      Cminus <- 0
+    },
+    EWMA = {
+      lambda <- chart.par[1]
+      L <- chart.par[2]
+      E <- 0
+    }
+  )
+
+  while (in.Control) {
+    # add one iteration to run length
+    RL <- RL + 1
+
+    # generate the subgroup to monitor
+    X <- getDist(n = n, dist = dist, mu = mu[2], stdev = sigma[2], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
+
+    # get the normal scores
+    Z <- NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
+    Z <- mean(Z)
+
+    # if the subgroup is out of the limits
+    # an alarm is detected
+    switch(chart,
+      Shewhart = {
+        # if the subgroup is out of the limits an alarm is detected
+        if (abs(Z) >= k / sqrt(n)) in.Control <- FALSE
+      },
+      CUSUM = {
+        switch(type,
+          "1" = {
+            Cplus <- max(c(0, Cplus + Z * sqrt(n) - k))
+          },
+          "2" = {
+            Cminus <- min(c(0, Cminus + Z * sqrt(n) + k))
+          },
+          "3" = {
+            Cplus <- max(c(0, Cplus + Z * sqrt(n) - k))
+            Cminus <- min(c(0, Cminus + Z * sqrt(n) + k))
+          }
+        )
+
+        if (Cplus >= h || Cminus <= -h) in.Control <- FALSE
+      },
+      EWMA = {
+        E <- lambda * Z + (1 - lambda) * E
+
+        UCL <- L / sqrt(n) * sqrt(lambda / (2 - lambda) * (1 - (1 - lambda)^(2 * RL)))
+        # LCL = - UCL
+
+        if (abs(E) >= UCL) in.Control <- FALSE
+      }
+    )
+
+    if (calibrate) if (RL >= arl0 * 10) in.Control <- FALSE
+    if (RL >= arl0 * 1000) in.Control <- FALSE
+
+    # update the reference sample
+    Y <- c(Y, X)
+  }
+  return(RL)
+}
+
+#' @title Average Run Length (ARL)
+#' @description Get the ARL \code{\link{getRL}}
+#' @inheritParams getRL
+#' @param print.RL is boolean. If set TRUE the function getARLSNS return the vectors of RL for each iteration
+#' @param replicates is a numeric and represent the number of replicates to get the ARL
+#' @param progress is a boolean. If TRUE it shows the progress of the calibration in the console.
+#' @param isParallel is a boolean. If is TRUE the code runs in parallel according to the
+#' number of cores in the computer,otherwise the code runs sequentially. By default is set to TRUE
+
+#' @export
+#' @import parallel
+#' @import stats
+#' @examples
+#' n <- 5 # subgroup size
+#' m <- 100 # reference-sample size
+#' dist <- "Normal"
+#' mu <- c(0, 0) # c(reference sample mean, monitoring sample mean)
+#' sigma <- c(1, 1) # c(reference sample sd, monitoring sample sd)
+#'
+#' #### Distribution parameters
+#' dist.par <- c(0, 1, 1) # c(location, scale, shape)
+#'
+#' #### Other Parameters
+#' replicates <- 2
+#' print.RL <- TRUE
+#' isParallel <- FALSE
+#' calibrate <- FALSE
+#' progress <- TRUE
+#' arl0 <- 370
+#'
+#' #### Control chart parameters
+#' chart <- "Shewhart"
+#' chart.par <- c(3)
+#' shewhart <- getARL(n, m,
+#'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
+#'   chart = chart, chart.par = chart.par, print.RL = print.RL, replicates = replicates, isParallel = isParallel,
+#'   calibrate = calibrate, arl0 = arl0
+#' )
+#'
+#' chart <- "CUSUM"
+#' chart.par <- c(0.25, 4.4181, 3)
+#' cusum <- getARL(n, m,
+#'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
+#'   chart = chart, chart.par = chart.par, print.RL = print.RL, replicates = replicates, isParallel = isParallel,
+#'   calibrate = calibrate, arl0 = arl0
+#' )
+#'
+#' chart <- "EWMA"
+#' chart.par <- c(0.2, 2.962)
+#' shewhart <- getARL(n, m,
+#'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
+#'   chart = chart, chart.par = chart.par, print.RL = print.RL, replicates = replicates, isParallel = isParallel,
+#'   calibrate = calibrate, arl0 = arl0
+#' )
+getARL <- function(n, m, theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = c(0, 1, 1), chart.par, print.RL = FALSE, replicates = 10000, chart, progress = FALSE, isParallel = TRUE, calibrate = FALSE, arl0 = 370) {
+  RLs <- NULL
+  if (isParallel) {
+    cluster <- makeCluster(detectCores() - 1)
+    clusterExport(cluster, "NS")
+    clusterExport(cluster, "getDist")
+    clusterExport(cluster, "getRL")
+    RLs <- parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370)
+    stopCluster(cluster)
+  } else {
+    t0 <- Sys.time()
+    for (r in 1:replicates) {
+      RL <- getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370)
+
+      RLs <- c(RLs, RL)
+
+      # print out progress
+      if (progress) { # if is TRUE
+        if (r %% 10 == 0) { # every 10 replicates
+          t1 <- Sys.time()
+          remaining.iterations <- replicates - r
+          remaining.time <- remaining.iterations * difftime(t1, t0, units = "min") / r
+          cat("ARL", round(mean(RLs), digits = 1), "-- SDRL", round(sd(RLs), digits = 1), "--> Time remaining", remaining.time, "in minutes to complete", remaining.iterations, "iterations", "\n", sep = " ")
+        }
+      }
+    }
+  }
+
+  output <- list(
+    ARL = mean(RLs),
+    SDRL = sd(RLs),
+    MRL = median(RLs),
+    QRL = quantile(x = RLs, probs = c(0.05, 0.1, 0.2, 0.25, 0.5, 0.75, 0.8, 0.9, 0.95), names = TRUE, type = 3)
+  )
+  if (print.RL) output$RL <- RLs
+
+  if (progress) cat("Final ARL", round(mean(RLs), digits = 1), "-- SDRL", round(sd(RLs), digits = 1), "\n", "See output variable for more.\n\n", sep = " ")
+
+  return(output)
+}
