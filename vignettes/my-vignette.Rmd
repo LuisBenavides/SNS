@@ -25,7 +25,6 @@ Load package and get dataset from Example 8.2 \code{example82}.
 
 ```{r, echo=TRUE, results='asis'}
 library("SNS")
-load_all()
 X = example82$X #get the dataset into a data frame
 X.id = example82$X.id
 ```
@@ -35,9 +34,9 @@ knitr::kable(head(example82, 10))
 ```
 
 ```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
-Z = SNS(X=X,X.id=X.id) #get the sns of the dataset
-print(Z)
-plot(Z) #finally plot the sns
+s = SNS(X=X,X.id=X.id) #get the sns of the dataset
+print(s)
+plot(s) #finally plot the sns
 ```
 
 
