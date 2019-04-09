@@ -2,43 +2,52 @@
 % Please edit documentation in R/RandomNumberGenerator.R
 \name{getDist}
 \alias{getDist}
-\title{Random variate generetor}
+\title{Random Observations Generetor}
 \usage{
-getDist(n, dist, mu, stdev, par.location = 0, par.scale = 1,
+getDist(n, dist, mu, sigma, par.location = 0, par.scale = 1,
   par.shape = 1)
 }
 \arguments{
-\item{n}{is a scalar. Indicates how many random variables to be generated}
+\item{n}{scalar. Number of observations to be generated.}
 
-\item{dist}{is a vector of characters. Choose one type:
-"Normal":     Normal distribution. (Default)
-"DoubleExp":  Double exponential distribution (also known as Laplace distribution).
-"DoubleExp2": Double exponential squared distribution from a DoubleExp(0,1).
-"LogNormal":  Lognormal distribution.
-"Gamma":      Gamma distribution.
-"Weibull":    Weibull distribution}
+\item{dist}{character string. Select from:
+\itemize{
+  \item{"Normal": Normal distribution (default).}
+  \item{"DoubleExp": Double exponential distribution (also known as Laplace distribution).}
+  \item{"DoubleExp2": Double exponential squared distribution from a \code{DoubleExp(0,1)}.}
+  \item{"LogNormal": Lognormal distribution.}
+  \item{"Gamma": Gamma distribution.}
+  \item{"Weibull": Weibull distribution.}
+}}
 
-\item{mu}{user defined expected value.}
+\item{mu}{scalar. Expected value of the desired distribution.}
 
-\item{stdev}{user defined standard deviation.}
+\item{sigma}{scalar. Standard deviation of the desired distribution.}
 
-\item{par.location}{scalar, location parameter, by defaoult is 0**.}
+\item{par.location}{scalar. Location parameter of the desired distribution. Default 0**.}
 
-\item{par.scale}{scalar, scale parameter, by defaoult is 1**.}
+\item{par.scale}{scalar. Scale parameter of the desired distribution. Default 1**.}
 
-\item{par.shape}{scalar, shape parameter, by defaoult is 1.
-**Note on par.location and par.scale:
-par.location and par.scale are the location and scale parameters
-of the distribution that generates the desired distribution. For lognormal,
-par.location and par.scale correspond to the location and scale parameters of the normal
-distribution that generales the lognormal. Hence, in this case they are the logmean and
-the logsigma parameters. For Normal2 and DoubleExp2, par.location and par.scale correspond
-correspond to the location and scale parameters of the normal and double exponential
-that are used to generates their squared forms.}
+\item{par.shape}{scalar. Shape parameter of the desired distribution, Default 1.}
+}
+\value{
+A vector \code{x} with \code{n} observations generated following the selected distribution with its parameters.
 }
 \description{
-Random variates from several distributions are generated with user defined mean and variance.
+Random observations generator selected from several distributions with user defined mean and variance.
 }
+\section{**Note}{
+
+\itemize{
+  \item{For "Lognormal", \code{par.location} and \code{par.scale} correspond to the location and scale parameters of the normal
+    distribution that generales the lognormal. Hence, in this case they are the logmean and
+    the logsigma parameters}
+  \item{For "Normal2" and "DoubleExp2", \code{par.location} and \code{par.scale} correspond
+    correspond to the location and scale parameters of the normal and double exponential
+    that are used to generates their squared forms.}
+}
+}
+
 \examples{
 getDist(1, "Normal", 0, 1)
 }

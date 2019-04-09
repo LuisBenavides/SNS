@@ -2,42 +2,48 @@
 % Please edit documentation in R/SequentialNormalScores.R
 \name{SNS}
 \alias{SNS}
-\title{Sequential normal scores}
+\title{Sequential Normal Scores}
 \usage{
 SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
-  alignment = "unadjusted", constant = NULL)
+  alignment = "unadjusted", constant = NULL, absolute = FALSE,
+  chart = "Shewhart", chart.par = c(3))
 }
 \arguments{
-\item{X}{is a numerical vector.}
+\item{X}{vector. New observations to obtain the N¡normal scores.}
 
-\item{X.id}{is the id of the vector X}
+\item{X.id}{vector. The id of the vector \code{X}.}
 
-\item{Y}{is a numerical vector. If Y is not defined, by default Y = NULL.}
+\item{Y}{vector. If \code{Y} is not defined (no previous observation available, \code{NULL}), NS is relative to \code{X}. Default \code{NULL}.}
 
-\item{theta}{is a constant.}
+\item{theta}{scalar. Value corresponig with the \code{Ftheta} quantile.}
 
-\item{Ftheta}{is a constant between (0,1).}
+\item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
 
-\item{alignment}{is the aligment of the data
+\item{alignment}{character string. Aligment of the data \code{X} and \code{Y}. Select from
 \itemize{
-  \item unadjusted:
-  \item overallmean:
-  \item overallmedian
-  \item samplemean:
-  \item samplemedian:
-  \item referencemean:
-  \item referencemedian:
-  \item constantvalue:
+  \item "unadjusted": nothing is sustracte from \code{X} and \code{Y} (default).
+  \item "overallmean": overall mean is sustracted from \code{X} and \code{Y}.
+  \item "overallmedian": overall median is sustracted from \code{X} and \code{Y}.
+  \item "samplemean": mean from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
+  \item "samplemedian": median from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
+  \item "referencemean": mean from \code{Y} is sustracted from \code{X} and \code{Y}.
+  \item "referencemedian": median from \code{Y} is sustracted from \code{X} and \code{Y}.
+  \item "constantvalue": a constant value is sustracted from \code{X} and \code{Y}.
 }}
 
-\item{constant}{is a numeric value}
+\item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
+
+\item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
 }
 \description{
-Transform a vector X into SNS using initial observations Y if available
-SNS follow the order of X.
-If ties, average ranks are used.
-If Y = NULL, normal scores are set relative to X.
+Transform a vector \code{X} into SNS using initial observations \code{Y} if available
+SNS follow the order of \code{X}.
 }
+\section{Comments}{
+
+If ties, average ranks are used.
+}
+
 \examples{
 # EXAMPLE CONDITIONAL WITH REFERENCE SAMPLE
 Y <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
@@ -46,7 +52,6 @@ theta <- 40
 Ftheta <- 0.5
 sample.id <- c("a", "b", "c")
 SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-# [1] -0.52440051 -0.31863936  0.08964235
 
 # EXAMPLE CONDITIONAL WITH REFERENCE SAMPLE
 Y <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
@@ -55,7 +60,6 @@ theta <- 40
 Ftheta <- 0.5
 sample.id <- c("a", "b", "c")
 SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-# [1] -0.52440051 -0.31863936  0.08964235
 
 # EXAMPLE UNCONDITIONAL WITH REFERENCE SAMPLE
 Y <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
@@ -64,7 +68,6 @@ theta <- NULL
 Ftheta <- NULL
 sample.id <- c("a", "b", "c")
 SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-# [1] -0.6045853 -0.3186394  0.0000000
 
 # EXAMPLE CONDITIONAL WITHOUT REFERENCE SAMPLE
 Y <- NULL # c(10,20,30,40,50,60,70,80,90,100)
@@ -73,7 +76,6 @@ theta <- 40
 Ftheta <- 0.5
 sample.id <- c("a", "b", "c")
 SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-# [1] -0.6744898 -0.3186394  0.6744898
 
 # EXAMPLE UNCONDITIONAL WITHOUT REFERENCE SAMPLE
 Y <- NULL
@@ -82,11 +84,7 @@ theta <- NULL
 Ftheta <- NULL
 sample.id <- c("a", "b", "c")
 SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-# [1] 0.0000000 0.6744898 0.9674216
 }
 \seealso{
-\code{\link{prod}} for products, \code{\link{cumsum}} for cumulative
-  sums, and \code{\link{colSums}}/\code{\link{rowSums}} marginal sums over
-  high-dimensional arrays.
+\code{\link{NS}} for normal scores
 }
-\concept{aggregate functions}

@@ -6,60 +6,81 @@
 \usage{
 calibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m,
   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = c(0, 1,
-  1), chart, initial.par, replicates = 50000, isParallel = FALSE,
-  maxIter = 20, progress = TRUE)
+  1), chart, chart.par, replicates = 50000, isParallel = FALSE,
+  maxIter = 20, progress = TRUE, alignment = "unadjusted",
+  constant = NULL, absolute = FALSE)
 }
 \arguments{
-\item{targetARL}{is the target ARL to calibrate. By default is set to NULL}
+\item{targetARL}{scalar. is the target ARL to calibrate. By default is set to NULL}
 
-\item{targetMRL}{is the target ARL to calibrate. By default is set to NULL}
+\item{targetMRL}{scalar. is the target ARL to calibrate. By default is set to NULL}
 
-\item{n}{is the subroup size}
+\item{n}{scalar. Subroup size}
 
-\item{m}{is the reference sample size}
+\item{m}{scalar. Reference sample size}
 
-\item{theta}{is a constant. By default is set to NULL}
+\item{theta}{scalar. Value corresponig with the \code{Ftheta} quantile.}
 
-\item{Ftheta}{is a constant between (0,1). By default is set to NULL}
+\item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
 
-\item{dist}{is the distribution to analyze. By default is "Normal"}
+\item{dist}{character string. Select from:
+\itemize{
+  \item{"Normal": Normal distribution (default).}
+  \item{"DoubleExp": Double exponential distribution (also known as Laplace distribution).}
+  \item{"DoubleExp2": Double exponential squared distribution from a \code{DoubleExp(0,1)}.}
+  \item{"LogNormal": Lognormal distribution.}
+  \item{"Gamma": Gamma distribution.}
+  \item{"Weibull": Weibull distribution.}
+}}
 
-\item{mu}{is a vector of two elements. By default is set to c(0,0)
-The firt element refers to the mean of the reference sample.
-The second element refers to the mean of the monitoring sample.}
+\item{mu}{scalar. Expected value of the desired distribution.}
 
-\item{sigma}{is a vector of two elements. By default is set to c(1,1)
-The firt element refers to the standard deviation of the reference sample.
-The second element refers to the standard deviation of the monitoring sample.}
+\item{sigma}{scalar. Standard deviation of the desired distribution.}
 
-\item{dist.par}{is a vector of three elements. By defautl is set to c(0, 1, 1)
-The firt element refers to location of the distribution
-The second element refers to scale of the distribution
-The third element refers to shape of the distribution}
+\item{dist.par}{vector. Distribution parameters. \code{c(par.location, par.scale, par.shape)}. Default \code{c(0,1,1)}.}
 
-\item{chart}{is the selected type of chart. Three options are available: Shewhart, CUSUM, EWMA}
+\item{chart}{character string. Selected type of chart. Three options are available: Shewhart, CUSUM, EWMA}
 
-\item{initial.par}{is a vector of one, or two elements depending
-on the chart selected: Shewhart, CUSUM, EWMA
-Shewhart chart is c(k), where k comes from UCL = mu + k*sigma, LCL = mu - k*sigma.
-CUSUM chart is c(k, h, t) where k is the reference value and h is the control limit,
-and t is the type of the chart (1:positive, 2:negative, 3:two sides)
-EWMA chart is c(lambda, L), where lambda is the smoothing constant
-and L multiplies standard deviation to get the control limit}
+\item{chart.par}{vector. The size depends on the selected chart:
+\describe{
+  \item{Shewhart scheme: }{is \code{c(k)}, where \code{k} comes from \eqn{UCL = mu + k\sigma, LCL = mu - k\sigma.}}
+  \item{CUSUM scheme: }{is \code{c(k, h, t)} where \code{k} is the reference value and \code{h} is the control limit,
+  and \code{t} is the type of the chart (1:positive, 2:negative, 3:two sides)}
+  \item{EWMA scheme: }{is \code{c(lambda, L)}, where \code{lambda} is the smoothing constant
+  and \code{L} multiplies standard deviation to get the control limit}
+}}
 
-\item{replicates}{is a numeric and represent the number of replicates
-to run the function getARL in each iteration}
+\item{replicates}{scalar. Number of replicates to get the ARL}
 
-\item{isParallel}{is a boolean. If is TRUE the code runs in parallel according to the
-number of cores in the computer,otherwise the code runs sequentially. By default is set to TRUE}
+\item{isParallel}{logical. If \code{TRUE} the code runs in parallel according to the
+number of cores in the computer,otherwise the code runs sequentially. Default \code{TRUE}.}
 
-\item{maxIter}{is a numeric. The maximum number of iteration to take the calibration before stops}
+\item{maxIter}{scalar. is a numeric. The maximum number of iteration to take the calibration before stops}
 
-\item{progress}{is a boolean. If TRUE it shows the progress of the calibration in the console.}
+\item{progress}{logical. If \code{TRUE} it shows the progress in the console.}
+
+\item{alignment}{character string. Aligment of the data \code{X} and \code{Y}. Select from
+\itemize{
+  \item "unadjusted": nothing is sustracte from \code{X} and \code{Y} (default).
+  \item "overallmean": overall mean is sustracted from \code{X} and \code{Y}.
+  \item "overallmedian": overall median is sustracted from \code{X} and \code{Y}.
+  \item "samplemean": mean from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
+  \item "samplemedian": median from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
+  \item "referencemean": mean from \code{Y} is sustracted from \code{X} and \code{Y}.
+  \item "referencemedian": median from \code{Y} is sustracted from \code{X} and \code{Y}.
+  \item "constantvalue": a constant value is sustracted from \code{X} and \code{Y}.
+}}
+
+\item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
+
+\item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
 }
 \description{
 The methodology used to calibrate the control limit
-for the SNS chart depending on the chart selected
+for the SNS chart depending on the selected chart
+}
+\note{
+The argument \code{chart.par} in this function correspond to the initial parameters to start the calibration.
 }
 \examples{
 n <- 2 # subgroup size
@@ -80,7 +101,7 @@ chart <- "Shewhart"
 chart.par <- c(3)
 shewhart <- calibrateControlLimit(
   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
-  Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, initial.par = chart.par,
+  Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
   replicates = replicates, chart = chart
 )
 
@@ -88,7 +109,7 @@ chart <- "CUSUM"
 chart.par <- c(0.5, 2.5, 3)
 cusum <- calibrateControlLimit(
   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
-  Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, initial.par = chart.par,
+  Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
   replicates = replicates, chart = chart
 )
 
@@ -96,7 +117,7 @@ chart <- "EWMA"
 chart.par <- c(0.2, 2.962)
 ewma <- calibrateControlLimit(
   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
-  Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, initial.par = chart.par,
+  Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
   replicates = replicates, chart = chart
 )
 }

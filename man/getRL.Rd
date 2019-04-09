@@ -2,65 +2,73 @@
 % Please edit documentation in R/ObtainAverageRunLength.R
 \name{getRL}
 \alias{getRL}
-\title{Run Length (RL)}
+\title{Run Length}
 \usage{
 getRL(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu,
-  sigma, dist.par, chart, chart.par, calibrate = FALSE, arl0 = 370,
-  alignment = "unadjusted", constant = NULL)
+  sigma, dist.par = c(0, 1, 1), chart, chart.par, calibrate = FALSE,
+  arl0 = 370, alignment = "unadjusted", constant = NULL,
+  absolute = FALSE)
 }
 \arguments{
-\item{replica}{is a numeric value. It is used for the parallel version of the function, it is set to 1 by default.}
+\item{replica}{scalar. It is used for the parallel version of the function (\code{parallel=TRUE}). Default \code{1}.}
 
-\item{n}{is the subroup size}
+\item{n}{scalar. Subroup size}
 
-\item{m}{is the reference sample size}
+\item{m}{scalar. Reference sample size}
 
-\item{theta}{is a constant.}
+\item{theta}{scalar. Value corresponig with the \code{Ftheta} quantile.}
 
-\item{Ftheta}{is a constant between (0,1).}
+\item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
 
-\item{dist}{is a vector of characters. Choose one type:
-"Normal":     Normal distribution. (Default)
-"DoubleExp":  Double exponential distribution (also known as Laplace distribution).
-"DoubleExp2": Double exponential squared distribution from a DoubleExp(0,1).
-"LogNormal":  Lognormal distribution.
-"Gamma":      Gamma distribution.
-"Weibull":    Weibull distribution}
-
-\item{mu}{user defined expected value.}
-
-\item{chart}{is the selected type of chart. Three options are available: Shewhart, CUSUM, EWMA}
-
-\item{chart.par}{is a vector of one, or two elements depending
-on the chart selected:
-\describe{
-  \item{For Shewhart scheme}{is c(k), where k comes from UCL = mu + k*sigma, LCL = mu - k*sigma.}
-  \item{For CUSUM scheme}{is c(k, h, t) where k is the reference value and h is the control limit,
-  and t is the type of the chart (1:positive, 2:negative, 3:two sides)}
-  \item{For EWMA scheme}{is c(lambda, L), where lambda is the smoothing constant
-  and L multiplies standard deviation to get the control limit}
-}}
-
-\item{calibrate}{is a boolean. If is TRUE the RL is limit to 10 times the target ARL}
-
-\item{arl0}{is a numeric value. Is the expected value of the RL, by default is set to 370}
-
-\item{alignment}{is the aligment of the data
+\item{dist}{character string. Select from:
 \itemize{
-  \item unadjusted:
-  \item overallmean:
-  \item overallmedian
-  \item samplemean:
-  \item samplemedian:
-  \item referencemean:
-  \item referencemedian:
-  \item constantvalue:
+  \item{"Normal": Normal distribution (default).}
+  \item{"DoubleExp": Double exponential distribution (also known as Laplace distribution).}
+  \item{"DoubleExp2": Double exponential squared distribution from a \code{DoubleExp(0,1)}.}
+  \item{"LogNormal": Lognormal distribution.}
+  \item{"Gamma": Gamma distribution.}
+  \item{"Weibull": Weibull distribution.}
 }}
 
-\item{constant}{is a numeric value}
+\item{mu}{scalar. Expected value of the desired distribution.}
+
+\item{sigma}{scalar. Standard deviation of the desired distribution.}
+
+\item{dist.par}{vector. Distribution parameters. \code{c(par.location, par.scale, par.shape)}. Default \code{c(0,1,1)}.}
+
+\item{chart}{character string. Selected type of chart. Three options are available: Shewhart, CUSUM, EWMA}
+
+\item{chart.par}{vector. The size depends on the selected chart:
+\describe{
+  \item{Shewhart scheme: }{is \code{c(k)}, where \code{k} comes from \eqn{UCL = mu + k\sigma, LCL = mu - k\sigma.}}
+  \item{CUSUM scheme: }{is \code{c(k, h, t)} where \code{k} is the reference value and \code{h} is the control limit,
+  and \code{t} is the type of the chart (1:positive, 2:negative, 3:two sides)}
+  \item{EWMA scheme: }{is \code{c(lambda, L)}, where \code{lambda} is the smoothing constant
+  and \code{L} multiplies standard deviation to get the control limit}
+}}
+
+\item{calibrate}{logical. If \code{TRUE} the RL is limit to 10 times the target ARL.}
+
+\item{arl0}{scalar. Expected value of the RL. Default \code{370}.}
+
+\item{alignment}{character string. Aligment of the data \code{X} and \code{Y}. Select from
+\itemize{
+  \item "unadjusted": nothing is sustracte from \code{X} and \code{Y} (default).
+  \item "overallmean": overall mean is sustracted from \code{X} and \code{Y}.
+  \item "overallmedian": overall median is sustracted from \code{X} and \code{Y}.
+  \item "samplemean": mean from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
+  \item "samplemedian": median from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
+  \item "referencemean": mean from \code{Y} is sustracted from \code{X} and \code{Y}.
+  \item "referencemedian": median from \code{Y} is sustracted from \code{X} and \code{Y}.
+  \item "constantvalue": a constant value is sustracted from \code{X} and \code{Y}.
+}}
+
+\item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
+
+\item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
 }
 \description{
-Get the rung length
+Get the run length
 }
 \examples{
 n <- 5 # subgroup size
