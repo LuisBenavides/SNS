@@ -1,39 +1,11 @@
 #' Calibration of the control limit for the selected chart
-#'
-#' The methodology used to calibrate the control limit
-#' for the SNS chart depending on the chart selected
-#'
-#' @param targetARL is the target ARL to calibrate. By default is set to NULL
-#' @param targetMRL is the target ARL to calibrate. By default is set to NULL
-#' @param n is the subroup size
-#' @param m is the reference sample size
-#' @param theta is a constant. By default is set to NULL
-#' @param Ftheta is a constant between (0,1). By default is set to NULL
-#' @param dist is the distribution to analyze. By default is "Normal"
-#' @param mu is a vector of two elements. By default is set to c(0,0)
-#' The firt element refers to the mean of the reference sample.
-#' The second element refers to the mean of the monitoring sample.
-#' @param sigma is a vector of two elements. By default is set to c(1,1)
-#' The firt element refers to the standard deviation of the reference sample.
-#' The second element refers to the standard deviation of the monitoring sample.
-#' @param dist.par is a vector of three elements. By defautl is set to c(0, 1, 1)
-#' The firt element refers to location of the distribution
-#' The second element refers to scale of the distribution
-#' The third element refers to shape of the distribution
-#' @param chart is the selected type of chart. Three options are available: Shewhart, CUSUM, EWMA
-#' @param initial.par is a vector of one, or two elements depending
-#' on the chart selected: Shewhart, CUSUM, EWMA
-#' Shewhart chart is c(k), where k comes from UCL = mu + k*sigma, LCL = mu - k*sigma.
-#' CUSUM chart is c(k, h, t) where k is the reference value and h is the control limit,
-#' and t is the type of the chart (1:positive, 2:negative, 3:two sides)
-#' EWMA chart is c(lambda, L), where lambda is the smoothing constant
-#' and L multiplies standard deviation to get the control limit
-#' @param replicates is a numeric and represent the number of replicates
-#' to run the function getARL in each iteration
-#' @param isParallel is a boolean. If is TRUE the code runs in parallel according to the
-#' number of cores in the computer,otherwise the code runs sequentially. By default is set to TRUE
-#' @param maxIter is a numeric. The maximum number of iteration to take the calibration before stops
-#' @param progress is a boolean. If TRUE it shows the progress of the calibration in the console.
+#' @description The methodology used to calibrate the control limit
+#' for the SNS chart depending on the selected chart
+#' @inheritParams getARL
+#' @param targetARL scalar. is the target ARL to calibrate. By default is set to NULL
+#' @param targetMRL scalar. is the target ARL to calibrate. By default is set to NULL
+#' @param maxIter scalar. is a numeric. The maximum number of iteration to take the calibration before stops
+#' @note The argument \code{chart.par} in this function correspond to the initial parameters to start the calibration.
 #' @export
 #' @examples
 #' n <- 2 # subgroup size
@@ -54,7 +26,7 @@
 #' chart.par <- c(3)
 #' shewhart <- calibrateControlLimit(
 #'   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
-#'   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, initial.par = chart.par,
+#'   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
 #'   replicates = replicates, chart = chart
 #' )
 #'
@@ -62,7 +34,7 @@
 #' chart.par <- c(0.5, 2.5, 3)
 #' cusum <- calibrateControlLimit(
 #'   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
-#'   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, initial.par = chart.par,
+#'   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
 #'   replicates = replicates, chart = chart
 #' )
 #'
@@ -70,10 +42,15 @@
 #' chart.par <- c(0.2, 2.962)
 #' ewma <- calibrateControlLimit(
 #'   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
-#'   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, initial.par = chart.par,
+#'   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
 #'   replicates = replicates, chart = chart
 #' )
-calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL, n, m, theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = c(0, 1, 1), chart, initial.par, replicates = 50000, isParallel = FALSE, maxIter = 20, progress = TRUE) {
+calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
+                                  n, m, theta = NULL, Ftheta = NULL,
+                                  dist, mu, sigma, dist.par = c(0, 1, 1),
+                                  chart, chart.par, replicates = 50000,
+                                  isParallel = FALSE, maxIter = 20, progress = TRUE,
+                                  alignment="unadjusted", constant=NULL, absolute=FALSE) {
   # Check for errors
   if (is.null(targetARL) && is.null(targetMRL)) {
     print("ERROR: Target ARL or target mRL missing")
@@ -108,10 +85,10 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL, n, m, thet
   y <- x
 
   i <- 1
-  x[i] <- initial.par[index.par]
+  x[i] <- chart.par[index.par]
   while (i < maxIter) {
     chart.par[index.par] <- x[i]
-    result <- getARL(n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, replicates = replicates, isParallel = isParallel, calibrate = TRUE, arl0 = targetARL)
+    result <- getARL(n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, replicates = replicates, isParallel = isParallel, calibrate = TRUE, arl0 = targetARL, alignment=alignment, constant=constant,absolute=absolute)
     if (!is.null(targetARL)) {
       y[i] <- result$ARL
       target <- targetARL

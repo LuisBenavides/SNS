@@ -1,22 +1,22 @@
-#' @title Run Length (RL)
-#' @description Get the rung length
+#' @title Run Length
+#' @description Get the run length
 #' @inheritParams getDist
 #' @inheritParams NS
-#' @param replica is a numeric value. It is used for the parallel version of the function, it is set to 1 by default.
-#' @param n is the subroup size
-#' @param m is the reference sample size
-#' @param chart is the selected type of chart. Three options are available: Shewhart, CUSUM, EWMA
-#' @param chart.par is a vector of one, or two elements depending
-#' on the chart selected:
+#' @param replica scalar. It is used for the parallel version of the function (\code{parallel=TRUE}). Default \code{1}.
+#' @param n scalar. Subroup size
+#' @param m scalar. Reference sample size
+#' @param dist.par vector. Distribution parameters. \code{c(par.location, par.scale, par.shape)}. Default \code{c(0,1,1)}.
+#' @param chart character string. Selected type of chart. Three options are available: Shewhart, CUSUM, EWMA
+#' @param chart.par vector. The size depends on the selected chart:
 #' \describe{
-#'   \item{For Shewhart scheme}{is c(k), where k comes from \eqn{UCL = mu + k*sigma, LCL = mu - k*sigma.}}
-#'   \item{For CUSUM scheme}{is c(k, h, t) where k is the reference value and h is the control limit,
-#'   and t is the type of the chart (1:positive, 2:negative, 3:two sides)}
-#'   \item{For EWMA scheme}{is c(lambda, L), where lambda is the smoothing constant
-#'   and L multiplies standard deviation to get the control limit}
+#'   \item{Shewhart scheme: }{is \code{c(k)}, where \code{k} comes from \eqn{UCL = mu + k\sigma, LCL = mu - k\sigma.}}
+#'   \item{CUSUM scheme: }{is \code{c(k, h, t)} where \code{k} is the reference value and \code{h} is the control limit,
+#'   and \code{t} is the type of the chart (1:positive, 2:negative, 3:two sides)}
+#'   \item{EWMA scheme: }{is \code{c(lambda, L)}, where \code{lambda} is the smoothing constant
+#'   and \code{L} multiplies standard deviation to get the control limit}
 #' }
-#' @param calibrate is a boolean. If is TRUE the RL is limit to 10 times the target ARL
-#' @param arl0 is a numeric value. Is the expected value of the RL, by default is set to 370
+#' @param calibrate logical. If \code{TRUE} the RL is limit to 10 times the target ARL.
+#' @param arl0 scalar. Expected value of the RL. Default \code{370}.
 #' @export
 #' @import stats
 #' @examples
@@ -57,12 +57,15 @@
 #'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
 #'   chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0
 #' )
-getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par, chart, chart.par, calibrate = FALSE, arl0 = 370, alignment = "unadjusted", constant = NULL) {
+getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
+                  dist, mu, sigma, dist.par = c(0,1,1),
+                  chart, chart.par, calibrate = FALSE, arl0 = 370,
+                  alignment = "unadjusted", constant = NULL, absolute=FALSE) {
   # initilize the reference sample
   Y <- NULL
   if (m > 0) { # if there are reference sample
     # generate the reference sample
-    Y <- getDist(n = m, dist = dist, mu = mu[1], stdev = sigma[1], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
+    Y <- getDist(n = m, dist = dist, mu = mu[1], sigma = sigma[1], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
   }
   RL <- 0
   in.Control <- TRUE
@@ -90,10 +93,11 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu, sigm
     RL <- RL + 1
 
     # generate the subgroup to monitor
-    X <- getDist(n = n, dist = dist, mu = mu[2], stdev = sigma[2], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
+    X <- getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
 
     # get the normal scores
-    Z <- NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
+    ns <- NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
+    Z <- ns$Z
     Z <- mean(Z)
 
     # if the subgroup is out of the limits
@@ -141,12 +145,11 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu, sigm
 #' @title Average Run Length (ARL)
 #' @description Get the ARL \code{\link{getRL}}
 #' @inheritParams getRL
-#' @param print.RL is boolean. If set TRUE the function getARLSNS return the vectors of RL for each iteration
-#' @param replicates is a numeric and represent the number of replicates to get the ARL
-#' @param progress is a boolean. If TRUE it shows the progress of the calibration in the console.
-#' @param isParallel is a boolean. If is TRUE the code runs in parallel according to the
-#' number of cores in the computer,otherwise the code runs sequentially. By default is set to TRUE
-
+#' @param print.RL logical. If \code{TRUE} return the vectors of RL for each iteration.
+#' @param replicates scalar. Number of replicates to get the ARL
+#' @param progress logical. If \code{TRUE} it shows the progress in the console.
+#' @param isParallel logical. If \code{TRUE} the code runs in parallel according to the
+#' number of cores in the computer,otherwise the code runs sequentially. Default \code{TRUE}.
 #' @export
 #' @import parallel
 #' @import stats
@@ -173,7 +176,8 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu, sigm
 #' chart.par <- c(3)
 #' shewhart <- getARL(n, m,
 #'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
-#'   chart = chart, chart.par = chart.par, print.RL = print.RL, replicates = replicates, isParallel = isParallel,
+#'   chart = chart, chart.par = chart.par, print.RL = print.RL,
+#'   replicates = replicates, isParallel = isParallel,
 #'   calibrate = calibrate, arl0 = arl0
 #' )
 #'
@@ -181,7 +185,8 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu, sigm
 #' chart.par <- c(0.25, 4.4181, 3)
 #' cusum <- getARL(n, m,
 #'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
-#'   chart = chart, chart.par = chart.par, print.RL = print.RL, replicates = replicates, isParallel = isParallel,
+#'   chart = chart, chart.par = chart.par, print.RL = print.RL,
+#'   replicates = replicates, isParallel = isParallel,
 #'   calibrate = calibrate, arl0 = arl0
 #' )
 #'
@@ -189,22 +194,29 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu, sigm
 #' chart.par <- c(0.2, 2.962)
 #' shewhart <- getARL(n, m,
 #'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
-#'   chart = chart, chart.par = chart.par, print.RL = print.RL, replicates = replicates, isParallel = isParallel,
+#'   chart = chart, chart.par = chart.par, print.RL = print.RL,
+#'   replicates = replicates, isParallel = isParallel,
 #'   calibrate = calibrate, arl0 = arl0
 #' )
-getARL <- function(n, m, theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = c(0, 1, 1), chart.par, print.RL = FALSE, replicates = 10000, chart, progress = FALSE, isParallel = TRUE, calibrate = FALSE, arl0 = 370) {
+getARL <- function(n, m, theta = NULL, Ftheta = NULL,
+                   dist, mu, sigma, dist.par = c(0, 1, 1),
+                   chart, chart.par,
+                   replicates = 10000, isParallel = TRUE,
+                   print.RL = FALSE, progress = FALSE,
+                   calibrate = FALSE, arl0 = 370,
+                   alignment = "unadjusted", constant = NULL, absolute=FALSE) {
   RLs <- NULL
   if (isParallel) {
     cluster <- makeCluster(detectCores() - 1)
     clusterExport(cluster, "NS")
     clusterExport(cluster, "getDist")
     clusterExport(cluster, "getRL")
-    RLs <- parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370)
+    RLs <- parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute)
     stopCluster(cluster)
   } else {
     t0 <- Sys.time()
     for (r in 1:replicates) {
-      RL <- getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370)
+      RL <- getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute)
 
       RLs <- c(RLs, RL)
 
