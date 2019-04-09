@@ -186,7 +186,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
 #' @title Plot Sequential Normal Scores
 #' @description plot the Sequential Normal Scores by using only \code{plot}
 #' @import graphics
-plot.sns=function(object,...){
+plot.sns=function(object){
   par(mar = c(6,6,4,2))
 
   Z = object$Z
@@ -244,7 +244,6 @@ plot.sns=function(object,...){
            lines(o.id, E, lt=2, lwd=3)
          }
   )
-
 
   change = 1
   if(o.id[1] > o.id[length(o.id)]){
