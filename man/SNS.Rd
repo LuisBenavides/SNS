@@ -4,9 +4,9 @@
 \alias{SNS}
 \title{Sequential Normal Scores}
 \usage{
-SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
+SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  chart = "Shewhart", chart.par = c(3), rawData = FALSE)
+  chart = "Shewhart", chart.par = c(3), snsRaw = FALSE)
 }
 \arguments{
 \item{X}{vector. New observations to obtain the N¡normal scores.}
@@ -18,6 +18,8 @@ SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
 \item{theta}{scalar. Value corresponig with the \code{Ftheta} quantile.}
 
 \item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
+
+\item{scoring}{character string. If "Z" (normal scores) (default). If "Z-SQ" (normal scores squared).}
 
 \item{alignment}{character string. Aligment of the data \code{X} and \code{Y}. Select from
 \itemize{
@@ -34,6 +36,8 @@ SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
 \item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
 
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
+
+\item{snsRaw}{logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.}
 }
 \description{
 Transform a vector \code{X} into SNS using initial observations \code{Y} if available

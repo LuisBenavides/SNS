@@ -4,7 +4,7 @@
 \alias{plot.sns}
 \title{Plot Sequential Normal Scores}
 \usage{
-\method{plot}{sns}(object)
+\method{plot}{sns}(object, ...)
 }
 \description{
 plot the Sequential Normal Scores by using only \code{plot}
