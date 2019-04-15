@@ -1,5 +1,5 @@
 ---
-title: "Example 8.2 from Qiu (2014)"
+title: "Usage SNS package"
 author: "Luis Benavides"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -16,16 +16,21 @@ knitr::opts_chunk$set(
 )
 ```
 
-Install package hosted in github
-```{r, eval=FALSE, echo=T}
+Install the package `SNS` hosted in [github](https://github.com/LuisBenavides/sns).
+```{r, eval=FALSE, echo=T, results='hide'}
 library("devtools")
 install_github("LuisBenavides/SNS")
 ```
-Load package and get dataset from Example 8.2 \code{example82}.
-
-```{r, echo=TRUE, results='asis'}
-library("SNS")
+```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
+library(devtools)
+load_all()
 X = example82$X #get the dataset into a data frame
+X.id = example82$X.id
+```
+Load package and get dataset from Example 8.2 \code{example82}.
+```{r, echo=TRUE, eval=FALSE, results='hide'}
+library("SNS")
+X = example82$X
 X.id = example82$X.id
 ```
 Table with the dataset using dataframe of \code{R} (first 10 rows).
@@ -33,12 +38,32 @@ Table with the dataset using dataframe of \code{R} (first 10 rows).
 knitr::kable(head(example82, 10))
 ```
 
+## Shewhart Scheme
 ```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
 s = SNS(X=X,X.id=X.id) #get the sns of the dataset
-print(s)
 plot(s) #finally plot the sns
 ```
 
-
+## CUSUM Scheme
+Positive
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+s = SNS(X=X,X.id=X.id, chart="CUSUM", chart.par=c(0.5, 2.5, 1)) #get the sns of the dataset
+plot(s) #finally plot the sns
+```
+Negative
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+s = SNS(X=X,X.id=X.id, chart="CUSUM", chart.par=c(0.5, 2.5, 2)) #get the sns of the dataset
+plot(s) #finally plot the sns
+```
+Both
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+s = SNS(X=X,X.id=X.id, chart="CUSUM", chart.par=c(0.5, 2.5, 3)) #get the sns of the dataset
+plot(s) #finally plot the sns
+```
+## EWMA Scheme
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+s = SNS(X=X,X.id=X.id, chart="EWMA", chart.par=c(1, 1)) #get the sns of the dataset
+plot(s) #finally plot the sns
+```
 
 
