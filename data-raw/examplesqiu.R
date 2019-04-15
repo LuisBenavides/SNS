@@ -68,13 +68,13 @@ for(nameFile in namesFileExamples){
       n = 50 #numbers of observations in each batch
       df1 = dfExample$V1
       X1 = df1[1:(nb*n)] #N(0,1)
-      X1.id = rep(seq(1:nb), n)
+      X1.id = rep(seq(1:nb), each=n)
       X1 = X1[order(X1.id)] #order according the id
       X1.id = X1.id[order(X1.id)] #order the id
 
       df2 = dfExample$V2
       X2 = df2[1:(nb*n)] #N(0,1)
-      X2.id = rep(seq(1:nb), n)
+      X2.id = rep(seq(1:nb), each=n)
       X2 = X2[order(X2.id)] #order according the id
       X2.id = X2.id[order(X2.id)] #order the id
       dfExample = data.frame(X1 = X1, X1.id = X1.id, X2 = X2, X2.id = X2.id)
@@ -83,13 +83,13 @@ for(nameFile in namesFileExamples){
       n = 10 #numbers of observations in each batch
       df1 = dfExample$X
       X1 = df1[1:(nb*n)] #N(0,1)
-      X1.id = rep(seq(1:nb), n)
+      X1.id = rep(seq(1:nb), each=n)
       X1 = X1[order(X1.id)] #order according the id
       X1.id = X1.id[order(X1.id)] #order the id
 
       df2 = dfExample$X.1
       X2 = df2[1:(nb*n)] #N(0,1)
-      X2.id = rep(seq(1:nb), n)
+      X2.id = rep(seq(1:nb), each=n)
       X2 = X2[order(X2.id)] #order according the id
       X2.id = X2.id[order(X2.id)] #order the id
       dfExample = data.frame(X1 = X1, X1.id = X1.id, X2 = X2, X2.id = X2.id)
@@ -98,19 +98,19 @@ for(nameFile in namesFileExamples){
       n = 1 #numbers of observations in each batch
       df1 = dfExample$X
       X1 = df1[1:(nb*n)] #N(0,1)
-      X1.id = rep(seq(1:nb), n)
+      X1.id = rep(seq(1:nb), each=n)
       X1 = X1[order(X1.id)] #order according the id
       X1.id = X1.id[order(X1.id)] #order the id
 
       df2 = dfExample$X.1
       X2 = df2[1:(nb*n)] #N(0,1)
-      X2.id = rep(seq(1:nb), n)
+      X2.id = rep(seq(1:nb), each=n)
       X2 = X2[order(X2.id)] #order according the id
       X2.id = X2.id[order(X2.id)] #order the id
 
       df3 = dfExample$X.2
       X3 = df3[1:(nb*n)] #N(0,1)
-      X3.id = rep(seq(1:nb), n)
+      X3.id = rep(seq(1:nb), each=n)
       X3 = X3[order(X3.id)] #order according the id
       X3.id = X3.id[order(X3.id)] #order the id
       dfExample = data.frame(X1 = X1, X1.id = X1.id, X2 = X2, X2.id = X2.id, X3 = X3, X3.id = X3.id)
