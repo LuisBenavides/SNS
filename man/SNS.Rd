@@ -6,7 +6,7 @@
 \usage{
 SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
   alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  chart = "Shewhart", chart.par = c(3))
+  chart = "Shewhart", chart.par = c(3), rawData = FALSE)
 }
 \arguments{
 \item{X}{vector. New observations to obtain the N¡normal scores.}

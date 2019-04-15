@@ -6,6 +6,7 @@
 #' @seealso \code{\link{NS}} for normal scores
 #' @inheritParams NS
 #' @param X.id vector. The id of the vector \code{X}.
+#' @param snsRaw logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.
 #' @export
 #' @examples
 #' # EXAMPLE CONDITIONAL WITH REFERENCE SAMPLE
@@ -47,9 +48,10 @@
 #' Ftheta <- NULL
 #' sample.id <- c("a", "b", "c")
 #' SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
+SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
                 alignment = "unadjusted", constant = NULL, absolute = FALSE,
-                chart="Shewhart", chart.par=c(3)) {
+                chart="Shewhart", chart.par=c(3),
+                snsRaw = FALSE) {
 
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
     print("ERROR, theta or Ftheta missing")
@@ -66,11 +68,15 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
   #get the different groups of the id
   groups = unique(Xb.id)
   z = rep(NA, length(groups)) # preallocate memory to initialize the SNS (one for group)
+  if(snsRaw){
+    Zraw = rep(NA, length(X))
+  }
   i = 1 # initialize the group index of the observation id vector
   Yb = Y
   if(!is.null(Yb)){
     Yb = Yb[!is.na(Yb)] # initialize reference sample (remove na values)
   }
+
 
   UCL = rep(NA, length(groups))
   LCL = rep(NA, length(groups))
@@ -100,12 +106,15 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
     ad = dataAlignment(Xb, Yb, alignment = alignment)
     Xb = ad$X
     Yb = ad$Y
-    ns = NS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant) # calculate the normal score
+    ns = NS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
     ns = ns$Z
+
     n = length(Xb)
-    z[i] = sum(ns) / n # it is a vector with a subgroup size so it is needed to
+    if(snsRaw){
+      Zraw[(1+n*(i-1)):(n+n*(i-1))] = ns
+    }
+    z[i] = sum(ns) / n # it is a vector with a subgroup size so it is needed to average them
     Z = z[i]
-    # make a mean
     if (is.null(Yb) && i == 1) { # if there is no reference sample
       Yb = Xb
     }
@@ -132,7 +141,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
              )
 
              Cplus[i] <- cplus
-             Cminus[i] = cminus
+             Cminus[i] <- cminus
 
              ucl = h
 
@@ -167,6 +176,9 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
     UCL = UCL,
     LCL = LCL
   )
+  if(snsRaw){
+    output$Zraw = Zraw
+  }
   switch(chart,
          CUSUM = {
            output$Cplus = Cplus
@@ -186,7 +198,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
 #' @title Plot Sequential Normal Scores
 #' @description plot the Sequential Normal Scores by using only \code{plot}
 #' @import graphics
-plot.sns=function(object){
+plot.sns=function(object,...){
   par(mar = c(6,6,4,2))
 
   Z = object$Z
@@ -234,10 +246,24 @@ plot.sns=function(object){
            lines(o.id, Z, lt=2, lwd=3)
          },
          CUSUM = {
-           plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="Cplus/Cminus",cex.lab=2.5, cex.axis=1.5, cex=2)
-           points(o.id, Cminus, pch=15, cex=2)
-           lines(o.id, Cplus, lt=2, lwd=3)
-           lines(o.id, Cminus, lt=2, lwd=3)
+           type = chart.par[3]
+           switch(type,
+                  "1" = {
+                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="Cplus",cex.lab=2.5, cex.axis=1.5, cex=2)
+                    lines(o.id, Cplus, lt=2, lwd=3)
+                  },
+                  "2" = {
+                    plot(o.id, Cminus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="Cminus",cex.lab=2.5, cex.axis=1.5, cex=2)
+                    lines(o.id, Cminus, lt=2, lwd=3)
+                  },
+                  "3" = {
+                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="Cplus/Cminus",cex.lab=2.5, cex.axis=1.5, cex=2)
+                    points(o.id, Cminus, pch=15, cex=2)
+                    lines(o.id, Cplus, lt=2, lwd=3)
+                    lines(o.id, Cminus, lt=2, lwd=3)
+                    legend("topleft", c("Cplus", "Cminus"), pch=c(19, 15))
+                  }
+           )
          },
          EWMA = {
            plot(o.id, E, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="E",cex.lab=2.5, cex.axis=1.5, cex=2)
