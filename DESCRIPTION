@@ -16,13 +16,15 @@ Description: The methods discussed in this paper are new nonparametric methods
   of the observations, over the time observed. They usually apply to large data sets,
   so computations need to be simple enough to be done in a reasonable time on a computer,
   and easily updated as each new observation (or batch of observations) becomes available.
+Depends: R (>= 2.10)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 Imports: 
     parallel,
-    stats
+    stats,
+    MASS
 Suggests: 
     testthat,
     knitr,
