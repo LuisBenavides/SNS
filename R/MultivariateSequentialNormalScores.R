@@ -6,13 +6,12 @@
 #' @seealso \code{\link{MNS}} for multivariate normal scores
 #' @inheritParams MNS
 #' @param X.id vector. The id of each column (variable) of the matrix \code{X}.
-#' @param char character string.
+#' @param chart character string.
 #' @export
 #' @examples
 #' X = cbind(example91$X1, example91$X2)
 #' X.id = example91$X1.id
 #' msns = MSNS(X, X.id)
-#' plot(msns)
 MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
                 alignment = "unadjusted", constant = NULL, absolute = FALSE,
                 chart="T2") {
@@ -46,7 +45,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
      T2 = {
        inf = 1000000 #infinite value to better approximation
        alpha = 0.005 #confindent interval
-       vec <- rchisq(inf, ng) #chi-sq random generator numbers according to the "infinite value"
+       vec <- rchisq(inf, ncol(X)) #chi-sq random generator numbers according to the "infinite value"
        ucl <- quantile(vec , 1-alpha) #control limit
      }
   )
@@ -67,6 +66,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       updateSample <- FALSE
       switch(chart,
          T2 = {
+           print(Z)
            T2[i] = n*(mu%*%solve(cor(Z, method = "spearman"))%*%mu) #get the T2 statistic
            if (T2[i] <= ucl) updateSample <- TRUE
          }
@@ -98,9 +98,13 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   return(output) # return the sequential normal score
 }
 
-plot.msns=function(object,...){
+#' @title Plot Multivariate Sequential Normal Scores
+#' @description plot the Multivariate Sequential Normal Scores by using only \code{plot}
+#' @param object msns class.
+#' @param ... same parameters for \code{plot} function.
+#' @import graphics
+plot.msns <- function(object,...){
   par(mar = c(6,6,4,2))
-
   T2 = object$T2
   o.id = unique(object$X.id) # original id
   chart = coef(object)$chart
