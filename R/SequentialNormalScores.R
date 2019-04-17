@@ -5,6 +5,7 @@
 #' If ties, average ranks are used.
 #' @seealso \code{\link{NS}} for normal scores
 #' @inheritParams NS
+#' @inheritParams getRL
 #' @param X.id vector. The id of the vector \code{X}.
 #' @param snsRaw logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.
 #' @export
@@ -197,8 +198,10 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
 #' @title Plot Sequential Normal Scores
 #' @description plot the Sequential Normal Scores by using only \code{plot}
+#' @param object sns class.
+#' @param ... same parameters for \code{plot} function.
 #' @import graphics
-plot.sns=function(object,...){
+plot.sns <- function(object,...){
   par(mar = c(6,6,4,2))
 
   Z = object$Z
