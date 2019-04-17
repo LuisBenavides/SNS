@@ -22,7 +22,7 @@ library("devtools")
 install_github("LuisBenavides/SNS")
 ```
 ```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
-library(devtools)
+library("devtools")
 load_all()
 X = example82$X #get the dataset into a data frame
 X.id = example82$X.id
@@ -66,4 +66,26 @@ s = SNS(X=X,X.id=X.id, chart="EWMA", chart.par=c(1, 1)) #get the sns of the data
 plot(s) #finally plot the sns
 ```
 
+## Multivariate SNS
+```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
+library("devtools")
+load_all()
+X = cbind(example91$X1,example91$X2) #get the dataset into a data frame
+X.id = example91$X1.id
+```
+Table with the dataset using dataframe of \code{R} (first 10 rows).
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(example91, 10))
+```
 
+Get dataset from Example 9.1 \code{example91}.
+```{r, echo=TRUE, eval=FALSE, results='hide'}
+X = cbind(example91$X1,example91$X2)
+X.id = example91$X1.id
+```
+
+Get the multivariate sequential normal scores
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+msns = MSNS(X, X.id)
+plot(msns)
+```
