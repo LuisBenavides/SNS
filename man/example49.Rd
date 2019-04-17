@@ -4,10 +4,14 @@
 \name{example49}
 \alias{example49}
 \title{Data from Example 4.9 Qiu (2014).}
-\format{A data frame with 100 rows and 2 columns:
+\format{A data frame with 50 rows and 6 columns:
 \describe{
- \item{V1}{First data set with 100 observations divided in 20 batches of 5 observation each. The first 10 batches are N(0,1) and the second 10 batches are N(1,1).}
- \item{V2}{Second data set with 100 observations divided in 20 batches of 5 observation each. The first 10 batches are N(0,1) and the second 10 batches are N(0,22).}
+ \item{Y1}{Reference sample of the first data set. 10 batches are N(0,1)}
+ \item{X1}{Monitoring sample of the first data set. 10 batches are N(1,1).}
+ \item{X1.id}{id of each observation of the batch for the first data set.}
+ \item{Y2}{Reference sample of the second data set. 10 batches are N(0,1)}
+ \item{X2}{Monitoring sample of the second data set. 10 batches are N(0,2^2).}
+ \item{X2.id}{id of each observation of the batch for the second data set.}
 }}
 \source{
 \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example49.dat}

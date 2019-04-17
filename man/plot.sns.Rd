@@ -6,6 +6,11 @@
 \usage{
 \method{plot}{sns}(object, ...)
 }
+\arguments{
+\item{object}{sns class.}
+
+\item{...}{same parameters for \code{plot} function.}
+}
 \description{
 plot the Sequential Normal Scores by using only \code{plot}
 }

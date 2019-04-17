@@ -4,15 +4,10 @@
 \name{example83}
 \alias{example83}
 \title{Data from Example 8.3 on page 326 Qiu (2014).}
-\format{A data frame with 30 rows and 8 columns. Each row is a batch. The first 6 columns are the observation of each batch:
+\format{A data frame with 180 rows (30 batches of size equals to 6)
 \describe{
- \item{X}{1st observation of the batch.}
- \item{X.1}{2nd observation of the batch.}
- \item{X.2}{3rd observation of the batch.}
- \item{X.3}{4th observation of the batch.}
- \item{X.4}{5th observation of the batch.}
- \item{X.5}{6th observation of the batch.}
- \item{psi}{psi}
+ \item{X}{observations of all batches}
+ \item{X.id}{id of each observation of the batch}
 }}
 \source{
 \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example81.dat}

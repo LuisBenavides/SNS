@@ -4,18 +4,11 @@
 \name{example82}
 \alias{example82}
 \title{Data from Example 8.2 Qiu (2014).}
-\format{A data frame with 30 rows (batches) and 6 columns
+\format{A data frame with 150 rows (30 batches of size equals to 5)
 \describe{
- \item{X}{first observation of the batch}
- \item{X.1}{second observation of the batch}
- \item{X.2}{third observation of the batch}
- \item{X.3}{fourth observation of the batch}
- \item{X.4}{fifth observation of the batch}
- \item{Xmedian}{Median of the batch}
-}
-
-(first 5 are the observations, the last is the median of the 5 observations).
-The column names are the default names given when the dataframe was created.}
+ \item{X}{observations of all batches}
+ \item{X.id}{id of each observation of the batch}
+}}
 \source{
 \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example82.dat}
 }

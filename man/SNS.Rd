@@ -37,6 +37,17 @@ SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
 
+\item{chart}{character string. Selected type of chart. Three options are available: Shewhart, CUSUM, EWMA}
+
+\item{chart.par}{vector. The size depends on the selected chart:
+\describe{
+  \item{Shewhart scheme: }{is \code{c(k)}, where \code{k} comes from \eqn{UCL = mu + k\sigma, LCL = mu - k\sigma.}}
+  \item{CUSUM scheme: }{is \code{c(k, h, t)} where \code{k} is the reference value and \code{h} is the control limit,
+  and \code{t} is the type of the chart (1:positive, 2:negative, 3:two sides)}
+  \item{EWMA scheme: }{is \code{c(lambda, L)}, where \code{lambda} is the smoothing constant
+  and \code{L} multiplies standard deviation to get the control limit}
+}}
+
 \item{snsRaw}{logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.}
 }
 \description{

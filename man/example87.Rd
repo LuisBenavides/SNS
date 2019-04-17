@@ -4,10 +4,11 @@
 \name{example87}
 \alias{example87}
 \title{Data from Example 8.7 on page 339 Qiu (2014).}
-\format{A data frame with 100 rows and 2 columns:
+\format{A data frame with 86 rows (86 batches of size equals to 1)
 \describe{
- \item{x}{first 14 observations are in control}
- \item{Tmax}{test statistic for the method proposed by Hawkins and Deng (2010)}
+ \item{X}{observations of all batches}
+ \item{X.id}{id of each observation of the batch}
+ \item{Y}{reference sample of size equals to 14}
 }}
 \source{
 \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example87.dat}
