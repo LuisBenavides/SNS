@@ -8,10 +8,9 @@
 \describe{
  \item{Y1}{Reference sample of the first data set. 10 batches are N(0,1)}
  \item{X1}{Monitoring sample of the first data set. 10 batches are N(1,1).}
- \item{X1.id}{id of each observation of the batch for the first data set.}
  \item{Y2}{Reference sample of the second data set. 10 batches are N(0,1)}
  \item{X2}{Monitoring sample of the second data set. 10 batches are N(0,2^2).}
- \item{X2.id}{id of each observation of the batch for the second data set.}
+ \item{X.id}{id of each observation of the batch for the second data set.}
 }}
 \source{
 \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example49.dat}
