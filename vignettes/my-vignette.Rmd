@@ -7,6 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{SNS}
 ---
 
 ```{r setup, include = FALSE}
@@ -17,19 +18,12 @@ knitr::opts_chunk$set(
 ```
 
 Install the package `SNS` hosted in [github](https://github.com/LuisBenavides/sns).
-```{r, eval=FALSE, echo=T, results='hide'}
-library("devtools")
+```{r, eval=FALSE, echo=T, results='hide',message=F, warning=F}
 install_github("LuisBenavides/SNS")
 ```
 
 ## Example 3.1.1 from Conover et al
 ### Using Sequential Normal Scores to Detect a Change in Location (Shewhart Scheme)
-```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
-library("devtools")
-load_all()
-X = example82$X #get the dataset into a data frame
-X.id = example82$X.id
-```
 Load package and get dataset from Example 8.2 \code{example82} from Qiu (Example 3.1.1 from Conover et al.)
 ```{r, echo=TRUE, eval=FALSE, results='hide'}
 library("SNS")
@@ -38,24 +32,25 @@ X.id = example82$X.id
 ```
 Table with the dataset using dataframe of \code{R} (first 10 rows).
 ```{r, echo=FALSE, results='asis'}
-knitr::kable(head(example82, 10))
+knitr::kable(head(SNS::example82, 10))
 ```
 
 Get the sns of the dataset
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F, results='hide', message=F, warning=F}
 s = SNS(X=X,X.id=X.id)
 ```
 to plot it
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F, results='hide', message=F, warning=F}
+plot(s)
+```
+```{r,echo=F,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+X = SNS::example82$X #get the dataset into a data frame
+X.id = SNS::example82$X.id
+s = SNS::SNS(X=X,X.id=X.id)
 plot(s)
 ```
 ## Example 3.2.1 from Conover et al. CUSUM Variation to Detect a Change in Location
-```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
-library("devtools")
-load_all()
-X = example84$X #get the dataset into a data frame
-X.id = example84$X.id
-```
+
 Load package and get dataset from Example 8.4 \code{example84} from Qiu (Example 3.2.1 from Conover et al.)
 ```{r, echo=TRUE, eval=FALSE, results='hide'}
 library("SNS")
@@ -64,25 +59,24 @@ X.id = example84$X.id
 ```
 Table with the dataset using dataframe of \code{R} (first 10 rows).
 ```{r, echo=FALSE, results='asis'}
-knitr::kable(head(example84, 10))
+knitr::kable(head(SNS::example84, 10))
 ```
 
 Get the sns of the dataset using a CUSUM scheme
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F}
 s = SNS(X=X,X.id=X.id, chart="CUSUM", chart.par=c(0.5, 4.389, 3)) 
 ```
 to plot it
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F}
 plot(s)
 ```
-
-## Example 3.3.1 from Conover et al. EWMA Variation to Detect a Change in Location
-```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
-library("devtools")
-load_all()
-X = example84$X #get the dataset into a data frame
-X.id = example84$X.id
+```{r,echo=F,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+X = SNS::example84$X #get the dataset into a data frame
+X.id = SNS::example84$X.id
+s = SNS::SNS(X=X,X.id=X.id, chart="CUSUM", chart.par=c(0.5, 4.389, 3)) 
+plot(s)
 ```
+## Example 3.3.1 from Conover et al. EWMA Variation to Detect a Change in Location
 Load package and get dataset from Example 8.4 \code{example84} from Qiu (Example 3.2.1 from Conover et al.)
 ```{r, echo=TRUE, eval=FALSE, results='hide'}
 library("SNS")
@@ -91,27 +85,25 @@ X.id = example84$X.id
 ```
 Table with the dataset using dataframe of \code{R} (first 10 rows).
 ```{r, echo=FALSE, results='asis'}
-knitr::kable(head(example84, 10))
+knitr::kable(head(SNS::example84, 10))
 ```
 
 Get the sns of the dataset using a EWMA scheme
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F}
 s = SNS(X=X,X.id=X.id, chart="EWMA", chart.par=c(0.1, 2.814))
 ```
 
 to plot it
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F}
 plot(s)
 ```
-
-## Example 3.5.1. Sequential Normal Scores with a Reference Data Set (Phase 1)
-```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
-library("devtools")
-load_all()
-X = example87$X #get the dataset into a data frame
-X.id = example87$X.id
-Y = example87$Y
+```{r,echo=F,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+X = SNS::example84$X #get the dataset into a data frame
+X.id = SNS::example84$X.id
+s = SNS::SNS(X=X,X.id=X.id, chart="EWMA", chart.par=c(0.1, 2.814))
+plot(s)
 ```
+## Example 3.5.1. Sequential Normal Scores with a Reference Data Set (Phase 1)
 Load package and get dataset from Example 8.7 \code{example87} from Qiu (Example 3.5.1 from Conover et al.)
 ```{r, echo=TRUE, eval=FALSE, results='hide'}
 library("SNS")
@@ -121,71 +113,77 @@ Y = example87$Y
 ```
 Table with the dataset using dataframe of \code{R} (first 10 rows).
 ```{r, echo=FALSE, results='asis'}
-knitr::kable(head(example87, 10))
+knitr::kable(head(SNS::example87, 10))
 ```
 
 Get the sns of the dataset using a EWMA scheme
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F}
 s = SNS(X=X,X.id=X.id, Y=Y, chart="EWMA", chart.par=c(0.1, 2.814))
 ```
 
 to plot it
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F}
 plot(s)
 ```
-
-## Example 6.1.1. Multivariate Sequential Normal Scores to Detect a Change in Location
-```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
-library("devtools")
-load_all()
-X = cbind(example91$X1,example91$X2) #get the dataset into a data frame
-X.id = example91$X.id
+```{r,echo=F,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+X = SNS::example87$X #get the dataset into a data frame
+X.id = SNS::example87$X.id
+Y = SNS::example87$Y
+s = SNS::SNS(X=X,X.id=X.id, Y=Y, chart="EWMA", chart.par=c(0.1, 2.814))
+plot(s)
 ```
+## Example 6.1.1. Multivariate Sequential Normal Scores to Detect a Change in Location
 
 Get dataset from Example 9.1 \code{example91}.
 ```{r, echo=TRUE, eval=FALSE, results='hide'}
-X = cbind(example91$X1,example91$X2)
+X = example91[,1:2]
 X.id = example91$X.id
 ```
 
 Table with the dataset using dataframe of \code{R} (first 10 rows).
 ```{r, echo=FALSE, results='asis'}
-knitr::kable(head(example91, 10))
+knitr::kable(head(SNS::example91, 10))
 ```
 
 Get the multivariate sequential normal scores
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F}
 msns = MSNS(X, X.id)
 ```
 and plot it
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F}
+plot(msns)
+```
+```{r,echo=F,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+X = SNS::example91[,1:2] #get the dataset into a data frame
+X.id = SNS::example91$X.id
+msns = SNS::MSNS(X, X.id)
 plot(msns)
 ```
 
 ## Example 6.2.1. Multivariate Sequential Normal Scores to Detect a Change in Location
-```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
-library("devtools")
-load_all()
-X = cbind(example93$X1,example93$X2) #get the dataset into a data frame
-X.id = example93$X.id
-```
 
 Get dataset from Example 9.3 \code{example93}.
 ```{r, echo=TRUE, eval=FALSE, results='hide'}
-X = cbind(example93$X1,example93$X2)
+X = example93[,1:2]
 X.id = example93$X.id
 ```
 
 Table with the dataset using dataframe of \code{R} (first 10 rows).
 ```{r, echo=FALSE, results='asis'}
-knitr::kable(head(example93, 10))
+knitr::kable(head(SNS::example93, 10))
 ```
 
 Get the multivariate sequential normal scores
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F}
 msns = MSNS(X, X.id)
 ```
 and plot it
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+```{r,echo=T,eval=F}
+plot(msns)
+```
+```{r,echo=F,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+X = SNS::example93[,1:2] #get the dataset into a data frame
+X.id = SNS::example93$X.id
+msns = SNS::MSNS(X, X.id)
 plot(msns)
 ```
