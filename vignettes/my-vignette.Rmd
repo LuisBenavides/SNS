@@ -21,13 +21,16 @@ Install the package `SNS` hosted in [github](https://github.com/LuisBenavides/sn
 library("devtools")
 install_github("LuisBenavides/SNS")
 ```
+
+## Example 3.1.1 from Conover et al
+### Using Sequential Normal Scores to Detect a Change in Location (Shewhart Scheme)
 ```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
 library("devtools")
 load_all()
 X = example82$X #get the dataset into a data frame
 X.id = example82$X.id
 ```
-Load package and get dataset from Example 8.2 \code{example82}.
+Load package and get dataset from Example 8.2 \code{example82} from Qiu (Example 3.1.1 from Conover et al.)
 ```{r, echo=TRUE, eval=FALSE, results='hide'}
 library("SNS")
 X = example82$X
@@ -38,54 +41,151 @@ Table with the dataset using dataframe of \code{R} (first 10 rows).
 knitr::kable(head(example82, 10))
 ```
 
-## Shewhart Scheme
+Get the sns of the dataset
 ```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
-s = SNS(X=X,X.id=X.id) #get the sns of the dataset
-plot(s) #finally plot the sns
+s = SNS(X=X,X.id=X.id)
+```
+to plot it
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+plot(s)
+```
+## Example 3.2.1 from Conover et al. CUSUM Variation to Detect a Change in Location
+```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
+library("devtools")
+load_all()
+X = example84$X #get the dataset into a data frame
+X.id = example84$X.id
+```
+Load package and get dataset from Example 8.4 \code{example84} from Qiu (Example 3.2.1 from Conover et al.)
+```{r, echo=TRUE, eval=FALSE, results='hide'}
+library("SNS")
+X = example84$X
+X.id = example84$X.id
+```
+Table with the dataset using dataframe of \code{R} (first 10 rows).
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(example84, 10))
 ```
 
-## CUSUM Scheme
-Positive
+Get the sns of the dataset using a CUSUM scheme
 ```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
-s = SNS(X=X,X.id=X.id, chart="CUSUM", chart.par=c(0.5, 2.5, 1)) #get the sns of the dataset
-plot(s) #finally plot the sns
+s = SNS(X=X,X.id=X.id, chart="CUSUM", chart.par=c(0.5, 4.389, 3)) 
 ```
-Negative
+to plot it
 ```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
-s = SNS(X=X,X.id=X.id, chart="CUSUM", chart.par=c(0.5, 2.5, 2)) #get the sns of the dataset
-plot(s) #finally plot the sns
-```
-Both
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
-s = SNS(X=X,X.id=X.id, chart="CUSUM", chart.par=c(0.5, 2.5, 3)) #get the sns of the dataset
-plot(s) #finally plot the sns
-```
-## EWMA Scheme
-```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
-s = SNS(X=X,X.id=X.id, chart="EWMA", chart.par=c(1, 1)) #get the sns of the dataset
-plot(s) #finally plot the sns
+plot(s)
 ```
 
-## Multivariate SNS
+## Example 3.3.1 from Conover et al. EWMA Variation to Detect a Change in Location
+```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
+library("devtools")
+load_all()
+X = example84$X #get the dataset into a data frame
+X.id = example84$X.id
+```
+Load package and get dataset from Example 8.4 \code{example84} from Qiu (Example 3.2.1 from Conover et al.)
+```{r, echo=TRUE, eval=FALSE, results='hide'}
+library("SNS")
+X = example84$X
+X.id = example84$X.id
+```
+Table with the dataset using dataframe of \code{R} (first 10 rows).
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(example84, 10))
+```
+
+Get the sns of the dataset using a EWMA scheme
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+s = SNS(X=X,X.id=X.id, chart="EWMA", chart.par=c(0.1, 2.814))
+```
+
+to plot it
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+plot(s)
+```
+
+## Example 3.5.1. Sequential Normal Scores with a Reference Data Set (Phase 1)
+```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
+library("devtools")
+load_all()
+X = example87$X #get the dataset into a data frame
+X.id = example87$X.id
+Y = example87$Y
+```
+Load package and get dataset from Example 8.7 \code{example87} from Qiu (Example 3.5.1 from Conover et al.)
+```{r, echo=TRUE, eval=FALSE, results='hide'}
+library("SNS")
+X = example87$X
+X.id = example87$X.id
+Y = example87$Y
+```
+Table with the dataset using dataframe of \code{R} (first 10 rows).
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(example87, 10))
+```
+
+Get the sns of the dataset using a EWMA scheme
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+s = SNS(X=X,X.id=X.id, Y=Y, chart="EWMA", chart.par=c(0.1, 2.814))
+```
+
+to plot it
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+plot(s)
+```
+
+## Example 6.1.1. Multivariate Sequential Normal Scores to Detect a Change in Location
 ```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
 library("devtools")
 load_all()
 X = cbind(example91$X1,example91$X2) #get the dataset into a data frame
-X.id = example91$X1.id
-```
-Table with the dataset using dataframe of \code{R} (first 10 rows).
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(example91, 10))
+X.id = example91$X.id
 ```
 
 Get dataset from Example 9.1 \code{example91}.
 ```{r, echo=TRUE, eval=FALSE, results='hide'}
 X = cbind(example91$X1,example91$X2)
-X.id = example91$X1.id
+X.id = example91$X.id
+```
+
+Table with the dataset using dataframe of \code{R} (first 10 rows).
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(example91, 10))
 ```
 
 Get the multivariate sequential normal scores
 ```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
 msns = MSNS(X, X.id)
+```
+and plot it
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+plot(msns)
+```
+
+## Example 6.2.1. Multivariate Sequential Normal Scores to Detect a Change in Location
+```{r, echo=FALSE, eval=TRUE, results='hide',message=F, warning=F}
+library("devtools")
+load_all()
+X = cbind(example93$X1,example93$X2) #get the dataset into a data frame
+X.id = example93$X.id
+```
+
+Get dataset from Example 9.3 \code{example93}.
+```{r, echo=TRUE, eval=FALSE, results='hide'}
+X = cbind(example93$X1,example93$X2)
+X.id = example93$X.id
+```
+
+Table with the dataset using dataframe of \code{R} (first 10 rows).
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(example93, 10))
+```
+
+Get the multivariate sequential normal scores
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
+msns = MSNS(X, X.id)
+```
+and plot it
+```{r,echo=T,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
 plot(msns)
 ```
