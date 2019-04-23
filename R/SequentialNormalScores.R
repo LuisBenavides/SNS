@@ -167,6 +167,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     }
     i = i + 1 # continue with the next group
   }
+
   output = list(
     coefficients = list(
       n=n,
@@ -190,13 +191,11 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
            output$E = E
          }
   )
-
-  class(output)="sns" # Class definition
-
+  class(output)="SNS" # Class definition
   return(output) # return the sequential normal score
 }
 
-plot.sns <- function(x){
+plot.SNS <- function(x,...){
   par(mar = c(6,6,4,2))
 
   Z = x$Z

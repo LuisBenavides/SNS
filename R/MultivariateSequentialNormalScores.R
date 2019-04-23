@@ -93,12 +93,12 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     UCL = UCL
   )
 
-  class(output)="msns" # Class definition
+  class(output)="MSNS" # Class definition
 
   return(output) # return the sequential normal score
 }
 
-plot.msns <- function(x){
+plot.MSNS <- function(x,...){
   par(mar = c(6,6,4,2))
   T2 = x$T2
   o.id = unique(x$X.id) # original id
