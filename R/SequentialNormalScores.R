@@ -8,7 +8,6 @@
 #' @inheritParams getRL
 #' @param X.id vector. The id of the vector \code{X}.
 #' @param snsRaw logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.
-#' @import graphics
 #' @export
 #' @examples
 #' # EXAMPLE CONDITIONAL WITH REFERENCE SAMPLE
@@ -195,6 +194,8 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   return(output) # return the sequential normal score
 }
 
+#' @import graphics
+#' @export
 plot.SNS <- function(x,...){
   par(mar = c(6,6,4,2))
 

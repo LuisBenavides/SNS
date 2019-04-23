@@ -98,6 +98,8 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   return(output) # return the sequential normal score
 }
 
+#' @import graphics
+#' @export
 plot.MSNS <- function(x,...){
   par(mar = c(6,6,4,2))
   T2 = x$T2
