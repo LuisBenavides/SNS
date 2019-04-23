@@ -195,7 +195,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   return(output) # return the sequential normal score
 }
 
-plot.sns <- function(x,...){
+plot.sns <- function(x){
   par(mar = c(6,6,4,2))
 
   Z = x$Z

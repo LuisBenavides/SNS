@@ -98,12 +98,14 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   return(output) # return the sequential normal score
 }
 
-plot.msns <- function(x,...){
+plot.msns <- function(x){
   par(mar = c(6,6,4,2))
   T2 = x$T2
   o.id = unique(x$X.id) # original id
   chart = coef(x)$chart
   UCL = x$UCL
+  difMaxZ = 0
+  difMinZ = 0
   switch(chart,
          T2 = {
            difMaxZ = abs(max(T2) - max(UCL))
