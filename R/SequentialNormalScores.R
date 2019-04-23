@@ -195,25 +195,19 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   return(output) # return the sequential normal score
 }
 
-
-#' @title Plot Sequential Normal Scores
-#' @description plot the Sequential Normal Scores by using only \code{plot}
-#' @param object sns class.
-#' @param ... same parameters for \code{plot} function.
-#' @import graphics
-plot.sns <- function(object,...){
+plot.sns <- function(x,...){
   par(mar = c(6,6,4,2))
 
-  Z = object$Z
-  n = object$n
-  o.id = unique(object$X.id) # original id
-  chart = coef(object)$chart
-  chart.par = coef(object)$chart.par
-  UCL = object$UCL
-  LCL = object$LCL
-  Cplus = object$Cplus
-  Cminus = object$Cminus
-  E = object$E
+  Z = x$Z
+  n = x$n
+  o.id = unique(x$X.id) # original id
+  chart = coef(x)$chart
+  chart.par = coef(x)$chart.par
+  UCL = x$UCL
+  LCL = x$LCL
+  Cplus = x$Cplus
+  Cminus = x$Cminus
+  E = x$E
   switch(chart,
          Shewhart = {
            difMaxZ = abs(max(Z) - max(UCL))

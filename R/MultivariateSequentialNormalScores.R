@@ -98,17 +98,12 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   return(output) # return the sequential normal score
 }
 
-#' @title Plot Multivariate Sequential Normal Scores
-#' @description plot the Multivariate Sequential Normal Scores by using only \code{plot}
-#' @param object msns class.
-#' @param ... same parameters for \code{plot} function.
-#' @import graphics
-plot.msns <- function(object,...){
+plot.msns <- function(x,...){
   par(mar = c(6,6,4,2))
-  T2 = object$T2
-  o.id = unique(object$X.id) # original id
-  chart = coef(object)$chart
-  UCL = object$UCL
+  T2 = x$T2
+  o.id = unique(x$X.id) # original id
+  chart = coef(x)$chart
+  UCL = x$UCL
   switch(chart,
          T2 = {
            difMaxZ = abs(max(T2) - max(UCL))
