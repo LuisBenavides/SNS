@@ -81,7 +81,7 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
     }
   )
 
-  x <- rep(NA, 3)
+  x <- rep(NA, maxIter)
   y <- x
 
   i <- 1

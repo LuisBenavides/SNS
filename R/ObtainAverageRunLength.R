@@ -207,7 +207,7 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
                    alignment = "unadjusted", constant = NULL, absolute=FALSE) {
   RLs <- NULL
   if (isParallel) {
-    cluster <- makeCluster(detectCores() - 1)
+    cluster <- parallel::makeCluster(detectCores() - 1)
     clusterExport(cluster, "NS")
     clusterExport(cluster, "getDist")
     clusterExport(cluster, "getRL")

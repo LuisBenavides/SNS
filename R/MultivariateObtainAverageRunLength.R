@@ -9,13 +9,23 @@
 #' \describe{
 #'   \item{T2 scheme: }{is \code{c(k)}, where \code{k} comes from \eqn{UCL = mu + k\sigma, LCL = mu - k\sigma.}}
 #' }
+#' @param chart.par vector. Control limit and other parameters of the selected chart.
 #' @param calibrate logical. If \code{TRUE} the RL is limit to 10 times the target ARL.
 #' @param arl0 scalar. Expected value of the RL. Default \code{370}.
 #' @export
 #' @import stats
-
+#' @examples
+#' nv <- 2 #number of variables
+#' inf <- 1000000 #infinite value to better approximation
+#' alpha <- 0.005 #confindent interval
+#' vec <- rchisq(inf, nv) #chi-sq random generator numbers according to the "infinite value"
+#' h <- quantile(vec , 1-alpha) #control limit
+#' mGetRL(n=5, m=10, nv=nv, mu=c(0,0), dists = c("Normal", "Normal"),
+#' dists.par = matrix(c(0,1,1,0,1,1), ncol=2),
+#' chart = "T2",chart.par=c(h), correlation=0)
 mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
-                  dists, mu, sigma=NULL, dists.par = NULL,chart="T2",
+                  dists, mu, sigma=NULL, dists.par = NULL, correlation=0,
+                  chart="T2", chart.par = c(10),
                   alignment = "unadjusted", constant = NULL, absolute=FALSE,
                   calibrate=FALSE, arl0=370) {
   # initilize the reference sample
@@ -24,7 +34,7 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 
   if (m > 0) { # if there are reference sample
     # generate the reference sample
-    Y <- mGetDist(n = m, nv = nv, mu = mu[1], dists = dists, dists.par = dists.par)
+    Y <- mGetDist(n = m, nv = nv, mu = mu[1], sigma = sigma, correlation=correlation, dists = dists, dists.par = dists.par)
     ns <- MNS(X = Y, Y = NULL, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
     Z <- ns$Z
   }
@@ -33,10 +43,7 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
   in.Control <- TRUE
   switch(chart,
      T2 = {
-       inf <- 1000000 #infinite value to better approximation
-       alpha <- 0.005 #confindent interval
-       vec <- rchisq(inf, nv) #chi-sq random generator numbers according to the "infinite value"
-       ucl <- quantile(vec , 1-alpha) #control limit
+       ucl <- chart.par[1] #control limit
      }
   )
 
@@ -45,11 +52,12 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
     RL <- RL + 1
 
     # generate the subgroup to monitor
-    X <- mGetDist(n = n, nv = nv, mu = mu[2], dists = dists, dists.par = dists.par)
+    X <- mGetDist(n = n, nv = nv, mu = mu[2],sigma=sigma, dists = dists, dists.par = dists.par, correlation=correlation)
 
     # get the normal scores
     ns <- MNS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
     Zb <- ns$Z
+
 
     if (is.null(Y)) { # if is the first batch
       T2 = 0 # it does not give any information and is considered the reference sample
@@ -59,8 +67,9 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
       # check if the subgroup is in control according to each scheme
       # the reference sample is updated
 
-      T2 <- n*(muZ%*%solve(cor(Z, method = "spearman"))%*%muZ) #get the T2 statistic
+      T2 <- n*(muZ%*%chol2inv(chol(cor(Z, method = "spearman")))%*%muZ) #get the T2 statistic
     }
+
 
     # if the subgroup is out of the limits
     # an alarm is detected
@@ -71,7 +80,7 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
        }
     )
     #cat("RL=",RL, " T2=",T2," ucl",ucl, "\n")
-    if (calibrate) if (RL >= arl0 * 10) in.Control <- FALSE
+    if (calibrate) if (RL >= arl0 * 50) in.Control <- FALSE
     if (RL >= arl0 * 1000) in.Control <- FALSE
 
     Y <- rbind(Y, X) # update the reference sample
@@ -92,9 +101,13 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 #' @export
 #' @import parallel
 #' @import stats
+#' @examples
+#' mGetARL(replicates=50,n=5,m=100,nv=2,mu=c(0,0),
+#' dists = c("Normal", "Normal"), dists.par = matrix(c(0,1,1,0,1,1), ncol=2),
+#' isParallel=FALSE)
 mGetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
-                   dists, dists.par = NULL, mu,
-                   chart = "T2",
+                   dists, dists.par = NULL, mu, sigma=NULL,
+                   chart = "T2", chart.par = c(10), correlation = 0,
                    replicates = 10000, isParallel = TRUE,
                    print.RL = FALSE, progress = FALSE,
                    calibrate = FALSE, arl0 = 370,
@@ -105,7 +118,7 @@ mGetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
     clusterExport(cluster, "MNS")
     clusterExport(cluster, "mGetDist")
     clusterExport(cluster, "mGetRL")
-    RLs <- parSapply(cluster, 1:replicates, mGetRL, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, alignment=alignment, constant=constant,absolute=absolute)
+    RLs <- parSapply(cluster, 1:replicates, mGetRL, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, chart.par=chart.par,correlation=correlation, alignment=alignment, constant=constant,absolute=absolute)
     stopCluster(cluster)
   } else {
     t0 <- Sys.time()

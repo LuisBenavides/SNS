@@ -16,19 +16,23 @@
 #'   \item{\code{par.shape}: Shape parameter of the desired distribution, Default 1.}
 #' }
 #' The number of columns must be the same as the number of variables.
+#' @param correlation scalar. Corralation between variables.
 #' @return A matrix \code{x} with \code{n} observations generated following the selected distribution with its parameters.
 #' @export
 #' @importFrom MASS mvrnorm
 #' @examples
-#' mGetDist(n=5, nv=2, dists=c("Normal", "Normal"), dists.par= matrix(c(0,1,1,0,1,1), ncol=2))
-mGetDist <- function(n, nv, mu = 0, sigma=NULL, dists = NULL, dists.par = NULL) {
+#' mGetDist(n=5, nv=2, dists=c("Normal", "Normal"),dists.par= matrix(c(0,1,1,0,1,1), ncol=2))
+mGetDist <- function(n, nv, mu = 0, sigma=NULL, correlation=0, dists = NULL, dists.par = NULL) {
   if (!requireNamespace("MASS", quietly = TRUE)) {
     stop("Package \"MASS\" needed for this function to work. Please install it.",
          call. = FALSE)
   }
   mus = rep(mu, nv) # mean
 
-  s = diag(nv) # correlation matrix
+  # correlation matrix
+  s = diag(nv) #create identity matrix
+  pos = which(s != 1) #get position of elements different of 1
+  s[pos] = s[pos] + correlation #add the correlation to that positions
 
   X = MASS::mvrnorm(n, mus, s) # multivariate normal random numbers
 

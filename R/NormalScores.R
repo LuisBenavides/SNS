@@ -49,7 +49,7 @@ NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       for (i in 1:n) { # for each observation, by index.
         # obtain the rank by comparing each obsarvation
         # depending on if is greater or equals to previous data
-        R[i] <- sum(Y < X[i]) + (sum(Y == X[i]) + 2) / 2
+        R[i] <- 1 + sum(Y < X[i]) + sum(Y == X[i]) / 2
       }
       n <- length(Y) + 1 # uptade number of observations and add one unit
     }
@@ -82,7 +82,6 @@ NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       Z = Z
     }
   )
-
   output <- list(
     R = R,
     P = P,

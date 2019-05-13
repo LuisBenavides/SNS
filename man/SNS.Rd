@@ -6,7 +6,8 @@
 \usage{
 SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  chart = "Shewhart", chart.par = c(3), snsRaw = FALSE)
+  chart = "Shewhart", chart.par = c(3), snsRaw = FALSE,
+  isFixed = FALSE)
 }
 \arguments{
 \item{X}{vector. New observations to obtain the N¡normal scores.}
@@ -49,6 +50,8 @@ SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 }}
 
 \item{snsRaw}{logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.}
+
+\item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.}
 }
 \description{
 Transform a vector \code{X} into SNS using initial observations \code{Y} if available

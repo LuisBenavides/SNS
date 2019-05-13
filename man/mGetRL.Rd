@@ -5,9 +5,9 @@
 \title{Multivariate Run Length}
 \usage{
 mGetRL(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL, dists, mu,
-  sigma = NULL, dists.par = NULL, chart = "T2",
-  alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  calibrate = FALSE, arl0 = 370)
+  sigma = NULL, dists.par = NULL, correlation = 0, chart = "T2",
+  chart.par = c(10), alignment = "unadjusted", constant = NULL,
+  absolute = FALSE, calibrate = FALSE, arl0 = 370)
 }
 \arguments{
 \item{replica}{scalar. It is used for the parallel version of the function (\code{parallel=TRUE}). Default \code{1}.}
@@ -40,10 +40,14 @@ mGetRL(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL, dists, mu,
 }
 The number of columns must be the same as the number of variables.}
 
+\item{correlation}{scalar. Corralation between variables.}
+
 \item{chart}{character string. Selected type of chart. One option available: T2
 \describe{
   \item{T2 scheme: }{is \code{c(k)}, where \code{k} comes from \eqn{UCL = mu + k\sigma, LCL = mu - k\sigma.}}
 }}
+
+\item{chart.par}{vector. Control limit and other parameters of the selected chart.}
 
 \item{alignment}{character string. Aligment of the data \code{X} and \code{Y}. Select from
 \itemize{
@@ -67,4 +71,14 @@ The number of columns must be the same as the number of variables.}
 }
 \description{
 Get the run length
+}
+\examples{
+nv <- 2 #number of variables
+inf <- 1000000 #infinite value to better approximation
+alpha <- 0.005 #confindent interval
+vec <- rchisq(inf, nv) #chi-sq random generator numbers according to the "infinite value"
+h <- quantile(vec , 1-alpha) #control limit
+mGetRL(n=5, m=10, nv=nv, mu=c(0,0), dists = c("Normal", "Normal"),
+dists.par = matrix(c(0,1,1,0,1,1), ncol=2),
+chart = "T2",chart.par=c(h), correlation=0)
 }

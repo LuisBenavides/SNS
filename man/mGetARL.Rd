@@ -5,7 +5,8 @@
 \title{Multivariate Average Run Length (ARL)}
 \usage{
 mGetARL(n, m, nv, theta = NULL, Ftheta = NULL, dists,
-  dists.par = NULL, mu, chart = "T2", replicates = 10000,
+  dists.par = NULL, mu, sigma = NULL, chart = "T2",
+  chart.par = c(10), correlation = 0, replicates = 10000,
   isParallel = TRUE, print.RL = FALSE, progress = FALSE,
   calibrate = FALSE, arl0 = 370, alignment = "unadjusted",
   constant = NULL, absolute = FALSE)
@@ -37,10 +38,16 @@ The number of columns must be the same as the number of variables.}
 
 \item{mu}{scalar. Expected value of the desired distribution.}
 
+\item{sigma}{scalar. Standard deviation of the desired distribution.}
+
 \item{chart}{character string. Selected type of chart. One option available: T2
 \describe{
   \item{T2 scheme: }{is \code{c(k)}, where \code{k} comes from \eqn{UCL = mu + k\sigma, LCL = mu - k\sigma.}}
 }}
+
+\item{chart.par}{vector. Control limit and other parameters of the selected chart.}
+
+\item{correlation}{scalar. Corralation between variables.}
 
 \item{replicates}{scalar. Number of replicates to get the ARL}
 
@@ -73,4 +80,9 @@ number of cores in the computer,otherwise the code runs sequentially. Default \c
 }
 \description{
 Get the ARL \code{\link{getRL}}
+}
+\examples{
+mGetARL(replicates=50,n=5,m=100,nv=2,mu=c(0,0),
+dists = c("Normal", "Normal"), dists.par = matrix(c(0,1,1,0,1,1), ncol=2),
+isParallel=FALSE)
 }

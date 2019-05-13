@@ -7,6 +7,7 @@
 #' @inheritParams NS
 #' @inheritParams getRL
 #' @param X.id vector. The id of the vector \code{X}.
+#' @param isFixed logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.
 #' @param snsRaw logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.
 #' @export
 #' @examples
@@ -52,7 +53,7 @@
 SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
                 alignment = "unadjusted", constant = NULL, absolute = FALSE,
                 chart="Shewhart", chart.par=c(3),
-                snsRaw = FALSE) {
+                snsRaw = FALSE, isFixed = FALSE) {
 
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
     print("ERROR, theta or Ftheta missing")
@@ -102,6 +103,13 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
          }
   )
 
+  ucl = 0
+  if (scoring == "Z-SQ"){
+    inf = 1000000 #infinite value to better approximation
+    alpha = 0.005 #confindent interval
+    vec <- rchisq(inf, length(X[which(Xb.id == groups[i])])) #chi-sq random generator numbers according to the "infinite value"
+    ucl <- quantile(vec , 1-alpha) #control limit
+  }
   while (i <= length(groups)) { # repeat until the total groups are analized
     Xb = X[which(Xb.id == groups[i])] # get the observations to evalute from the positions
     ad = dataAlignment(Xb, Yb, alignment = alignment)
@@ -114,7 +122,12 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     if(snsRaw){
       Zraw[(1+n*(i-1)):(n+n*(i-1))] = ns
     }
-    z[i] = sum(ns) / n # it is a vector with a subgroup size so it is needed to average them
+
+    if (scoring == "Z"){
+      z[i] = sum(ns) / n # it is a vector with a subgroup size so it is needed to average them
+    }else if (scoring == "Z-SQ"){
+      z[i] = sum(ns)# it is a vector with a subgroup size so it is needed to sum them
+    }
     Z = z[i]
     if (is.null(Yb) && i == 1) { # if there is no reference sample
       Yb = Xb
@@ -124,7 +137,9 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     updateSample <- FALSE
     switch(chart,
            Shewhart = {
-             ucl = k / sqrt(n)
+             if (scoring == "Z"){
+               ucl = k / sqrt(n)
+             }
              if (abs(Z) < ucl) updateSample <- TRUE
            },
            CUSUM = {
@@ -160,8 +175,12 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
     UCL[i] = ucl
     LCL[i] = -ucl
+    if (scoring == "Z-SQ"){
+      LCL[i] = 0
+    }
 
-    if (updateSample){# if the subgroup is in control (updateSample change to TRUE)
+
+    if (updateSample && !isFixed){# if the subgroup is in control (updateSample change to TRUE)
       Yb = c(Yb, Xb) # add to reference sample the new observations
     }
     i = i + 1 # continue with the next group
@@ -176,7 +195,8 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     Z = z,
     X.id = X.id,
     UCL = UCL,
-    LCL = LCL
+    LCL = LCL,
+    scoring = scoring
   )
   if(snsRaw){
     output$Zraw = Zraw
@@ -209,6 +229,7 @@ plot.SNS <- function(x,...){
   Cplus = x$Cplus
   Cminus = x$Cminus
   E = x$E
+  scoring = x$scoring
   switch(chart,
          Shewhart = {
            difMaxZ = abs(max(Z) - max(UCL))
@@ -240,6 +261,9 @@ plot.SNS <- function(x,...){
 
   switch(chart,
          Shewhart = {
+          if (scoring == "Z-SQ"){
+            ymin = 0
+          }
            plot(o.id, Z, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="Z",cex.lab=2.5, cex.axis=1.5, cex=2)
            lines(o.id, Z, lt=2, lwd=3)
          },
@@ -275,6 +299,4 @@ plot.SNS <- function(x,...){
   }
   lines(o.id, UCL,lt=4, lwd=3)
   lines(o.id, LCL,lt=4, lwd=3)
-  #lines(c(o.id[1]-10*change,o.id,o.id[length(o.id)]+10*change), rep(UCL,length(o.id)+2),lt=4, lwd=3)
-  #lines(c(o.id[1]-10*change,o.id,o.id[length(o.id)]+10*change), rep(LCL,length(o.id)+2),lt=4, lwd=3)
 }

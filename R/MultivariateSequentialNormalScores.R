@@ -5,8 +5,9 @@
 #' If ties, average ranks are used.
 #' @seealso \code{\link{MNS}} for multivariate normal scores
 #' @inheritParams MNS
+#' @inheritParams mGetRL
 #' @param X.id vector. The id of each column (variable) of the matrix \code{X}.
-#' @param chart character string.
+#' @param isFixed logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.
 #' @export
 #' @examples
 #' X = cbind(example91$X1, example91$X2)
@@ -14,7 +15,7 @@
 #' msns = MSNS(X, X.id)
 MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
                 alignment = "unadjusted", constant = NULL, absolute = FALSE,
-                chart="T2") {
+                chart="T2", chart.par = c(10), isFixed = FALSE) {
 
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
     print("ERROR, theta or Ftheta missing")
@@ -43,10 +44,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   UCL = rep(NA, ng)
   switch(chart,
      T2 = {
-       inf = 1000000 #infinite value to better approximation
-       alpha = 0.005 #confindent interval
-       vec <- rchisq(inf, ncol(X)) #chi-sq random generator numbers according to the "infinite value"
-       ucl <- quantile(vec , 1-alpha) #control limit
+        ucl <- chart.par[1]
      }
   )
 
@@ -74,7 +72,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     }
     UCL[i] = ucl
 
-    if (updateSample || is.null(Yb)){# if the subgroup is in control (updateSample change to TRUE)
+    if ( (updateSample || is.null(Yb)) && !isFixed){# if the subgroup is in control (updateSample change to TRUE)
       Yb = rbind(Yb, Xb) # add to reference sample the new observations
     }
     Z = rbind(Z, Zb) #update the sns

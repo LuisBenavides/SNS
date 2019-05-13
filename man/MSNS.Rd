@@ -6,7 +6,7 @@
 \usage{
 MSNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  chart = "T2")
+  chart = "T2", chart.par = c(10), isFixed = FALSE)
 }
 \arguments{
 \item{X}{matrix or data.frame. New observations to obtain the N¡normal scores.}
@@ -37,7 +37,14 @@ MSNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
 
-\item{chart}{character string.}
+\item{chart}{character string. Selected type of chart. One option available: T2
+\describe{
+  \item{T2 scheme: }{is \code{c(k)}, where \code{k} comes from \eqn{UCL = mu + k\sigma, LCL = mu - k\sigma.}}
+}}
+
+\item{chart.par}{vector. Control limit and other parameters of the selected chart.}
+
+\item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.}
 }
 \description{
 Transform a matrix \code{X} into SNS using initial observations \code{Y} if available

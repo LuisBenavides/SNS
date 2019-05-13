@@ -4,8 +4,8 @@
 \alias{mGetDist}
 \title{Multivariate Random Observations Generetor}
 \usage{
-mGetDist(n, nv, mu = 0, sigma = NULL, dists = NULL,
-  dists.par = NULL)
+mGetDist(n, nv, mu = 0, sigma = NULL, correlation = 0,
+  dists = NULL, dists.par = NULL)
 }
 \arguments{
 \item{n}{scalar. Number of observations to be generated.}
@@ -15,6 +15,8 @@ mGetDist(n, nv, mu = 0, sigma = NULL, dists = NULL,
 \item{mu}{scalar. Expected value of the desired distribution.}
 
 \item{sigma}{scalar. Standard deviation of the desired distribution.}
+
+\item{correlation}{scalar. Corralation between variables.}
 
 \item{dists}{vector of character string. Distribution of each variable. The length mus be the same as the number of variables. Select from:
 \itemize{
@@ -37,5 +39,5 @@ A matrix \code{x} with \code{n} observations generated following the selected di
 Multivariate Random observations generator selected from several distributions with user defined mean and variance.
 }
 \examples{
-mGetDist(n=5, nv=2, dists=c("Normal", "Normal"), dists.par= matrix(c(0,1,1,0,1,1), ncol=2))
+mGetDist(n=5, nv=2, dists=c("Normal", "Normal"),dists.par= matrix(c(0,1,1,0,1,1), ncol=2))
 }
