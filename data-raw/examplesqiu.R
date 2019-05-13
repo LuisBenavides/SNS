@@ -38,14 +38,12 @@ for(nameFile in namesFileExamples){
       df1 = dfExample$V1
       Y1 = df1[1:(nb*n)] #N(0,1)
       X1 = df1[(nb*n+1):(2*nb*n)] #N(1,1)
-      X.id = rep(seq(1:nb), n)
-      X1 = X1[order(X.id)] #order according the id
 
       df2 = dfExample$V2
       Y2 = df2[1:(nb*n)] #N(0,1)
       X2 = df2[(nb*n+1):(2*nb*n)] #N(0,22)
-      X2 = X2[order(X.id)] #order according the id
 
+      X.id = rep(seq(1:nb), n)
       X.id = X.id[order(X.id)] #order the id
       dfExample = data.frame(X1 = X1, X2 = X2, Y1 = Y1,Y2 = Y2, X.id = X.id)
     }else if(fileName %in% c("example81", "example85") ){
