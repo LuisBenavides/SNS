@@ -6,8 +6,8 @@
 \usage{
 mCalibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m, nv,
   theta = NULL, Ftheta = NULL, dists = c("Normal", "Normal"),
-  mu = 0, sigma = NULL, dists.par = matrix(c(0, 1, 1, 0, 1, 1), ncol
-  = 2), correlation = 0, chart = "T2", chart.par = c(10),
+  mu = c(0, 0), sigma = NULL, dists.par = matrix(c(0, 1, 1, 0, 1, 1),
+  ncol = 2), correlation = 0, chart = "T2", chart.par = c(10),
   replicates = 50000, isParallel = FALSE, maxIter = 20,
   progress = TRUE, alignment = "unadjusted", constant = NULL,
   absolute = FALSE)

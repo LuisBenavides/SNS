@@ -50,7 +50,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
   while (i <= ng) { # repeat until the total groups are analized
     Xb = X[which(Xb.id == groups[i]),] # get the observations to evalute from the positions
-    ns = MNS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
+    ns = SNS::MNS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
     Zb = ns$Z
     n = nrow(Xb) #get the number of observation per group
 
@@ -64,8 +64,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       updateSample <- FALSE
       switch(chart,
          T2 = {
-           print(Z)
-           T2[i] = n*(mu%*%solve(cor(Z, method = "spearman"))%*%mu) #get the T2 statistic
+           T2[i] = n*(mu%*%chol2inv(chol(cor(Z, method = "spearman")))%*%mu) #get the T2 statistic
            if (T2[i] <= ucl) updateSample <- TRUE
          }
       )

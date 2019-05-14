@@ -34,8 +34,8 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 
   if (m > 0) { # if there are reference sample
     # generate the reference sample
-    Y <- mGetDist(n = m, nv = nv, mu = mu[1], sigma = sigma, correlation=correlation, dists = dists, dists.par = dists.par)
-    ns <- MNS(X = Y, Y = NULL, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
+    Y <- SNS::mGetDist(n = m, nv = nv, mu = mu[1], sigma = sigma, correlation=correlation, dists = dists, dists.par = dists.par)
+    ns <- SNS::MNS(X = Y, Y = NULL, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
     Z <- ns$Z
   }
 
@@ -52,7 +52,7 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
     RL <- RL + 1
 
     # generate the subgroup to monitor
-    X <- mGetDist(n = n, nv = nv, mu = mu[2],sigma=sigma, dists = dists, dists.par = dists.par, correlation=correlation)
+    X <- SNS::mGetDist(n = n, nv = nv, mu = mu[2],sigma=sigma, dists = dists, dists.par = dists.par, correlation=correlation)
 
     # get the normal scores
     ns <- MNS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
@@ -114,16 +114,16 @@ mGetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
                    alignment = "unadjusted", constant = NULL, absolute=FALSE) {
   RLs <- NULL
   if (isParallel) {
-    cluster <- makeCluster(detectCores() - 1)
-    clusterExport(cluster, "MNS")
-    clusterExport(cluster, "mGetDist")
-    clusterExport(cluster, "mGetRL")
-    RLs <- parSapply(cluster, 1:replicates, mGetRL, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, chart.par=chart.par,correlation=correlation, alignment=alignment, constant=constant,absolute=absolute)
-    stopCluster(cluster)
+    cluster <- parallel::makeCluster(detectCores() - 1)
+    parallel::clusterExport(cluster, "MNS")
+    parallel::clusterExport(cluster, "mGetDist")
+    parallel::clusterExport(cluster, "mGetRL")
+    RLs <- parallel::parSapply(cluster, 1:replicates, mGetRL, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, chart.par=chart.par,correlation=correlation, alignment=alignment, constant=constant,absolute=absolute)
+    parallel::stopCluster(cluster)
   } else {
     t0 <- Sys.time()
     for (r in 1:replicates) {
-      RL <- mGetRL(1, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, alignment=alignment, constant=constant,absolute=absolute)
+      RL <- SNS::mGetRL(1, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, alignment=alignment, constant=constant,absolute=absolute)
 
       RLs <- c(RLs, RL)
 

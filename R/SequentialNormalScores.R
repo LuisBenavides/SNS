@@ -112,7 +112,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   }
   while (i <= length(groups)) { # repeat until the total groups are analized
     Xb = X[which(Xb.id == groups[i])] # get the observations to evalute from the positions
-    ad = dataAlignment(Xb, Yb, alignment = alignment)
+    ad = SNS::dataAlignment(Xb, Yb, alignment = alignment)
     Xb = ad$X
     Yb = ad$Y
     ns = SNS::NS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
@@ -123,11 +123,14 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       Zraw[(1+n*(i-1)):(n+n*(i-1))] = ns
     }
 
-    if (scoring == "Z"){
-      z[i] = sum(ns) / n # it is a vector with a subgroup size so it is needed to average them
-    }else if (scoring == "Z-SQ"){
-      z[i] = sum(ns)# it is a vector with a subgroup size so it is needed to sum them
-    }
+    switch (scoring,
+      "Z" = {# it is a vector with a subgroup size so it is needed to average them
+        z[i] = mean(ns)
+      },
+      "Z-SQ" = {# it is a vector with a subgroup size so it is needed to sum them
+        z[i] = sum(ns)
+      }
+    )
     Z = z[i]
     if (is.null(Yb) && i == 1) { # if there is no reference sample
       Yb = Xb
@@ -261,29 +264,31 @@ plot.SNS <- function(x,...){
 
   switch(chart,
          Shewhart = {
+           ylab = "Z"
           if (scoring == "Z-SQ"){
             ymin = 0
+            ylab = expression(Z^2)
           }
-           plot(o.id, Z, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="Z",cex.lab=2.5, cex.axis=1.5, cex=2)
+           plot(o.id, Z, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=ylab,cex.lab=2.5, cex.axis=1.5, cex=2)
            lines(o.id, Z, lt=2, lwd=3)
          },
          CUSUM = {
            type = chart.par[3]
            switch(type,
                   "1" = {
-                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="Cplus",cex.lab=2.5, cex.axis=1.5, cex=2)
+                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"+"),cex.lab=2.5, cex.axis=1.5, cex=2)
                     lines(o.id, Cplus, lt=2, lwd=3)
                   },
                   "2" = {
-                    plot(o.id, Cminus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="Cminus",cex.lab=2.5, cex.axis=1.5, cex=2)
+                    plot(o.id, Cminus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"-"),cex.lab=2.5, cex.axis=1.5, cex=2)
                     lines(o.id, Cminus, lt=2, lwd=3)
                   },
                   "3" = {
-                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="Cplus/Cminus",cex.lab=2.5, cex.axis=1.5, cex=2)
+                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"+"/C^"-"),cex.lab=2.5, cex.axis=1.5, cex=2)
                     points(o.id, Cminus, pch=15, cex=2)
                     lines(o.id, Cplus, lt=2, lwd=3)
                     lines(o.id, Cminus, lt=2, lwd=3)
-                    legend("topleft", c("Cplus", "Cminus"), pch=c(19, 15))
+                    legend("topleft", c(expression(C^"+"), expression(C^"-")), pch=c(19, 15))
                   }
            )
          },
@@ -298,5 +303,5 @@ plot.SNS <- function(x,...){
     change = -1
   }
   lines(o.id, UCL,lt=4, lwd=3)
-  lines(o.id, LCL,lt=4, lwd=3)
+  if(sum(LCL) != 0)  lines(o.id, LCL,lt=4, lwd=3)
 }

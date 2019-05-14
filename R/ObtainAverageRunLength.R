@@ -65,7 +65,7 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
   Y <- NULL
   if (m > 0) { # if there are reference sample
     # generate the reference sample
-    Y <- getDist(n = m, dist = dist, mu = mu[1], sigma = sigma[1], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
+    Y <- SNS::getDist(n = m, dist = dist, mu = mu[1], sigma = sigma[1], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
   }
   RL <- 0
   in.Control <- TRUE
@@ -88,24 +88,37 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
     }
   )
 
+
   while (in.Control) {
     # add one iteration to run length
     RL <- RL + 1
 
     # generate the subgroup to monitor
-    X <- getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
+    X <- SNS::getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
 
     # get the normal scores
-    ns <- NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
+    ns <- SNS::NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
     Z <- ns$Z
-    Z <- mean(Z)
+
+    switch(scoring,
+           "Z" = {# it is a vector with a subgroup size so it is needed to average them
+             Z = mean(Z)
+           },
+           "Z-SQ" = {# it is a vector with a subgroup size so it is needed to sum them
+             Z = sum(Z)
+           }
+    )
 
     # if the subgroup is out of the limits
     # an alarm is detected
     switch(chart,
       Shewhart = {
         # if the subgroup is out of the limits an alarm is detected
-        if (abs(Z) >= k / sqrt(n)) in.Control <- FALSE
+        ucl = k
+        if (scoring == "Z"){
+          ucl = ucl / sqrt(n) #k / sqrt(n)
+        }
+        if (abs(Z) >= ucl) in.Control <- FALSE
       },
       CUSUM = {
         switch(type,
@@ -208,15 +221,15 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
   RLs <- NULL
   if (isParallel) {
     cluster <- parallel::makeCluster(detectCores() - 1)
-    clusterExport(cluster, "NS")
-    clusterExport(cluster, "getDist")
-    clusterExport(cluster, "getRL")
-    RLs <- parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute)
-    stopCluster(cluster)
+    parallel::clusterExport(cluster, "NS")
+    parallel::clusterExport(cluster, "getDist")
+    parallel::clusterExport(cluster, "getRL")
+    RLs <- parallel::parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute)
+    parallel::stopCluster(cluster)
   } else {
     t0 <- Sys.time()
     for (r in 1:replicates) {
-      RL <- getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute)
+      RL <- SNS::getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute)
 
       RLs <- c(RLs, RL)
 
