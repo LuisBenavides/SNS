@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 ```
 
 # Sequential Normal Scores
-The methods discussed in this package are new nonparametric methods based on **sequential normal scores** (SNS), designed for sequences of observations, usually time series data, which may occur singly or in batches, and may be univariate or multivariate. These methods are designed to detect changes in the process, which may occur as changes in **location** (mean or median), changes in **scale** (standard deviation, or variance), or other changes of interest in the distribution of the observations, over the time observed. They usually apply to large data sets, so computations need to be simple enough to be done in a reasonable time on a computer, and easily updated as each new observation (or batch of observations) becomes available.
+The methods discussed in this package are new nonparametric methods based on *sequential normal scores* (SNS), designed for sequences of observations, usually time series data, which may occur singly or in batches, and may be univariate or multivariate. These methods are designed to detect changes in the process, which may occur as changes in *location* (mean or median), changes in *scale* (standard deviation, or variance), or other changes of interest in the distribution of the observations, over the time observed. They usually apply to large data sets, so computations need to be simple enough to be done in a reasonable time on a computer, and easily updated as each new observation (or batch of observations) becomes available.
 
 ## Installation
 
@@ -30,6 +30,13 @@ You can install the released version of SNS from [CRAN](https://CRAN.R-project.o
 install.packages("SNS")
 ```
 
+or install from the package hosted in [github](https://github.com/LuisBenavides/sns).
+
+``` r
+install_github("LuisBenavides/SNS")
+```
+
+**Note**: To use `install_github` it is needed the library devtools.
 ## Univariate Analysis
 
 
