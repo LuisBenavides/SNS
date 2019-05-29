@@ -6,10 +6,10 @@
 \usage{
 mgetARL(n, m, nv, theta = NULL, Ftheta = NULL, dists,
   dists.par = NULL, mu, sigma = NULL, chart = "T2",
-  chart.par = c(10), correlation = 0, replicates = 10000,
-  isParallel = TRUE, print.RL = FALSE, progress = FALSE,
-  calibrate = FALSE, arl0 = 370, alignment = "unadjusted",
-  constant = NULL, absolute = FALSE)
+  chart.par = c(0.005), correlation = 0, s = NULL,
+  replicates = 10000, isParallel = TRUE, print.RL = FALSE,
+  progress = FALSE, calibrate = FALSE, arl0 = 370,
+  alignment = "unadjusted", constant = NULL, absolute = FALSE)
 }
 \arguments{
 \item{n}{scalar. Subroup size}
@@ -48,6 +48,8 @@ The number of columns must be the same as the number of variables.}
 \item{chart.par}{vector. Control limit and other parameters of the selected chart.}
 
 \item{correlation}{scalar. Corralation between variables.}
+
+\item{s}{matrix. Correlation matrix of the variables}
 
 \item{replicates}{scalar. Number of replicates to get the ARL}
 

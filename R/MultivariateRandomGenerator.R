@@ -9,6 +9,7 @@
 #' }
 #' @param mu scalar. Expected value of the desired distribution.
 #' @param sigma scalar. Standard deviation of the desired distribution.
+#' @param s matrix. Correlation matrix of the variables
 #' @param dists.par matrix  For each variable (column), specify
 #' \itemize{
 #'   \item{\code{par.location}: Location parameter of the desired distribution. Default 0.}

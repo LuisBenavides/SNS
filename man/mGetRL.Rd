@@ -5,9 +5,10 @@
 \title{Multivariate Run Length}
 \usage{
 mgetRL(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL, dists, mu,
-  sigma = NULL, dists.par = NULL, correlation = 0, chart = "T2",
-  chart.par = c(0.005), null.dist = "Chi", alignment = "unadjusted",
-  constant = NULL, absolute = FALSE, calibrate = FALSE, arl0 = 370)
+  sigma = NULL, dists.par = NULL, correlation = 0, s = NULL,
+  chart = "T2", chart.par = c(0.005), null.dist = "Chi",
+  alignment = "unadjusted", constant = NULL, absolute = FALSE,
+  calibrate = FALSE, arl0 = 370)
 }
 \arguments{
 \item{replica}{scalar. It is used for the parallel version of the function (\code{parallel=TRUE}). Default \code{1}.}
@@ -41,6 +42,8 @@ mgetRL(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL, dists, mu,
 The number of columns must be the same as the number of variables.}
 
 \item{correlation}{scalar. Corralation between variables.}
+
+\item{s}{matrix. Correlation matrix of the variables}
 
 \item{chart}{character string. Selected type of chart. One option available: \code{"T2"}.
 \describe{

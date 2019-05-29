@@ -20,7 +20,7 @@
 #' mgetRL(n=5, m=10, nv=2, mu=c(0,0), dists = c("Normal", "Normal"),
 #' dists.par = matrix(c(0,1,1,0,1,1), ncol=2))
 mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
-                  dists, mu, sigma=NULL, dists.par = NULL, correlation=0,
+                  dists, mu, sigma=NULL, dists.par = NULL, correlation=0, s=NULL,
                   chart="T2", chart.par = c(0.005), null.dist = "Chi",
                   alignment = "unadjusted", constant = NULL, absolute=FALSE,
                   calibrate=FALSE, arl0=370) {
@@ -30,7 +30,7 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 
   if (m > 0) { # if there are reference sample
     # generate the reference sample
-    Y <- SNS::mgetDist(n = m, nv = nv, mu = mu[1], sigma = sigma, correlation=correlation, dists = dists, dists.par = dists.par)
+    Y <- SNS::mgetDist(n = m, nv = nv, mu = mu[1], sigma = sigma, correlation=correlation, s=s, dists = dists, dists.par = dists.par)
     ns <- SNS::MNS(X = Y, Y = NULL, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
     Z <- ns$Z
   }
@@ -50,7 +50,7 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
     RL <- RL + 1
 
     # generate the subgroup to monitor
-    X <- SNS::mgetDist(n = n, nv = nv, mu = mu[2],sigma=sigma, dists = dists, dists.par = dists.par, correlation=correlation)
+    X <- SNS::mgetDist(n = n, nv = nv, mu = mu[2],sigma=sigma, dists = dists, dists.par = dists.par, correlation=correlation, s=s)
 
     # get the normal scores
     ns <- MNS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
@@ -109,7 +109,7 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 #' isParallel=FALSE)
 mgetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
                    dists, dists.par = NULL, mu, sigma=NULL,
-                   chart = "T2", chart.par = c(10), correlation = 0,
+                   chart = "T2", chart.par = c(0.005), correlation = 0, s=NULL,
                    replicates = 10000, isParallel = TRUE,
                    print.RL = FALSE, progress = FALSE,
                    calibrate = FALSE, arl0 = 370,
@@ -120,12 +120,12 @@ mgetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
     parallel::clusterExport(cluster, "MNS")
     parallel::clusterExport(cluster, "mgetDist")
     parallel::clusterExport(cluster, "mgetRL")
-    RLs <- parallel::parSapply(cluster, 1:replicates, mgetRL, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, chart.par=chart.par,correlation=correlation, alignment=alignment, constant=constant,absolute=absolute)
+    RLs <- parallel::parSapply(cluster, 1:replicates, mgetRL, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, chart.par=chart.par,correlation=correlation, s=s, alignment=alignment, constant=constant,absolute=absolute)
     parallel::stopCluster(cluster)
   } else {
     t0 <- Sys.time()
     for (r in 1:replicates) {
-      RL <- SNS::mgetRL(1, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, alignment=alignment, constant=constant,absolute=absolute)
+      RL <- SNS::mgetRL(replica=1, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, chart.par=chart.par,correlation=correlation, s=s, alignment=alignment, constant=constant,absolute=absolute)
 
       RLs <- c(RLs, RL)
 

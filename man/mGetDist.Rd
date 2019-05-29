@@ -4,7 +4,7 @@
 \alias{mgetDist}
 \title{Multivariate Random Observations Generetor}
 \usage{
-mgetDist(n, nv, mu = 0, sigma = NULL, correlation = 0,
+mgetDist(n, nv, mu = 0, sigma = NULL, correlation = 0, s = NULL,
   dists = NULL, dists.par = NULL)
 }
 \arguments{
@@ -17,6 +17,8 @@ mgetDist(n, nv, mu = 0, sigma = NULL, correlation = 0,
 \item{sigma}{scalar. Standard deviation of the desired distribution.}
 
 \item{correlation}{scalar. Corralation between variables.}
+
+\item{s}{matrix. Correlation matrix of the variables}
 
 \item{dists}{vector of character string. Distribution of each variable. The length mus be the same as the number of variables. Select from:
 \itemize{
