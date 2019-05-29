@@ -221,7 +221,7 @@ plot(msns)
 ```{r,echo=F,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
 X = SNS::example93[,1:2] #get the dataset into a data frame
 X.id = SNS::example93$X.id
-msns = SNS::MSNS(X, X.id)
+msns = SNS::MSNS(X, X.id, null.dist = "F")
 plot(msns)
 ```
 
