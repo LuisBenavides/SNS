@@ -5,7 +5,7 @@
 #' If ties, average ranks are used.
 #' @seealso \code{\link{MNS}} for multivariate normal scores
 #' @inheritParams MNS
-#' @inheritParams mGetRL
+#' @inheritParams mgetRL
 #' @param X.id vector. The id of each column (variable) of the matrix \code{X}.
 #' @param isFixed logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.
 #' @export
@@ -15,7 +15,7 @@
 #' msns = MSNS(X, X.id)
 MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
                 alignment = "unadjusted", constant = NULL, absolute = FALSE,
-                chart="T2", chart.par = c(10), isFixed = FALSE) {
+                chart="T2", chart.par = c(0.005), null.dist="Chi", isFixed = FALSE) {
 
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
     print("ERROR, theta or Ftheta missing")
@@ -42,10 +42,23 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   }
 
   UCL = rep(NA, ng)
+
+  alpha <- chart.par[1]
+  nv <- ncol(X)
   switch(chart,
-     T2 = {
-        ucl <- chart.par[1]
-     }
+         T2 = {
+           if(null.dist == "Chi"){
+             ucl <- qchisq(1-alpha,nv) #control limit
+           }else if(null.dist=="F"){
+             M <- 1
+             n <- length(Xb.id) / ng
+             if(!is.null(Yb)){#if Yb exists
+              m <- nrow(Yb) / ng
+              M <- ceiling(m / n)
+             }
+             ucl <- nv*(M+1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
+           }
+         }
   )
 
   while (i <= ng) { # repeat until the total groups are analized
@@ -65,6 +78,11 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       switch(chart,
          T2 = {
            T2[i] = n*(mu%*%chol2inv(chol(cor(Z, method = "spearman")))%*%mu) #get the T2 statistic
+
+           if (null.dist == "F"){
+             M <- M + 1 #add the subgroup
+             ucl <- nv*(M+1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
+           }
            if (T2[i] <= ucl) updateSample <- TRUE
          }
       )
@@ -90,14 +108,14 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     UCL = UCL
   )
 
-  class(output)="MSNS" # Class definition
+  class(output)="msns" # Class definition
 
   return(output) # return the sequential normal score
 }
 
 #' @import graphics
 #' @export
-plot.MSNS <- function(x,...){
+plot.msns <- function(x,...){
   par(mar = c(6,6,4,2))
   T2 = x$T2
   o.id = unique(x$X.id) # original id

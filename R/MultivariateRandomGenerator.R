@@ -21,8 +21,8 @@
 #' @export
 #' @importFrom MASS mvrnorm
 #' @examples
-#' mGetDist(n=5, nv=2, dists=c("Normal", "Normal"),dists.par= matrix(c(0,1,1,0,1,1), ncol=2))
-mGetDist <- function(n, nv, mu = 0, sigma=NULL, correlation=0, dists = NULL, dists.par = NULL) {
+#' mgetDist(n=5, nv=2, dists=c("Normal", "Normal"),dists.par= matrix(c(0,1,1,0,1,1), ncol=2))
+mgetDist <- function(n, nv, mu = 0, sigma=NULL, correlation=0, s=NULL,  dists = NULL, dists.par = NULL) {
   if (!requireNamespace("MASS", quietly = TRUE)) {
     stop("Package \"MASS\" needed for this function to work. Please install it.",
          call. = FALSE)
@@ -30,10 +30,11 @@ mGetDist <- function(n, nv, mu = 0, sigma=NULL, correlation=0, dists = NULL, dis
   mus = rep(mu, nv) # mean
 
   # correlation matrix
-  s = diag(nv) #create identity matrix
-  pos = which(s != 1) #get position of elements different of 1
-  s[pos] = s[pos] + correlation #add the correlation to that positions
-
+  if (is.null(s)){
+    s = diag(nv) #create identity matrix
+    pos = which(s != 1) #get position of elements different of 1
+    s[pos] = s[pos] + correlation #add the correlation to that positions
+  }
   X = MASS::mvrnorm(n, mus, s) # multivariate normal random numbers
 
   U = pnorm(X) # marginal's cdf

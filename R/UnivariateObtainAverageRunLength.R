@@ -5,6 +5,7 @@
 #' @param replica scalar. It is used for the parallel version of the function (\code{parallel=TRUE}). Default \code{1}.
 #' @param n scalar. Subroup size
 #' @param m scalar. Reference sample size
+#' @param mu vector. Two elements of the vector the first one is the mean of the reference sample and the second one is the mean of the monitoring sample.
 #' @param dist.par vector. Distribution parameters. \code{c(par.location, par.scale, par.shape)}. Default \code{c(0,1,1)}.
 #' @param chart character string. Selected type of chart. Three options are available: Shewhart, CUSUM, EWMA
 #' @param chart.par vector. The size depends on the selected chart:
@@ -40,7 +41,7 @@
 #' chart <- "Shewhart"
 #' chart.par <- c(3)
 #' shewhart <- getRL(1, n, m,
-#'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
+#'   theta = NULL, Ftheta = NULL,dist, mu, sigma, dist.par = dist.par,
 #'   chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0
 #' )
 #'
@@ -54,11 +55,11 @@
 #' chart <- "EWMA"
 #' chart.par <- c(0.2, 2.962)
 #' shewhart <- getRL(1, n, m,
-#'   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = dist.par,
+#'   theta = NULL, Ftheta = NULL,dist, mu, sigma, dist.par = dist.par,
 #'   chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0
 #' )
 getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
-                  dist, mu, sigma, dist.par = c(0,1,1),
+                  dist, mu, sigma, dist.par = c(0,1,1),scoring = "Z",
                   chart, chart.par, calibrate = FALSE, arl0 = 370,
                   alignment = "unadjusted", constant = NULL, absolute=FALSE) {
   # initilize the reference sample

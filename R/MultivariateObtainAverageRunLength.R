@@ -1,31 +1,27 @@
 #' @title Multivariate Run Length
 #' @description Get the run length
-#' @inheritParams mGetDist
+#' @inheritParams mgetDist
 #' @inheritParams MNS
 #' @param replica scalar. It is used for the parallel version of the function (\code{parallel=TRUE}). Default \code{1}.
 #' @param n scalar. Subroup size
 #' @param m scalar. Reference sample size
-#' @param chart character string. Selected type of chart. One option available: T2
+#' @param mu vector. Two elements of the vector the first one is the mean of the reference sample and the second one is the mean of the monitoring sample.
+#' @param chart character string. Selected type of chart. One option available: \code{"T2"}.
 #' \describe{
 #'   \item{T2 scheme: }{is \code{c(k)}, where \code{k} comes from \eqn{UCL = mu + k\sigma, LCL = mu - k\sigma.}}
 #' }
 #' @param chart.par vector. Control limit and other parameters of the selected chart.
+#' @param null.dist character string. It is the null distribution choose from \code{"Chi"} or \code{"F"}.
 #' @param calibrate logical. If \code{TRUE} the RL is limit to 10 times the target ARL.
-#' @param arl0 scalar. Expected value of the RL. Default \code{370}.
+#' @param arl0 scalar. Expected value of the RL. It is only used for stop the RL if exceeds 10 times its value. Default \code{370}.
 #' @export
 #' @import stats
 #' @examples
-#' nv <- 2 #number of variables
-#' inf <- 1000000 #infinite value to better approximation
-#' alpha <- 0.005 #confindent interval
-#' vec <- rchisq(inf, nv) #chi-sq random generator numbers according to the "infinite value"
-#' h <- quantile(vec , 1-alpha) #control limit
-#' mGetRL(n=5, m=10, nv=nv, mu=c(0,0), dists = c("Normal", "Normal"),
-#' dists.par = matrix(c(0,1,1,0,1,1), ncol=2),
-#' chart = "T2",chart.par=c(h), correlation=0)
-mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
+#' mgetRL(n=5, m=10, nv=2, mu=c(0,0), dists = c("Normal", "Normal"),
+#' dists.par = matrix(c(0,1,1,0,1,1), ncol=2))
+mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
                   dists, mu, sigma=NULL, dists.par = NULL, correlation=0,
-                  chart="T2", chart.par = c(10),
+                  chart="T2", chart.par = c(0.005), null.dist = "Chi",
                   alignment = "unadjusted", constant = NULL, absolute=FALSE,
                   calibrate=FALSE, arl0=370) {
   # initilize the reference sample
@@ -34,16 +30,18 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 
   if (m > 0) { # if there are reference sample
     # generate the reference sample
-    Y <- SNS::mGetDist(n = m, nv = nv, mu = mu[1], sigma = sigma, correlation=correlation, dists = dists, dists.par = dists.par)
+    Y <- SNS::mgetDist(n = m, nv = nv, mu = mu[1], sigma = sigma, correlation=correlation, dists = dists, dists.par = dists.par)
     ns <- SNS::MNS(X = Y, Y = NULL, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
     Z <- ns$Z
   }
 
   RL <- 0
   in.Control <- TRUE
+  alpha <- chart.par[1]
+  M <- floor(m / n)
   switch(chart,
      T2 = {
-       ucl <- chart.par[1] #control limit
+       if(null.dist == "Chi") ucl <- qchisq(1-alpha,nv) #control limit
      }
   )
 
@@ -52,7 +50,7 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
     RL <- RL + 1
 
     # generate the subgroup to monitor
-    X <- SNS::mGetDist(n = n, nv = nv, mu = mu[2],sigma=sigma, dists = dists, dists.par = dists.par, correlation=correlation)
+    X <- SNS::mgetDist(n = n, nv = nv, mu = mu[2],sigma=sigma, dists = dists, dists.par = dists.par, correlation=correlation)
 
     # get the normal scores
     ns <- MNS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
@@ -75,6 +73,10 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
     # an alarm is detected
     switch(chart,
        T2 = {
+         if (null.dist == "F"){
+           M <- M + 1 #add the subgroup
+           ucl <- nv*(M-1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
+         }
          # if the subgroup is out of the limits an alarm is detected
          if (T2 > ucl) in.Control <- FALSE
        }
@@ -92,7 +94,7 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 
 #' @title Multivariate Average Run Length (ARL)
 #' @description Get the ARL \code{\link{getRL}}
-#' @inheritParams mGetRL
+#' @inheritParams mgetRL
 #' @param print.RL logical. If \code{TRUE} return the vectors of RL for each iteration.
 #' @param replicates scalar. Number of replicates to get the ARL
 #' @param progress logical. If \code{TRUE} it shows the progress in the console.
@@ -102,10 +104,10 @@ mGetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 #' @import parallel
 #' @import stats
 #' @examples
-#' mGetARL(replicates=50,n=5,m=100,nv=2,mu=c(0,0),
+#' mgetARL(replicates=50,n=5,m=100,nv=2,mu=c(0,0),
 #' dists = c("Normal", "Normal"), dists.par = matrix(c(0,1,1,0,1,1), ncol=2),
 #' isParallel=FALSE)
-mGetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
+mgetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
                    dists, dists.par = NULL, mu, sigma=NULL,
                    chart = "T2", chart.par = c(10), correlation = 0,
                    replicates = 10000, isParallel = TRUE,
@@ -116,14 +118,14 @@ mGetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
   if (isParallel) {
     cluster <- parallel::makeCluster(detectCores() - 1)
     parallel::clusterExport(cluster, "MNS")
-    parallel::clusterExport(cluster, "mGetDist")
-    parallel::clusterExport(cluster, "mGetRL")
-    RLs <- parallel::parSapply(cluster, 1:replicates, mGetRL, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, chart.par=chart.par,correlation=correlation, alignment=alignment, constant=constant,absolute=absolute)
+    parallel::clusterExport(cluster, "mgetDist")
+    parallel::clusterExport(cluster, "mgetRL")
+    RLs <- parallel::parSapply(cluster, 1:replicates, mgetRL, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, chart.par=chart.par,correlation=correlation, alignment=alignment, constant=constant,absolute=absolute)
     parallel::stopCluster(cluster)
   } else {
     t0 <- Sys.time()
     for (r in 1:replicates) {
-      RL <- SNS::mGetRL(1, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, alignment=alignment, constant=constant,absolute=absolute)
+      RL <- SNS::mgetRL(1, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, alignment=alignment, constant=constant,absolute=absolute)
 
       RLs <- c(RLs, RL)
 

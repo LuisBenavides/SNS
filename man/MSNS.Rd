@@ -6,7 +6,8 @@
 \usage{
 MSNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  chart = "T2", chart.par = c(10), isFixed = FALSE)
+  chart = "T2", chart.par = c(0.005), null.dist = "Chi",
+  isFixed = FALSE)
 }
 \arguments{
 \item{X}{matrix or data.frame. New observations to obtain the N¡normal scores.}
@@ -37,12 +38,14 @@ MSNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
 
-\item{chart}{character string. Selected type of chart. One option available: T2
+\item{chart}{character string. Selected type of chart. One option available: \code{"T2"}.
 \describe{
   \item{T2 scheme: }{is \code{c(k)}, where \code{k} comes from \eqn{UCL = mu + k\sigma, LCL = mu - k\sigma.}}
 }}
 
 \item{chart.par}{vector. Control limit and other parameters of the selected chart.}
+
+\item{null.dist}{character string. It is the null distribution choose from \code{"Chi"} or \code{"F"}.}
 
 \item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.}
 }

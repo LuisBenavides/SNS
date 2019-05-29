@@ -1,13 +1,13 @@
 #' Calibration of the control limit for the selected chart
 #' @description The methodology used to calibrate the control limit
 #' for the SNS chart depending on the selected chart
-#' @inheritParams mGetARL
+#' @inheritParams mgetARL
 #' @param targetARL scalar. is the target ARL to calibrate. By default is set to NULL
 #' @param targetMRL scalar. is the target ARL to calibrate. By default is set to NULL
 #' @param maxIter scalar. is a numeric. The maximum number of iteration to take the calibration before stops
 #' @note The argument \code{chart.par} in this function correspond to the initial parameters to start the calibration.
 #' @export
-mCalibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
+mcalibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                                   n, m, nv, theta = NULL, Ftheta = NULL,
                                   dists=c("Normal", "Normal"), mu=c(0,0), sigma=NULL, dists.par = matrix(c(0,1,1,0,1,1), ncol=2), correlation=0,
                                   chart="T2", chart.par=c(10), replicates = 50000,
@@ -42,7 +42,7 @@ mCalibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
   x[i] <- chart.par[index.par]
   while (i < maxIter) {
     chart.par[index.par] <- x[i]
-    result <- SNS::mGetARL(n = n, m = m, nv = nv,
+    result <- SNS::mgetARL(n = n, m = m, nv = nv,
                       theta = theta, Ftheta = Ftheta,
                       dists = dists, mu = mu, sigma = sigma, dists.par = dists.par,
                       correlation=correlation, chart = chart, chart.par = chart.par,
