@@ -210,9 +210,9 @@ Table with the dataset using dataframe of \code{R} (first 10 rows).
 knitr::kable(head(SNS::example93, 10))
 ```
 
-Get the multivariate sequential normal scores
+Get the multivariate sequential normal scores. Null distribution considered is the \code{F} statistic.
 ```{r,echo=T,eval=F}
-msns = MSNS(X, X.id)
+msns = MSNS(X, X.id, null.dist = "F")
 ```
 and plot it
 ```{r,echo=T,eval=F}
