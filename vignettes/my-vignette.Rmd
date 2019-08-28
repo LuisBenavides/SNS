@@ -2,13 +2,13 @@
 title: "Usage SNS package"
 author: "Luis Benavides"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: rmarkdown::html_vignette  
 bibliography: bibliography.bib
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{SNS}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r setup, include = FALSE}
@@ -198,7 +198,7 @@ plot(msns)
 ```
 
 ## Multivariate Sequential Normal Scores to Detect a Change in Location
-### Example 6.2.1. 
+### Example 6.2.1.
 Get dataset from Example 9.3 \code{example93} by @qiu_2013 (see Example 6.2.1 from @conover_etal_2019).
 ```{r, echo=TRUE, eval=FALSE, results='hide'}
 X = example93[,1:2]
