@@ -39,7 +39,12 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   Yb = Y
   if(!is.null(Yb)){
     Yb = Yb[!is.na(Yb)] # initialize reference sample (remove na values)
+
+    #get the normal scores of the reference sample
+    ns = SNS::MNS(X = Yb, Y = NULL, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
+    Z = ns$Z
   }
+
 
   UCL = rep(NA, ng)
 
@@ -52,7 +57,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
            }else if(null.dist=="F"){
              M <- 1
              n <- length(Xb.id) / ng
-             if(!is.null(Yb)){#if Yb exists
+             if(!is.null(Yb)){#if there is reference sample
               m <- nrow(Yb) / ng
               M <- ceiling(m / n)
              }
@@ -67,7 +72,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     Zb = ns$Z
     n = nrow(Xb) #get the number of observation per group
 
-    if (i == 1) { # if is the first batch
+    if (is.null(Yb)) { # if there is not reference sample
       updateSample <- TRUE
       T2[i] = 0 # it does not give any information and is considered the reference sample
     }else{

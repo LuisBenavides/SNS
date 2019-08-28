@@ -70,8 +70,10 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   #get the different groups of the id
   groups = unique(Xb.id)
   z = rep(NA, length(groups)) # preallocate memory to initialize the SNS (one for group)
+  r = rep(NA, length(groups)) # preallocate memory to initialize the ranks (one for group)
   if(snsRaw){
     Zraw = rep(NA, length(X))
+    Rraw = rep(NA, length(X))
   }
   i = 1 # initialize the group index of the observation id vector
   Yb = Y
@@ -116,12 +118,17 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     Xb = ad$X
     Yb = ad$Y
     ns = SNS::NS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
-    ns = ns$Z
+    if(snsRaw){#save raw data
+      Zraw[(1+n*(i-1)):(n+n*(i-1))] = ns$Z
 
-    n = length(Xb)
-    if(snsRaw){
-      Zraw[(1+n*(i-1)):(n+n*(i-1))] = ns
+      Rraw[(1+n*(i-1)):(n+n*(i-1))] = ns$R
+
     }
+    r[i] = mean(ns$R)
+
+    ns = ns$Z
+    n = length(Xb)
+
 
     switch (scoring,
       "Z" = {# it is a vector with a subgroup size so it is needed to average them
@@ -195,6 +202,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       chart = chart,
       chart.par = chart.par
     ),
+    R = r,
     Z = z,
     X.id = X.id,
     UCL = UCL,
@@ -203,6 +211,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   )
   if(snsRaw){
     output$Zraw = Zraw
+    output$Rraw = Rraw
   }
   switch(chart,
          CUSUM = {
