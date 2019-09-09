@@ -18,6 +18,7 @@
 #' }
 #' @param calibrate logical. If \code{TRUE} the RL is limit to 10 times the target ARL.
 #' @param arl0 scalar. Expected value of the RL. Default \code{370}.
+#' @param isFixed logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated whenever the batch is in control.
 #' @export
 #' @import stats
 #' @examples
@@ -61,7 +62,8 @@
 getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
                   dist, mu, sigma, dist.par = c(0,1,1),scoring = "Z",
                   chart, chart.par, calibrate = FALSE, arl0 = 370,
-                  alignment = "unadjusted", constant = NULL, absolute=FALSE) {
+                  alignment = "unadjusted", constant = NULL, absolute=FALSE,
+                  isFixed=FALSE) {
   # initilize the reference sample
   Y <- NULL
   if (m > 0) { # if there are reference sample
@@ -151,7 +153,9 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
     if (RL >= arl0 * 1000) in.Control <- FALSE
 
     # update the reference sample
-    Y <- c(Y, X)
+    if(!isFixed){#if the reference sample is updated (not fixed)
+      Y <- c(Y, X)
+    }
   }
   return(RL)
 }

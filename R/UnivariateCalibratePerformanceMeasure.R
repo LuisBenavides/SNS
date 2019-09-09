@@ -50,7 +50,8 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                                   dist, mu, sigma, dist.par = c(0, 1, 1),
                                   chart, chart.par, replicates = 50000,
                                   isParallel = FALSE, maxIter = 20, progress = TRUE,
-                                  alignment="unadjusted", constant=NULL, absolute=FALSE) {
+                                  alignment="unadjusted", constant=NULL, absolute=FALSE,
+                                  isFixed=FALSE) {
   # Check for errors
   if (is.null(targetARL) && is.null(targetMRL)) {
     print("ERROR: Target ARL or target mRL missing")
@@ -88,7 +89,7 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
   x[i] <- chart.par[index.par]
   while (i < maxIter) {
     chart.par[index.par] <- x[i]
-    result <- SNS::getARL(n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, replicates = replicates, isParallel = isParallel, calibrate = TRUE, arl0 = targetARL, alignment=alignment, constant=constant,absolute=absolute)
+    result <- SNS::getARL(n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, replicates = replicates, isParallel = isParallel, calibrate = TRUE, arl0 = targetARL, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed)
     if (!is.null(targetARL)) {
       y[i] <- result$ARL
       target <- targetARL

@@ -7,7 +7,6 @@
 #' @inheritParams NS
 #' @inheritParams getRL
 #' @param X.id vector. The id of the vector \code{X}.
-#' @param isFixed logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.
 #' @param snsRaw logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.
 #' @export
 #' @examples
