@@ -132,7 +132,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
     switch (scoring,
       "Z" = {# it is a vector with a subgroup size so it is needed to average them
-        z[i] = mean(ns)
+        z[i] = sum(ns)/sqrt(n)
       },
       "Z-SQ" = {# it is a vector with a subgroup size so it is needed to sum them
         z[i] = sum(ns)
@@ -148,21 +148,21 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     switch(chart,
            Shewhart = {
              if (scoring == "Z"){
-               ucl = k / sqrt(n)
+               ucl = k
              }
              if (abs(Z) < ucl) updateSample <- TRUE
            },
            CUSUM = {
              switch(type,
                     "1" = {
-                      cplus <- max(c(0, cplus + Z * sqrt(n) - k))
+                      cplus <- max(c(0, cplus + Z - k))
                     },
                     "2" = {
-                      cminus <- min(c(0, cminus + Z * sqrt(n) + k))
+                      cminus <- min(c(0, cminus + Z + k))
                     },
                     "3" = {
-                      cplus <- max(c(0, cplus + Z * sqrt(n) - k))
-                      cminus <- min(c(0, cminus + Z * sqrt(n) + k))
+                      cplus <- max(c(0, cplus + Z - k))
+                      cminus <- min(c(0, cminus + Z + k))
                     }
              )
 
@@ -178,7 +178,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
              E[i] = e
 
-             ucl <- L / sqrt(n) * sqrt(lambda / (2 - lambda) * (1 - (1 - lambda)^(2 * i)))
+             ucl <- L * sqrt(lambda / (2 - lambda) * (1 - (1 - lambda)^(2 * i)))
              if (abs(e) < ucl) updateSample <- TRUE
            }
     )

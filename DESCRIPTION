@@ -5,7 +5,8 @@ Version: 0.0.0.9000
 Authors@R: c(person("Victor", "Tercero", email = "victor.tercero@tec.mx", role=c("aut")),
   person("Luis", "Benavides", email = "luisbv@tec.mx", role = c("aut", "cre")))
 Author: Victor Tercero [aut],
-  Luis Benavides [aut, cre]
+  Luis Benavides [aut, cre],
+  Jorge Merlo [ctb]
 Maintainer: Luis Benavides <luisbv@tec.mx>
 Description: The methods discussed in this paper are new nonparametric methods
   based on sequential normal scores (SNS), designed for sequences of observations,

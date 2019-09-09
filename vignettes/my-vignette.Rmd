@@ -95,7 +95,7 @@ knitr::kable(head(SNS::example84, 10))
 
 Get the sns of the dataset using a EWMA scheme
 ```{r,echo=T,eval=F}
-s = SNS(X=X,X.id=X.id, chart="EWMA", chart.par=c(0.1, 2.814))
+s = SNS(X=X,X.id=X.id, chart="EWMA", chart.par=c(0.01, 2.0171))
 ```
 
 to plot it
@@ -105,7 +105,7 @@ plot(s)
 ```{r,echo=F,eval=T, results='hide', message=F, warning=F,fig.width = 9, fig.height = 6}
 X = SNS::example84$X #get the dataset into a data frame
 X.id = SNS::example84$X.id
-s = SNS::SNS(X=X,X.id=X.id, chart="EWMA", chart.par=c(0.1, 2.814))
+s = SNS::SNS(X=X,X.id=X.id, chart="EWMA", chart.par=c(0.01, 2.0171))
 plot(s)
 ```
 
@@ -124,7 +124,7 @@ knitr::kable(head(SNS::example87, 10))
 
 Get the sns of the dataset using a EWMA scheme
 ```{r,echo=T,eval=F}
-s = SNS(X=X,X.id=X.id, Y=Y, chart="EWMA", chart.par=c(0.1, 2.814))
+s = SNS(X=X,X.id=X.id, Y=Y, chart="EWMA", chart.par=c(0.01, 2.0171))
 ```
 
 to plot it
@@ -135,7 +135,7 @@ plot(s)
 X = SNS::example87$X #get the dataset into a data frame
 X.id = SNS::example87$X.id
 Y = SNS::example87$Y
-s = SNS::SNS(X=X,X.id=X.id, Y=Y, chart="EWMA", chart.par=c(0.1, 2.814))
+s = SNS::SNS(X=X,X.id=X.id, Y=Y, chart="EWMA", chart.par=c(0.01, 2.0171))
 plot(s)
 ```
 

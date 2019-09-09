@@ -4,6 +4,7 @@
 #' @param dist character string. Select from:
 #' \itemize{
 #'   \item{"Normal": Normal distribution (default).}
+#'   \item{"Normal2": Squared Normal distribution (also known as Chi-squared).}
 #'   \item{"DoubleExp": Double exponential distribution (also known as Laplace distribution).}
 #'   \item{"DoubleExp2": Double exponential squared distribution from a \code{DoubleExp(0,1)}.}
 #'   \item{"LogNormal": Lognormal distribution.}
