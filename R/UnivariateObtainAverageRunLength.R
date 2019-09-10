@@ -222,19 +222,20 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
                    replicates = 10000, isParallel = TRUE,
                    print.RL = FALSE, progress = FALSE,
                    calibrate = FALSE, arl0 = 370,
-                   alignment = "unadjusted", constant = NULL, absolute=FALSE) {
+                   alignment = "unadjusted", constant = NULL, absolute=FALSE,
+                   isFixed=FALSE) {
   RLs <- NULL
   if (isParallel) {
     cluster <- parallel::makeCluster(detectCores() - 1)
     parallel::clusterExport(cluster, "NS")
     parallel::clusterExport(cluster, "getDist")
     parallel::clusterExport(cluster, "getRL")
-    RLs <- parallel::parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute)
+    RLs <- parallel::parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute,isisFixed=isFixed)
     parallel::stopCluster(cluster)
   } else {
     t0 <- Sys.time()
     for (r in 1:replicates) {
-      RL <- SNS::getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute)
+      RL <- SNS::getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute,isisFixed=isFixed)
 
       RLs <- c(RLs, RL)
 
