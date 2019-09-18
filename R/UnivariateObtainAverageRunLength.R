@@ -100,7 +100,7 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
     X <- SNS::getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
 
     # get the normal scores
-    ns <- SNS::NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
+    ns <- SNS::NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant, scoring = scoring)
     Z <- ns$Z
 
     switch(scoring,
@@ -124,6 +124,9 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
         if (abs(Z) >= ucl) in.Control <- FALSE
       },
       CUSUM = {
+        if(scoring == "Z-SQ"){# for obtain variance Z/n
+          Z = Z /(n * sqrt(n))
+        }
         switch(type,
           "1" = {
             Cplus <- max(c(0, Cplus + Z * sqrt(n) - k))
