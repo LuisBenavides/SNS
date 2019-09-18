@@ -8,7 +8,7 @@ calibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m,
   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = c(0, 1,
   1), chart, chart.par, replicates = 50000, isParallel = FALSE,
   maxIter = 20, progress = TRUE, alignment = "unadjusted",
-  constant = NULL, absolute = FALSE)
+  constant = NULL, absolute = FALSE, isFixed = FALSE)
 }
 \arguments{
 \item{targetARL}{scalar. is the target ARL to calibrate. By default is set to NULL}
@@ -26,6 +26,7 @@ calibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m,
 \item{dist}{character string. Select from:
 \itemize{
   \item{"Normal": Normal distribution (default).}
+  \item{"Normal2": Squared Normal distribution (also known as Chi-squared).}
   \item{"DoubleExp": Double exponential distribution (also known as Laplace distribution).}
   \item{"DoubleExp2": Double exponential squared distribution from a \code{DoubleExp(0,1)}.}
   \item{"LogNormal": Lognormal distribution.}
@@ -74,6 +75,8 @@ number of cores in the computer,otherwise the code runs sequentially. Default \c
 \item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
 
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
+
+\item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated whenever the batch is in control.}
 }
 \description{
 The methodology used to calibrate the control limit

@@ -51,7 +51,7 @@ SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
 \item{snsRaw}{logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.}
 
-\item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.}
+\item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated whenever the batch is in control.}
 }
 \description{
 Transform a vector \code{X} into SNS using initial observations \code{Y} if available
