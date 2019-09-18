@@ -31,7 +31,7 @@ NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
                alignment = "unadjusted", constant = NULL, absolute = FALSE) {
   # Check for errors
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
-    print("ERROR, theta or Ftheta missing")
+    message("ERROR, theta or Ftheta missing")
     return()
   }
 
