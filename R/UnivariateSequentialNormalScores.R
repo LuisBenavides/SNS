@@ -113,20 +113,21 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   }
   while (i <= length(groups)) { # repeat until the total groups are analized
     Xb = X[which(Xb.id == groups[i])] # get the observations to evalute from the positions
+    n = length(Xb)
     ad = SNS::dataAlignment(Xb, Yb, alignment = alignment)
     Xb = ad$X
     Yb = ad$Y
     ns = SNS::NS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
 
     r[i] = mean(ns$R)
-
-    ns = ns$Z
-    n = length(Xb)
     if(snsRaw){#save raw data
       Zraw[(1+n*(i-1)):(n+n*(i-1))] = ns$Z
 
       Rraw[(1+n*(i-1)):(n+n*(i-1))] = ns$R
     }
+    ns = ns$Z
+
+
 
 
     switch (scoring,
@@ -138,9 +139,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       }
     )
     Z = z[i]
-    if (is.null(Yb) && i == 1) { # if there is no reference sample
-      Yb = Xb
-    }
+
     # check if the subgroup is in control according to each scheme
     # the reference sample is updated
     updateSample <- FALSE
