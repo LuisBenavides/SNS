@@ -117,16 +117,16 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     Xb = ad$X
     Yb = ad$Y
     ns = SNS::NS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
-    if(snsRaw){#save raw data
-      Zraw[(1+n*(i-1)):(n+n*(i-1))] = ns$Z
 
-      Rraw[(1+n*(i-1)):(n+n*(i-1))] = ns$R
-
-    }
     r[i] = mean(ns$R)
 
     ns = ns$Z
     n = length(Xb)
+    if(snsRaw){#save raw data
+      Zraw[(1+n*(i-1)):(n+n*(i-1))] = ns$Z
+
+      Rraw[(1+n*(i-1)):(n+n*(i-1))] = ns$R
+    }
 
 
     switch (scoring,
@@ -257,16 +257,12 @@ plot.SNS <- function(x,...){
   )
 
   ymax = max(UCL)
+  ymin = min(LCL)
   if(difMaxZ > difMinZ){
     ymax = ymax + difMaxZ
-  }else{
-    ymax = ymax + difMinZ
-  }
-
-  ymin = min(LCL)
-  if(difMaxZ < difMinZ){
     ymin = ymin - difMaxZ
   }else{
+    ymax = ymax + difMinZ
     ymin = ymin - difMinZ
   }
 

@@ -42,7 +42,7 @@ NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   n <- length(X) # get the number of observations
   if (is.null(theta) | is.null(Ftheta)) { # if descriptive data is not vailable
     # such as a quantil (theta) or
-    if (is.null(Y)) { # if previous data is not available
+    if (is.null(Y)) {# if previous data is not available
       R <- rank(X) # rank the observations with general wanking function
     } else { # if previous data is available
       R <- rep(NA, n) # preallocate memory to initialize the ranks. One for each observation.
@@ -89,4 +89,31 @@ NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   )
   return(output)
 }
+
+#' @title Sequential Rank
+#' @description Get the sequential rank of observations (\code{X})
+#' relative to previous observations (\code{Y}).
+#' @param X vector. New observations to obtain the N¡normal scores.
+#' @param Y vector. If \code{Y} is not defined (no previous observation available, \code{NULL}), NS is relative to \code{X}. Default \code{NULL}.
+#' @return vector. Sequentil Ranks for the \code{X} observations. If ties occurs, average of the ranks are used.
+#' @export
+#' @examples
+#' X <- c(30, 35, 45)
+#' srank(X)
+srank <- function(X, Y){
+
+  n = length(X)
+  r = rep(NA, n)  #preallocate memory to initialize the ranks. One for each observation.
+  is.srank.X = FALSE
+  if(is.null(Y)) is.srank.X = TRUE
+
+  for(i in 1:n){#for each observation, by index.
+    #obtain the rank by comparing each obsarvation
+    #depending on if is greater or equals to previous data
+    r[i] = 1 + sum(Y < X[i]) + sum(Y == X[i]) / 2
+    if(is.srank.X) Y = c(Y, X[i])
+  }
+  return(r)
+}
+
 
