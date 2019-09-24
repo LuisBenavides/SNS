@@ -112,8 +112,8 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
       f1 <- 0
       f2 <- 0
       if (i > 2) {
-        f1 <- x[i] - target
-        f2 <- x[i - 1] - target
+        f1 <- y[i] - target
+        f2 <- y[i - 1] - target
       }
 
       if (f1 * f2 < 0) {
