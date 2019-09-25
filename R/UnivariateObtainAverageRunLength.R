@@ -60,7 +60,7 @@
 #'   chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0
 #' )
 getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
-                  dist, mu, sigma, dist.par = c(0,1,1),scoring = "Z",
+                  dist, mu, sigma, dist.par = c(0,1,1), scoring = "Z",
                   chart, chart.par, calibrate = FALSE, arl0 = 370,
                   alignment = "unadjusted", constant = NULL, absolute=FALSE,
                   isFixed=FALSE) {
@@ -221,7 +221,7 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
 #' )
 getARL <- function(n, m, theta = NULL, Ftheta = NULL,
                    dist, mu, sigma, dist.par = c(0, 1, 1),
-                   chart, chart.par,
+                   chart, chart.par, scoring = "Z",
                    replicates = 10000, isParallel = TRUE,
                    print.RL = FALSE, progress = FALSE,
                    calibrate = FALSE, arl0 = 370,
