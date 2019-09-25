@@ -5,10 +5,11 @@
 \title{Average Run Length (ARL)}
 \usage{
 getARL(n, m, theta = NULL, Ftheta = NULL, dist, mu, sigma,
-  dist.par = c(0, 1, 1), chart, chart.par, replicates = 10000,
-  isParallel = TRUE, print.RL = FALSE, progress = FALSE,
-  calibrate = FALSE, arl0 = 370, alignment = "unadjusted",
-  constant = NULL, absolute = FALSE, isFixed = FALSE)
+  dist.par = c(0, 1, 1), chart, chart.par, scoring = "Z",
+  replicates = 10000, isParallel = TRUE, print.RL = FALSE,
+  progress = FALSE, calibrate = FALSE, arl0 = 370,
+  alignment = "unadjusted", constant = NULL, absolute = FALSE,
+  isFixed = FALSE)
 }
 \arguments{
 \item{n}{scalar. Subroup size}
@@ -46,6 +47,8 @@ getARL(n, m, theta = NULL, Ftheta = NULL, dist, mu, sigma,
   \item{EWMA scheme: }{is \code{c(lambda, L)}, where \code{lambda} is the smoothing constant
   and \code{L} multiplies standard deviation to get the control limit}
 }}
+
+\item{scoring}{character string. If "Z" (normal scores) (default). If "Z-SQ" (normal scores squared).}
 
 \item{replicates}{scalar. Number of replicates to get the ARL}
 

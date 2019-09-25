@@ -100,7 +100,7 @@ NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 #' @examples
 #' X <- c(30, 35, 45)
 #' srank(X)
-srank <- function(X, Y){
+srank <- function(X, Y=NULL){
 
   n = length(X)
   r = rep(NA, n)  #preallocate memory to initialize the ranks. One for each observation.
