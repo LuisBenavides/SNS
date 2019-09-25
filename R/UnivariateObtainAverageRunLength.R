@@ -230,10 +230,10 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
   RLs <- NULL
   if (isParallel) {
     cluster <- parallel::makeCluster(detectCores() - 1)
-    parallel::clusterExport(cluster, "SNS::NS")
-    parallel::clusterExport(cluster, "SNS::getDist")
-    parallel::clusterExport(cluster, "SNS::getRL")
-    RLs <- parallel::parSapply(cluster, 1:replicates, SNS::getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,sccoring=scoring)
+    parallel::clusterExport(cluster, "NS")
+    parallel::clusterExport(cluster, "getDist")
+    parallel::clusterExport(cluster, "getRL")
+    RLs <- parallel::parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring)
     parallel::stopCluster(cluster)
   } else {
     t0 <- Sys.time()
