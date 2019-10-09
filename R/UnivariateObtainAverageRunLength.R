@@ -152,8 +152,14 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
       }
     )
 
-    if (calibrate) if (RL >= arl0 * 10) in.Control <- FALSE
-    if (RL >= arl0 * 1000) in.Control <- FALSE
+    if (calibrate){
+      if (RL >= arl0){
+        in.Control <- FALSE
+      }
+    }
+    if (RL >= arl0 * 1000){
+      in.Control <- FALSE
+    }
 
     # update the reference sample
     if(!isFixed){#if the reference sample is updated (not fixed)
@@ -233,12 +239,12 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
     parallel::clusterExport(cluster, "NS")
     parallel::clusterExport(cluster, "getDist")
     parallel::clusterExport(cluster, "getRL")
-    RLs <- parallel::parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring)
+    RLs <- parallel::parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring)
     parallel::stopCluster(cluster)
   } else {
     t0 <- Sys.time()
     for (r in 1:replicates) {
-      RL <- SNS::getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = 370, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring)
+      RL <- SNS::getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring)
 
       RLs <- c(RLs, RL)
 

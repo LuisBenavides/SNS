@@ -49,7 +49,7 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                                   n, m, theta = NULL, Ftheta = NULL,
                                   dist, mu, sigma, dist.par = c(0, 1, 1),
                                   chart, chart.par, replicates = 50000,
-                                  isParallel = FALSE, maxIter = 20, progress = TRUE,
+                                  isParallel = TRUE, maxIter = 20, progress = TRUE,
                                   alignment="unadjusted", constant=NULL, absolute=FALSE,
                                   isFixed=FALSE) {
   # Check for errors
@@ -89,7 +89,11 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
   x[i] <- chart.par[index.par]
   while (i < maxIter) {
     chart.par[index.par] <- x[i]
-    result <- SNS::getARL(n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, replicates = replicates, isParallel = isParallel, calibrate = TRUE, arl0 = ARL0, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed)
+    result <- SNS::getARL(n = n, m = m, theta = theta, Ftheta = Ftheta,
+                          dist = dist, mu = mu, sigma = sigma, dist.par = dist.par,
+                          chart = chart, chart.par = chart.par, replicates = replicates,
+                          isParallel = isParallel, calibrate = TRUE, arl0 = ARL0,
+                          alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed)
     if (!is.null(targetARL)) {
       y[i] <- result$ARL
       target <- targetARL
