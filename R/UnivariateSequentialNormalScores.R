@@ -126,10 +126,6 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       Rraw[(1+n*(i-1)):(n+n*(i-1))] = ns$R
     }
     ns = ns$Z
-
-
-
-
     switch (scoring,
       "Z" = {# it is a vector with a subgroup size so it is needed to average them
         z[i] = sum(ns)/sqrt(n)
