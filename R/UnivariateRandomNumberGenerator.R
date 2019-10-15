@@ -3,6 +3,7 @@
 #' @param n scalar. Number of observations to be generated.
 #' @param dist character string. Select from:
 #' \itemize{
+#'   \item{"Uniform: Continuous Uniform distribution .}
 #'   \item{"Normal": Normal distribution (default).}
 #'   \item{"Normal2": Squared Normal distribution (also known as Chi-squared).}
 #'   \item{"DoubleExp": Double exponential distribution (also known as Laplace distribution).}
@@ -10,6 +11,7 @@
 #'   \item{"LogNormal": Lognormal distribution.}
 #'   \item{"Gamma": Gamma distribution.}
 #'   \item{"Weibull": Weibull distribution.}
+#'   \item{"t": Student-t distribution.}
 #' }
 #' @param mu scalar. Expected value of the desired distribution.
 #' @param sigma scalar. Standard deviation of the desired distribution.
@@ -32,6 +34,14 @@
 getDist <- function(n, dist, mu, sigma,
                     par.location = 0, par.scale = 1, par.shape = 1) {
   switch(dist,
+    Uniform  = {
+      a <- 0
+      b <- 1
+      EX <- (a+b)/2
+      VarX <- (b-a)^2/12
+      z <- (runif(n, min = a, max = b) - EX) / VarX(0.5)
+      x <- mu + sigma * z
+    },
     Normal = {
       a <- par.location
       b <- par.scale
@@ -98,9 +108,15 @@ getDist <- function(n, dist, mu, sigma,
       z <- (xtemp - EX) / VarX^(0.5)
       x <- mu + sigma * z
     },
-    foo = {
-
-    }, { # Normal (default)
+    t = {
+      v <- par.shape
+      EX <- 0
+      VarX <- v/(v-2)
+      xtemp <- rt(n, v)
+      z <- (xtemp - EX) / VarX^(0.5)
+      x <- mu + sigma * z
+    },
+    { # Normal (default)
       a <- par.location
       b <- par.scale
       EX <- a
