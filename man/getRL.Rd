@@ -7,7 +7,8 @@
 getRL(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu,
   sigma, dist.par = c(0, 1, 1), scoring = "Z", chart, chart.par,
   calibrate = FALSE, arl0 = 370, alignment = "unadjusted",
-  constant = NULL, absolute = FALSE, isFixed = FALSE)
+  constant = NULL, absolute = FALSE, isFixed = FALSE,
+  Chi2corrector = "None")
 }
 \arguments{
 \item{replica}{scalar. It is used for the parallel version of the function (\code{parallel=TRUE}). Default \code{1}.}
@@ -73,6 +74,14 @@ getRL(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu,
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
 
 \item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated whenever the batch is in control.}
+
+\item{Chi2corrector}{character string. Only when scoring is Z-SQ. Select from
+\itemize{
+  \item{"approx: Z^2*(m + 1 + 1.3)/(m+1).}
+  \item{"exact": Z^2/mean(Z).}
+  \item{"none": Z^2.}
+}
+If "approx" () (default). If "exact" (normal scores squared).}
 }
 \description{
 Get the run length

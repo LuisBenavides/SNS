@@ -48,6 +48,7 @@
 #' )
 calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                                   n, m, theta = NULL, Ftheta = NULL,
+                                  scoring = "Z", Chi2corrector="None",
                                   dist, mu, sigma, dist.par = c(0, 1, 1),
                                   chart, chart.par, replicates = 50000,
                                   isParallel = TRUE, maxIter = 20, progress = TRUE,
@@ -106,7 +107,8 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                           dist = dist, mu = mu, sigma = sigma, dist.par = dist.par,
                           chart = chart, chart.par = chart.par, replicates = replicates,
                           isParallel = isParallel, calibrate = TRUE, arl0 = ARL0,
-                          alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed)
+                          alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,
+                          scoring=scoring,Chi2corrector=Chi2corrector)
     if (!is.null(targetARL)) {
       y[i] <- result$ARL
       target <- targetARL

@@ -6,10 +6,10 @@
 \usage{
 getARL(n, m, theta = NULL, Ftheta = NULL, dist, mu, sigma,
   dist.par = c(0, 1, 1), chart, chart.par, scoring = "Z",
-  replicates = 10000, isParallel = TRUE, print.RL = FALSE,
-  progress = FALSE, calibrate = FALSE, arl0 = 370,
-  alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  isFixed = FALSE)
+  Chi2corrector = "None", replicates = 10000, isParallel = TRUE,
+  print.RL = FALSE, progress = FALSE, calibrate = FALSE,
+  arl0 = 370, alignment = "unadjusted", constant = NULL,
+  absolute = FALSE, isFixed = FALSE)
 }
 \arguments{
 \item{n}{scalar. Subroup size}
@@ -51,6 +51,14 @@ getARL(n, m, theta = NULL, Ftheta = NULL, dist, mu, sigma,
 }}
 
 \item{scoring}{character string. If "Z" (normal scores) (default). If "Z-SQ" (normal scores squared).}
+
+\item{Chi2corrector}{character string. Only when scoring is Z-SQ. Select from
+\itemize{
+  \item{"approx: Z^2*(m + 1 + 1.3)/(m+1).}
+  \item{"exact": Z^2/mean(Z).}
+  \item{"none": Z^2.}
+}
+If "approx" () (default). If "exact" (normal scores squared).}
 
 \item{replicates}{scalar. Number of replicates to get the ARL}
 

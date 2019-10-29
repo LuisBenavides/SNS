@@ -118,7 +118,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
     ad = SNS::dataAlignment(Xb, Yb, alignment = alignment)
     Xb = ad$X
     Yb = ad$Y
-    ns = SNS::NS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
+    ns = SNS::NS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, Chi2corrector = Chi2corrector, alignment = alignment, constant = constant) # calculate the normal score
 
     r[i] = mean(ns$R)
     if(snsRaw){#save raw data

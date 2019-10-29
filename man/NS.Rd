@@ -5,8 +5,8 @@
 \title{Normal Scores}
 \usage{
 NS(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
-  alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  Chi2corrector = "None")
+  Chi2corrector = "None", alignment = "unadjusted", constant = NULL,
+  absolute = FALSE)
 }
 \arguments{
 \item{X}{vector. New observations to obtain the N¡normal scores.}
@@ -18,6 +18,14 @@ NS(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 \item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
 
 \item{scoring}{character string. If "Z" (normal scores) (default). If "Z-SQ" (normal scores squared).}
+
+\item{Chi2corrector}{character string. Only when scoring is Z-SQ. Select from
+\itemize{
+  \item{"approx: Z^2*(m + 1 + 1.3)/(m+1).}
+  \item{"exact": Z^2/mean(Z).}
+  \item{"none": Z^2.}
+}
+If "approx" () (default). If "exact" (normal scores squared).}
 
 \item{alignment}{character string. Aligment of the data \code{X} and \code{Y}. Select from
 \itemize{
@@ -34,14 +42,6 @@ NS(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 \item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
 
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
-
-\item{Chi2corrector}{character string. Only when scoring is Z-SQ. Select from
-\itemize{
-  \item{"approx: Z^2*(m + 1 + 1.3)/(m+1).}
-  \item{"exact": Z^2/mean(Z).}
-  \item{"none": Z^2.}
-}
-If "approx" () (default). If "exact" (normal scores squared).}
 }
 \value{
 Multiple output. Select by \code{output$}

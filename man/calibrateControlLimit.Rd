@@ -5,8 +5,9 @@
 \title{Calibration of the control limit for the selected chart}
 \usage{
 calibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m,
-  theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = c(0, 1,
-  1), chart, chart.par, replicates = 50000, isParallel = TRUE,
+  theta = NULL, Ftheta = NULL, scoring = "Z",
+  Chi2corrector = "None", dist, mu, sigma, dist.par = c(0, 1, 1),
+  chart, chart.par, replicates = 50000, isParallel = TRUE,
   maxIter = 20, progress = TRUE, alignment = "unadjusted",
   constant = NULL, absolute = FALSE, isFixed = FALSE)
 }
@@ -22,6 +23,16 @@ calibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m,
 \item{theta}{scalar. Value corresponig with the \code{Ftheta} quantile.}
 
 \item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
+
+\item{scoring}{character string. If "Z" (normal scores) (default). If "Z-SQ" (normal scores squared).}
+
+\item{Chi2corrector}{character string. Only when scoring is Z-SQ. Select from
+\itemize{
+  \item{"approx: Z^2*(m + 1 + 1.3)/(m+1).}
+  \item{"exact": Z^2/mean(Z).}
+  \item{"none": Z^2.}
+}
+If "approx" () (default). If "exact" (normal scores squared).}
 
 \item{dist}{character string. Select from:
 \itemize{

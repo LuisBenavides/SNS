@@ -5,9 +5,9 @@
 \title{Sequential Normal Scores}
 \usage{
 SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
-  alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  chart = "Shewhart", chart.par = c(3), snsRaw = FALSE,
-  isFixed = FALSE)
+  Chi2corrector = "None", alignment = "unadjusted", constant = NULL,
+  absolute = FALSE, chart = "Shewhart", chart.par = c(3),
+  snsRaw = FALSE, isFixed = FALSE)
 }
 \arguments{
 \item{X}{vector. New observations to obtain the N¡normal scores.}
@@ -21,6 +21,14 @@ SNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 \item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
 
 \item{scoring}{character string. If "Z" (normal scores) (default). If "Z-SQ" (normal scores squared).}
+
+\item{Chi2corrector}{character string. Only when scoring is Z-SQ. Select from
+\itemize{
+  \item{"approx: Z^2*(m + 1 + 1.3)/(m+1).}
+  \item{"exact": Z^2/mean(Z).}
+  \item{"none": Z^2.}
+}
+If "approx" () (default). If "exact" (normal scores squared).}
 
 \item{alignment}{character string. Aligment of the data \code{X} and \code{Y}. Select from
 \itemize{
