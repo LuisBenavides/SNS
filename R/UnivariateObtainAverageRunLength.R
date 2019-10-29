@@ -63,7 +63,7 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
                   dist, mu, sigma, dist.par = c(0,1,1), scoring = "Z",
                   chart, chart.par, calibrate = FALSE, arl0 = 370,
                   alignment = "unadjusted", constant = NULL, absolute=FALSE,
-                  isFixed=FALSE) {
+                  isFixed=FALSE,Chi2corrector="None") {
   # initilize the reference sample
   Y <- NULL
   if (m > 0) { # if there are reference sample
@@ -227,7 +227,7 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
 #' )
 getARL <- function(n, m, theta = NULL, Ftheta = NULL,
                    dist, mu, sigma, dist.par = c(0, 1, 1),
-                   chart, chart.par, scoring = "Z",
+                   chart, chart.par, scoring = "Z",Chi2corrector="None",
                    replicates = 10000, isParallel = TRUE,
                    print.RL = FALSE, progress = FALSE,
                    calibrate = FALSE, arl0 = 370,

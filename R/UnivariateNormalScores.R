@@ -34,8 +34,10 @@
 #' theta <- NULL
 #' Ftheta <- NULL
 #' NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta)
-NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
-               alignment = "unadjusted", constant = NULL, absolute = FALSE,Chi2corrector="None") {
+NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL,
+               scoring = "Z",Chi2corrector="None",
+               alignment = "unadjusted", constant = NULL, absolute = FALSE,
+               ) {
   # Check for errors
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
     message("ERROR, theta or Ftheta missing")

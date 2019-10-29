@@ -49,7 +49,8 @@
 #' Ftheta <- NULL
 #' sample.id <- c("a", "b", "c")
 #' SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
-SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
+SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
+                scoring = "Z", Chi2corrector="None",
                 alignment = "unadjusted", constant = NULL, absolute = FALSE,
                 chart="Shewhart", chart.par=c(3),
                 snsRaw = FALSE, isFixed = FALSE) {
