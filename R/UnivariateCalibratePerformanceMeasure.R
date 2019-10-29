@@ -20,6 +20,7 @@
 #' #### Other Parameters
 #' replicates <- 2
 #' targetARL <- 370
+#' isParallel = FALSE
 #'
 #' #### Control chart parameters
 #' chart <- "Shewhart"
@@ -27,7 +28,7 @@
 #' shewhart <- calibrateControlLimit(
 #'   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
 #'   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
-#'   replicates = replicates, chart = chart
+#'   replicates = replicates, chart = chart, isParallel = isParallel
 #' )
 #'
 #' chart <- "CUSUM"
@@ -35,7 +36,7 @@
 #' cusum <- calibrateControlLimit(
 #'   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
 #'   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
-#'   replicates = replicates, chart = chart
+#'   replicates = replicates, chart = chart, isParallel = isParallel
 #' )
 #'
 #' chart <- "EWMA"
@@ -43,7 +44,7 @@
 #' ewma <- calibrateControlLimit(
 #'   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
 #'   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
-#'   replicates = replicates, chart = chart
+#'   replicates = replicates, chart = chart, isParallel = isParallel
 #' )
 calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                                   n, m, theta = NULL, Ftheta = NULL,

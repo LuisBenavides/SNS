@@ -7,6 +7,13 @@
 #' @param theta scalar. Value corresponig with the \code{Ftheta} quantile.
 #' @param Ftheta scalar. Quantile of the data distribution. The values that take are between (0,1).
 #' @param scoring character string. If "Z" (normal scores) (default). If "Z-SQ" (normal scores squared).
+#' @param Chi2corrector character string. Only when scoring is Z-SQ. Select from
+#' \itemize{
+#'   \item{"approx: Z^2*(m + 1 + 1.3)/(m+1).}
+#'   \item{"exact": Z^2/mean(Z).}
+#'   \item{"none": Z^2.}
+#' }
+#' If "approx" () (default). If "exact" (normal scores squared).
 #' @return Multiple output. Select by \code{output$}
 #' \itemize{
 #'   \item \code{R}: vector. Ranks for the \code{X} observations. If ties occurs, average ranks are used.
@@ -28,7 +35,7 @@
 #' Ftheta <- NULL
 #' NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta)
 NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
-               alignment = "unadjusted", constant = NULL, absolute = FALSE) {
+               alignment = "unadjusted", constant = NULL, absolute = FALSE,Chi2corrector="None") {
   # Check for errors
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
     message("ERROR, theta or Ftheta missing")
@@ -74,14 +81,45 @@ NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   switch(scoring,
     "Z-SQ" = {
       Z <- Z^2
+
     },
     "Z" = {
-      Z <- Z
+      #Z <- Z
     },
     {
-      Z = Z
+      message("argument not defined. Used the default scoring = 'Z'")
+      #Z = Z
     }
   )
+
+  if (scoring == "Z-SQ"){
+    switch(Chi2corrector,
+      "approx" = {
+        Z <- Z * (n + 1.3) / n
+      },
+      "exact" = {
+        #Obtain the rank for every possible value
+        Re <- seq(1,n)
+        #Obtain probability
+        Pe <- (Re - 0.5) / n
+        #Obtain normal scores
+        Ze <- qnorm(Pe)
+        #Convert to squared
+        Ze <- Ze^2
+
+        #The correction is by dividing into the mean
+        #of the exact
+        Z <- Z / mean(Ze)
+    },
+    "none" = {
+      #Z <- Z
+    },
+    {
+      message("argument not defined. Used the default Chi2corrector = 'None'")
+      #Z = Z
+    })
+  }
+
   output <- list(
     R = R,
     P = P,

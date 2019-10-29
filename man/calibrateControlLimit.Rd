@@ -6,7 +6,7 @@
 \usage{
 calibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m,
   theta = NULL, Ftheta = NULL, dist, mu, sigma, dist.par = c(0, 1,
-  1), chart, chart.par, replicates = 50000, isParallel = FALSE,
+  1), chart, chart.par, replicates = 50000, isParallel = TRUE,
   maxIter = 20, progress = TRUE, alignment = "unadjusted",
   constant = NULL, absolute = FALSE, isFixed = FALSE)
 }
@@ -25,6 +25,7 @@ calibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m,
 
 \item{dist}{character string. Select from:
 \itemize{
+  \item{"Uniform: Continuous Uniform distribution .}
   \item{"Normal": Normal distribution (default).}
   \item{"Normal2": Squared Normal distribution (also known as Chi-squared).}
   \item{"DoubleExp": Double exponential distribution (also known as Laplace distribution).}
@@ -32,6 +33,7 @@ calibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m,
   \item{"LogNormal": Lognormal distribution.}
   \item{"Gamma": Gamma distribution.}
   \item{"Weibull": Weibull distribution.}
+  \item{"t": Student-t distribution.}
 }}
 
 \item{mu}{vector. Two elements of the vector the first one is the mean of the reference sample and the second one is the mean of the monitoring sample.}
@@ -98,6 +100,7 @@ dist.par <- c(0, 1, 1) # c(location, scale, shape)
 #### Other Parameters
 replicates <- 2
 targetARL <- 370
+isParallel = FALSE
 
 #### Control chart parameters
 chart <- "Shewhart"
@@ -105,7 +108,7 @@ chart.par <- c(3)
 shewhart <- calibrateControlLimit(
   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
-  replicates = replicates, chart = chart
+  replicates = replicates, chart = chart, isParallel = isParallel
 )
 
 chart <- "CUSUM"
@@ -113,7 +116,7 @@ chart.par <- c(0.5, 2.5, 3)
 cusum <- calibrateControlLimit(
   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
-  replicates = replicates, chart = chart
+  replicates = replicates, chart = chart, isParallel = isParallel
 )
 
 chart <- "EWMA"
@@ -121,6 +124,6 @@ chart.par <- c(0.2, 2.962)
 ewma <- calibrateControlLimit(
   targetARL = targetARL, targetMRL = NULL, n = n, m = m, theta = NULL,
   Ftheta = NULL, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart.par = chart.par,
-  replicates = replicates, chart = chart
+  replicates = replicates, chart = chart, isParallel = isParallel
 )
 }

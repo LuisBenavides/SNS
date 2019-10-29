@@ -12,6 +12,7 @@ getDist(n, dist, mu, sigma, par.location = 0, par.scale = 1,
 
 \item{dist}{character string. Select from:
 \itemize{
+  \item{"Uniform: Continuous Uniform distribution .}
   \item{"Normal": Normal distribution (default).}
   \item{"Normal2": Squared Normal distribution (also known as Chi-squared).}
   \item{"DoubleExp": Double exponential distribution (also known as Laplace distribution).}
@@ -19,6 +20,7 @@ getDist(n, dist, mu, sigma, par.location = 0, par.scale = 1,
   \item{"LogNormal": Lognormal distribution.}
   \item{"Gamma": Gamma distribution.}
   \item{"Weibull": Weibull distribution.}
+  \item{"t": Student-t distribution.}
 }}
 
 \item{mu}{scalar. Expected value of the desired distribution.}

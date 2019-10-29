@@ -22,6 +22,7 @@ getRL(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu,
 
 \item{dist}{character string. Select from:
 \itemize{
+  \item{"Uniform: Continuous Uniform distribution .}
   \item{"Normal": Normal distribution (default).}
   \item{"Normal2": Squared Normal distribution (also known as Chi-squared).}
   \item{"DoubleExp": Double exponential distribution (also known as Laplace distribution).}
@@ -29,6 +30,7 @@ getRL(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu,
   \item{"LogNormal": Lognormal distribution.}
   \item{"Gamma": Gamma distribution.}
   \item{"Weibull": Weibull distribution.}
+  \item{"t": Student-t distribution.}
 }}
 
 \item{mu}{vector. Two elements of the vector the first one is the mean of the reference sample and the second one is the mean of the monitoring sample.}
