@@ -27,103 +27,138 @@
 #'     correspond to the location and scale parameters of the normal and double exponential
 #'     that are used to generates their squared forms.}
 #' }
+#' @param dist.par vector. Overwrite \code{par.location}, \code{par.scale}, \code{par.shape}. Depends on the distribution (default \code{NULL}):
+#' \itemize{
+#'   \item{"Uniform: no matter how is defined always gives numbers between 0 and 1.}
+#'   \item{"Normal": c(location, scale).}
+#'   \item{"Normal2": c(location, scale).}
+#'   \item{"DoubleExp": c(location, scale).}
+#'   \item{"DoubleExp2": c(location, scale).}
+#'   \item{"LogNormal": c(location, scale).}
+#'   \item{"Gamma": c(scale, shape).}
+#'   \item{"Weibull": c(shape, scale).}
+#'   \item{"t": c(degrees of freedom).}
+#' }
 #' @return A vector \code{x} with \code{n} observations generated following the selected distribution with its parameters.
 #' @export
 #' @examples
 #' getDist(1, "Normal", 0, 1)
 getDist <- function(n, dist, mu, sigma,
-                    par.location = 0, par.scale = 1, par.shape = 1) {
+                    par.location = 0, par.scale = 1, par.shape = 1, dist.par = NULL) {
   switch(dist,
     Uniform  = {
       a <- 0
       b <- 1
+
       EX <- (a+b)/2
       VarX <- (b-a)^2/12
-      z <- (runif(n, min = a, max = b) - EX) / VarX(0.5)
-      x <- mu + sigma * z
+
+      xtemp <- runif(n, min = a, max = b)
     },
     Normal = {
       a <- par.location
       b <- par.scale
+      if(!is.null(dist.par)){
+        a <- dist.par[1]
+        b <- dist.par[2]
+      }
       EX <- a
       VarX <- b^2
-      z <- (rnorm(n, mean = a, sd = b) - EX) / VarX^(0.5)
-      x <- mu + sigma * z
+      xtemp <- rnorm(n, mean = a, sd = b)
     },
     Normal2 = {
       a <- par.location
       b <- par.scale
+      if(!is.null(dist.par)){
+        a <- dist.par[1]
+        b <- dist.par[2]
+      }
       EX <- a^2 + b^2
       VarX <- 4 * a^2 * b^2 + 2 * b^4
-      z <- ((rnorm(n, mean = a, sd = b))^2 - EX) / VarX^(0.5)
-      x <- mu + sigma * z
+      xtemp <- (rnorm(n, mean = a, sd = b))^2
     },
     DoubleExp = {
       a <- par.location
       b <- par.scale
+      if(!is.null(dist.par)){
+        a <- dist.par[1]
+        b <- dist.par[2]
+      }
       EX <- a
       VarX <- 2 * b^2
       # xtemp = a - b * sign(U - 0.5) * log(1 - 2 * abs(U - 0.5)) #This one appeared in Wikipedia
       xtemp <- log(runif(n) / runif(n)) / 2^(0.5) # this is the recommended method. Gives standard DE variates.
-
-      z <- (xtemp - EX) / VarX^(0.5)
-      x <- mu + sigma * z
     },
     DoubleExp2 = {
       a <- par.location
       b <- par.scale
+      if(!is.null(dist.par)){
+        a <- dist.par[1]
+        b <- dist.par[2]
+      }
       EX <- 2 * b^2 + a^2
       EY3 <- 6 * b^3 + 6 * a * b^2 + 5 * a^3 # Y is Laplace
       EY4 <- 24 * b^4 + 4 * a * EY3 - 6 * a^2 * (2 * b^2 + a^2) + 5 * a^4 # Y is Laplace
       VarX <- EY4 - EX^2
       xtemp <- (log(runif(n) / runif(n)))^2
-      z <- (xtemp - EX) / VarX^(0.5)
-      x <- mu + sigma * z
+
     },
     LogNormal = {
       a <- par.location # logmean
       b <- par.scale # logsigma
+      if(!is.null(dist.par)){
+        a <- dist.par[1]
+        b <- dist.par[2]
+      }
       EX <- exp(a + b^2 / 2)
       VarX <- exp(2 * (a + b^2)) - exp(2 * a + b^2)
       xtemp <- rlnorm(n, meanlog = a, sdlog = b)
       # xtemp = exp(a + b*rnorm(n))
-      z <- (xtemp - EX) / VarX^(0.5)
-      x <- mu + sigma * z
     },
     Gamma = {
       k <- par.scale # beta in Casella
       o <- par.shape # alpha in Casella
+      if(!is.null(dist.par)){
+        k <- dist.par[1]
+        o <- dist.par[2]
+      }
       EX <- k * o
       VarX <- o * k^2
       xtemp <- rgamma(n, shape = o, scale = k)
-      z <- (xtemp - EX) / VarX^(0.5)
-      x <- mu + sigma * z
     },
     Weibull = {
       k <- par.shape
       l <- par.scale
+      if(!is.null(dist.par)){
+        k <- dist.par[1]
+        l <- dist.par[2]
+      }
       EX <- l * gamma(1 + 1 / k)
       VarX <- l^2 * (gamma(1 + 2 / k) - (gamma(1 + 1 / k))^2)
       xtemp <- rweibull(n, shape = k, scale = l)
-      z <- (xtemp - EX) / VarX^(0.5)
-      x <- mu + sigma * z
     },
     t = {
       v <- par.shape
+      if(!is.null(dist.par)){
+        v <- dist.par[1]
+      }
       EX <- 0
       VarX <- v/(v-2)
       xtemp <- rt(n, v)
-      z <- (xtemp - EX) / VarX^(0.5)
-      x <- mu + sigma * z
     },
     { # Normal (default)
       a <- par.location
       b <- par.scale
+      if(!is.null(dist.par)){
+        a <- dist.par[1]
+        b <- dist.par[2]
+      }
       EX <- a
       VarX <- b^2
-      z <- (rnorm(n, mean = a, sd = b) - EX) / VarX^(0.5)
-      x <- mu + sigma * z
+      xtemp <- rnorm(n, mean = a, sd = b)
     }
   )
+  z <- (xtemp - EX) / VarX^(0.5)
+  x <- mu + sigma * z
   return(x)
 }

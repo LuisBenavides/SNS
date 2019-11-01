@@ -5,7 +5,7 @@
 \title{Random Observations Generetor}
 \usage{
 getDist(n, dist, mu, sigma, par.location = 0, par.scale = 1,
-  par.shape = 1)
+  par.shape = 1, dist.par = NULL)
 }
 \arguments{
 \item{n}{scalar. Number of observations to be generated.}
@@ -32,6 +32,19 @@ getDist(n, dist, mu, sigma, par.location = 0, par.scale = 1,
 \item{par.scale}{scalar. Scale parameter of the desired distribution. Default 1**.}
 
 \item{par.shape}{scalar. Shape parameter of the desired distribution, Default 1.}
+
+\item{dist.par}{vector. Depends on the distribution (default \code{NULL}):
+\itemize{
+  \item{"Uniform: no matter how is defined always gives numbers between 0 and 1.}
+  \item{"Normal": c(location, scale).}
+  \item{"Normal2": c(location, scale).}
+  \item{"DoubleExp": c(location, scale).}
+  \item{"DoubleExp2": c(location, scale).}
+  \item{"LogNormal": c(location, scale).}
+  \item{"Gamma": c(scale, shape).}
+  \item{"Weibull": c(shape, scale).}
+  \item{"t": c(degrees of freedom).}
+}}
 }
 \value{
 A vector \code{x} with \code{n} observations generated following the selected distribution with its parameters.

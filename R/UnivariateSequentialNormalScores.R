@@ -2,7 +2,7 @@
 #' @description Transform a vector \code{X} into SNS using initial observations \code{Y} if available
 #' SNS follow the order of \code{X}.
 #' @section Comments:
-#' If ties, average ranks are used.
+#' If ties occur, average ranks are used.
 #' @seealso \code{\link{NS}} for normal scores
 #' @inheritParams NS
 #' @inheritParams getRL
