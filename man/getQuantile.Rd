@@ -4,9 +4,16 @@
 \alias{getQuantile}
 \title{Obtain Quantile from Distribution Function}
 \usage{
-getQuantile(dist, dist.par = c(0, 1), mu, sigma, Ftheta)
+getQuantile(mu, sigma, Ftheta, dist, par.location = 0, par.scale = 1,
+  par.shape = 1, dist.par = NULL)
 }
 \arguments{
+\item{mu}{scalar. Expected value of the desired distribution.}
+
+\item{sigma}{scalar. Standard deviation of the desired distribution.}
+
+\item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
+
 \item{dist}{character string. Select from:
 \itemize{
   \item{"Uniform: Continuous Uniform distribution .}
@@ -20,7 +27,13 @@ getQuantile(dist, dist.par = c(0, 1), mu, sigma, Ftheta)
   \item{"t": Student-t distribution.}
 }}
 
-\item{dist.par}{vector. Depends on the distribution (default \code{NULL}):
+\item{par.location}{scalar. Location parameter of the desired distribution. Default 0**.}
+
+\item{par.scale}{scalar. Scale parameter of the desired distribution. Default 1**.}
+
+\item{par.shape}{scalar. Shape parameter of the desired distribution, Default 1.}
+
+\item{dist.par}{vector. Overwrite \code{par.location}, \code{par.scale}, \code{par.shape}. Depends on the distribution (default \code{NULL}):
 \itemize{
   \item{"Uniform: no matter how is defined always gives numbers between 0 and 1.}
   \item{"Normal": c(location, scale).}
@@ -32,12 +45,6 @@ getQuantile(dist, dist.par = c(0, 1), mu, sigma, Ftheta)
   \item{"Weibull": c(shape, scale).}
   \item{"t": c(degrees of freedom).}
 }}
-
-\item{mu}{scalar. Expected value of the desired distribution.}
-
-\item{sigma}{scalar. Standard deviation of the desired distribution.}
-
-\item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
 }
 \value{
 A quantile \code{theta} of the selected \code{Ftheta} distribution with its parameters.
@@ -46,5 +53,5 @@ A quantile \code{theta} of the selected \code{Ftheta} distribution with its para
 Get the quantile \code{theta} from several distributions with user defined mean and variance.
 }
 \examples{
-getQuantile("Normal", c(0,1), 0, 1, 0.5)
+getQuantile(0, 1, 0.5, "Normal")
 }

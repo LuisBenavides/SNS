@@ -5,7 +5,7 @@
 #' @return A quantile \code{theta} of the selected \code{Ftheta} distribution with its parameters.
 #' @export
 #' @examples
-#' getQuantile("Normal", c(0,1), 0, 1, 0.5)
+#' getQuantile(0, 1, 0.5, "Normal")
 getQuantile <- function(mu, sigma, Ftheta, dist,
                         par.location = 0, par.scale = 1, par.shape = 1, dist.par = NULL) {
   switch(dist,
@@ -21,8 +21,8 @@ getQuantile <- function(mu, sigma, Ftheta, dist,
            q <- qunif(Ftheta,min=a,max=b)
          },
          Normal = {
-           a <- dist.par[1]
-           b <- dist.par[2]
+           a <- par.location
+           b <- par.scale
            if(!is.null(dist.par)){
              a <- dist.par[1]
              b <- dist.par[2]
@@ -32,8 +32,8 @@ getQuantile <- function(mu, sigma, Ftheta, dist,
            q <- qnorm(Ftheta, mean = a, sd = b)
          },
          Normal2 = {
-           a <- dist.par[1]
-           b <- dist.par[2]
+           a <- par.location
+           b <- par.scale
            if(!is.null(dist.par)){
              a <- dist.par[1]
              b <- dist.par[2]
@@ -43,8 +43,8 @@ getQuantile <- function(mu, sigma, Ftheta, dist,
            q <- qchisq(Ftheta, 1)
          },
          DoubleExp = {
-           a <- dist.par[1]
-           b <- dist.par[2]
+           a <- par.location
+           b <- par.scale
            if(!is.null(dist.par)){
              a <- dist.par[1]
              b <- dist.par[2]
@@ -55,8 +55,8 @@ getQuantile <- function(mu, sigma, Ftheta, dist,
 
          },
          DoubleExp2 = {
-           a <- dist.par[1]
-           b <- dist.par[2]
+           a <- par.location
+           b <- par.scale
            if(!is.null(dist.par)){
              a <- dist.par[1]
              b <- dist.par[2]
@@ -70,8 +70,8 @@ getQuantile <- function(mu, sigma, Ftheta, dist,
 
          },
          LogNormal = {
-           a <- dist.par[1] # logmean
-           b <- dist.par[2] # logsigma
+           a <- par.location # logmean
+           b <- par.scale # logsigma
            if(!is.null(dist.par)){
              a <- dist.par[1]
              b <- dist.par[2]
@@ -81,8 +81,8 @@ getQuantile <- function(mu, sigma, Ftheta, dist,
            q <- qlnorm(Ftheta)
          },
          Gamma = {
-           k <- dist.par[1] # beta in Casella
-           o <- dist.par[2] # alpha in Casella
+           k <- par.scale # beta in Casella
+           o <- par.shape # alpha in Casella
            if(!is.null(dist.par)){
              k <- dist.par[1]
              o <- dist.par[2]
@@ -92,8 +92,8 @@ getQuantile <- function(mu, sigma, Ftheta, dist,
            q <- qgamma(Ftheta, shape = o, scale = k)
          },
          Weibull = {
-           k <- dist.par[1]
-           l <- dist.par[2]
+           k <- par.shape
+           l <- par.scale
            if(!is.null(dist.par)){
              k <- dist.par[1]
              l <- dist.par[2]
@@ -103,7 +103,7 @@ getQuantile <- function(mu, sigma, Ftheta, dist,
            q <- qweibull(Ftheta,shape = k, scale = l)
          },
          t = {
-           v <- dist.par[1]
+           v <- par.shape
            if(!is.null(dist.par)){
              v <- dist.par[1]
            }
@@ -113,8 +113,12 @@ getQuantile <- function(mu, sigma, Ftheta, dist,
            q <- qt(Ftheta, v)
          },
          { # Normal (default)
-           a <- dist.par[1]
-           b <- dist.par[2]
+           a <- par.location
+           b <- par.scale
+           if(!is.null(dist.par)){
+             a <- dist.par[1]
+             b <- dist.par[2]
+           }
            EX <- a
            VarX <- b^2
            q <- qnorm(Ftheta, mean = a, sd = b)

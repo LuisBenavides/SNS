@@ -67,7 +67,7 @@ SNS follow the order of \code{X}.
 }
 \section{Comments}{
 
-If ties, average ranks are used.
+If ties occur, average ranks are used.
 }
 
 \examples{

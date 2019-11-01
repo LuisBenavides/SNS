@@ -33,7 +33,7 @@ getDist(n, dist, mu, sigma, par.location = 0, par.scale = 1,
 
 \item{par.shape}{scalar. Shape parameter of the desired distribution, Default 1.}
 
-\item{dist.par}{vector. Depends on the distribution (default \code{NULL}):
+\item{dist.par}{vector. Overwrite \code{par.location}, \code{par.scale}, \code{par.shape}. Depends on the distribution (default \code{NULL}):
 \itemize{
   \item{"Uniform: no matter how is defined always gives numbers between 0 and 1.}
   \item{"Normal": c(location, scale).}
