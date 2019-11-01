@@ -4,15 +4,15 @@
 \alias{getQuantile}
 \title{Obtain Quantile from Distribution Function}
 \usage{
-getQuantile(mu, sigma, Ftheta, dist, par.location = 0, par.scale = 1,
+getQuantile(Ftheta, mu, sigma, dist, par.location = 0, par.scale = 1,
   par.shape = 1, dist.par = NULL)
 }
 \arguments{
+\item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
+
 \item{mu}{scalar. Expected value of the desired distribution.}
 
 \item{sigma}{scalar. Standard deviation of the desired distribution.}
-
-\item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}
 
 \item{dist}{character string. Select from:
 \itemize{
@@ -53,5 +53,5 @@ A quantile \code{theta} of the selected \code{Ftheta} distribution with its para
 Get the quantile \code{theta} from several distributions with user defined mean and variance.
 }
 \examples{
-getQuantile(0, 1, 0.5, "Normal")
+getQuantile(0.5, 0, 1, "Normal")
 }

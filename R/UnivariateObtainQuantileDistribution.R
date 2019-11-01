@@ -5,8 +5,8 @@
 #' @return A quantile \code{theta} of the selected \code{Ftheta} distribution with its parameters.
 #' @export
 #' @examples
-#' getQuantile(0, 1, 0.5, "Normal")
-getQuantile <- function(mu, sigma, Ftheta, dist,
+#' getQuantile(0.5, 0, 1, "Normal")
+getQuantile <- function(Ftheta, mu, sigma, dist,
                         par.location = 0, par.scale = 1, par.shape = 1, dist.par = NULL) {
   switch(dist,
          Uniform  = {
