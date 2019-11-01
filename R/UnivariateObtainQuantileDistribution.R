@@ -51,7 +51,10 @@ getQuantile <- function(Ftheta, mu, sigma, dist,
            }
            EX <- a
            VarX <- 2 * b^2
-           #theta <- (qunif(Ftheta,1) - EX)/sqrt(VarX) * (sigma) + mu
+           # two equations
+           # if Ftheta <= 0.5 --> a + bln(2Ftheta)
+           # if Ftheta > 0.5 --> a - bln(2(1-Ftheta))
+           q <- a + (-1)^(Ftheta > 0.5) * b * log(2*(1-Ftheta + (-1+2*Ftheta)*(Ftheta<=0.5)))
 
          },
          DoubleExp2 = {
@@ -65,7 +68,7 @@ getQuantile <- function(Ftheta, mu, sigma, dist,
            EY3 <- 6 * b^3 + 6 * a * b^2 + 5 * a^3 # Y is Laplace
            EY4 <- 24 * b^4 + 4 * a * EY3 - 6 * a^2 * (2 * b^2 + a^2) + 5 * a^4 # Y is Laplace
            VarX <- EY4 - EX^2
-
+           stop("Result not available for this distribution.")
            #theta <- (qunif(Ftheta,1) - EX)/sqrt(VarX) * (sigma) + mu
 
          },
