@@ -34,9 +34,9 @@ getRL(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu,
   \item{"t": Student-t distribution.}
 }}
 
-\item{mu}{vector. Two elements of the vector the first one is the mean of the reference sample and the second one is the mean of the monitoring sample.}
+\item{mu}{vector. Two elements, the first one is the mean of the reference sample and the second one is the mean of the monitoring sample.}
 
-\item{sigma}{scalar. Standard deviation of the desired distribution.}
+\item{sigma}{vector. Two elements, the first one is the sd of the reference sample and the second one is the sd of the monitoring sample.}
 
 \item{dist.par}{vector. Distribution parameters. \code{c(par.location, par.scale, par.shape)}. Default \code{c(0,1,1)}.}
 

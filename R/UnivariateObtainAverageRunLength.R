@@ -83,9 +83,6 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
       type = chart.par[length(chart.par)]
 
       if(type == 3 && scoring == "Z-SQ"){
-        if(length(chart.par) < 4){
-          stop("Missing argument in chart.par. Four arguments needed.")
-        }
         kp <- chart.par[1]
         km <- chart.par[2]
         h <- chart.par[3]
@@ -249,6 +246,13 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
                    calibrate = FALSE, arl0 = 370,
                    alignment = "unadjusted", constant = NULL, absolute=FALSE,
                    isFixed=FALSE) {
+
+  type = chart.par[length(chart.par)]
+  if(type == 3 && scoring == "Z-SQ"){
+    if(length(chart.par) < 4){
+      stop("Missing argument in chart.par. Four arguments needed.")
+    }
+  }
   RLs <- NULL
   if (isParallel) {
     cluster <- parallel::makeCluster(parallel::detectCores() - 1)
