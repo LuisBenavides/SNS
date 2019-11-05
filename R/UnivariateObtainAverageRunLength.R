@@ -78,9 +78,24 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
       k <- chart.par[1]
     },
     CUSUM = {
-      k <- chart.par[1]
-      h <- chart.par[2]
-      type <- chart.par[3]
+      #type is always the last value in vector
+      type = chart.par[length(chart.par)]
+
+      if(type == 3 && scoring == "Z-SQ"){
+        if(length(chart.par) < 4){
+          stop("Missing argument in chart.par. Four arguments needed.")
+        }
+        kp <- chart.par[1]
+        km <- chart.par[2]
+        h <- chart.par[3]
+      }else{
+        k <- chart.par[1]
+        h <- chart.par[2]
+
+        kp <- k
+        km <- k
+      }
+
       Cplus <- 0
       Cminus <- 0
     },
@@ -129,14 +144,14 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
         }
         switch(type,
           "1" = {
-            Cplus <- max(c(0, Cplus + Z * sqrt(n) - k))
+            Cplus <- max(c(0, Cplus + Z * sqrt(n) - kp))
           },
           "2" = {
-            Cminus <- min(c(0, Cminus + Z * sqrt(n) + k))
+            Cminus <- min(c(0, Cminus + Z * sqrt(n) + km))
           },
           "3" = {
-            Cplus <- max(c(0, Cplus + Z * sqrt(n) - k))
-            Cminus <- min(c(0, Cminus + Z * sqrt(n) + k))
+            Cplus <- max(c(0, Cplus + Z * sqrt(n) - kp))
+            Cminus <- min(c(0, Cminus + Z * sqrt(n) + km))
           }
         )
 
@@ -235,7 +250,7 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
                    isFixed=FALSE) {
   RLs <- NULL
   if (isParallel) {
-    cluster <- parallel::makeCluster(detectCores() - 1)
+    cluster <- parallel::makeCluster(parallel::detectCores() - 1)
     parallel::clusterExport(cluster, "NS")
     parallel::clusterExport(cluster, "getDist")
     parallel::clusterExport(cluster, "getRL")
