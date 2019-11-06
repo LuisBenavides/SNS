@@ -1,7 +1,7 @@
 Package: SNS
 Type: Package
 Title: Sequential Normal Scores in Statistical Process Management
-Version: 0.0.0.9000
+Version: 1.3.20
 Authors@R: c(person("Victor", "Tercero", email = "victor.tercero@tec.mx", role=c("aut")),
   person("Luis", "Benavides", email = "luisbv@tec.mx", role = c("aut", "cre")))
 Author: Victor Tercero [aut],

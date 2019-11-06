@@ -89,7 +89,7 @@ NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL,
       #Z <- Z
     },
     {
-      message("argument not defined. Used the default scoring = 'Z'")
+      #message("argument not defined. Used the default scoring = 'Z'")
       #Z = Z
     }
   )
@@ -117,7 +117,7 @@ NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL,
       #Z <- Z
     },
     {
-      message("argument not defined. Used the default Chi2corrector = 'None'")
+      #message("argument not defined. Used the default Chi2corrector = 'None'")
       #Z = Z
     })
   }

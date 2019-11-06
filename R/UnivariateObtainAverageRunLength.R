@@ -113,7 +113,7 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
     X <- SNS::getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
 
     # get the normal scores
-    ns <- SNS::NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant, scoring = scoring)
+    ns <- SNS::NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant, scoring = scoring, Chi2corrector=Chi2corrector)
     Z <- ns$Z
 
     switch(scoring,
@@ -152,7 +152,6 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
             Cminus <- min(c(0, Cminus + Z * sqrt(n) + km))
           }
         )
-
         if (Cplus >= h || Cminus <= -h) in.Control <- FALSE
       },
       EWMA = {
