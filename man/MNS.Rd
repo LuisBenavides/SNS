@@ -4,8 +4,16 @@
 \alias{MNS}
 \title{Multivariate Normal Scores}
 \usage{
-MNS(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
-  alignment = "unadjusted", constant = NULL, absolute = FALSE)
+MNS(
+  X,
+  Y = NULL,
+  theta = NULL,
+  Ftheta = NULL,
+  scoring = "Z",
+  alignment = "unadjusted",
+  constant = NULL,
+  absolute = FALSE
+)
 }
 \arguments{
 \item{X}{matrix or data.frame. New observations to obtain the N¡normal scores.}

@@ -4,11 +4,28 @@
 \alias{getRL}
 \title{Run Length}
 \usage{
-getRL(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu,
-  sigma, dist.par = c(0, 1, 1), scoring = "Z", chart, chart.par,
-  calibrate = FALSE, arl0 = 370, alignment = "unadjusted",
-  constant = NULL, absolute = FALSE, isFixed = FALSE,
-  Chi2corrector = "None")
+getRL(
+  replica = 1,
+  n,
+  m,
+  theta = NULL,
+  Ftheta = NULL,
+  dist,
+  mu,
+  sigma,
+  dist.par = c(0, 1, 1),
+  scoring = "Z",
+  chart,
+  chart.par,
+  calibrate = FALSE,
+  arl0 = 370,
+  alignment = "unadjusted",
+  constant = NULL,
+  absolute = FALSE,
+  isFixed = FALSE,
+  Chi2corrector = "None",
+  rounding.factor = NULL
+)
 }
 \arguments{
 \item{replica}{scalar. It is used for the parallel version of the function (\code{parallel=TRUE}). Default \code{1}.}
@@ -82,6 +99,8 @@ getRL(replica = 1, n, m, theta = NULL, Ftheta = NULL, dist, mu,
   \item{"none": Z^2.}
 }
 If "approx" () (default). If "exact" (normal scores squared).}
+
+\item{rounding.factor}{scalar. positive value that determine the range between two consecutive rounded values.}
 }
 \description{
 Get the run length

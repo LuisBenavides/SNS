@@ -4,8 +4,13 @@
 \alias{dataAlignment}
 \title{Alignment of the data}
 \usage{
-dataAlignment(X, Y, alignment = "unadjusted", constant = NULL,
-  absolute = FALSE)
+dataAlignment(
+  X,
+  Y,
+  alignment = "unadjusted",
+  constant = NULL,
+  absolute = FALSE
+)
 }
 \arguments{
 \item{X}{vector. Monitoring sample.}

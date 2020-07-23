@@ -4,8 +4,16 @@
 \alias{mgetDist}
 \title{Multivariate Random Observations Generetor}
 \usage{
-mgetDist(n, nv, mu = 0, sigma = NULL, correlation = 0, s = NULL,
-  dists = NULL, dists.par = NULL)
+mgetDist(
+  n,
+  nv,
+  mu = 0,
+  sigma = NULL,
+  correlation = 0,
+  s = NULL,
+  dists = NULL,
+  dists.par = NULL
+)
 }
 \arguments{
 \item{n}{scalar. Number of observations to be generated.}

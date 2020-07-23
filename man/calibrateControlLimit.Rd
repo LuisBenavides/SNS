@@ -4,12 +4,31 @@
 \alias{calibrateControlLimit}
 \title{Calibration of the control limit for the selected chart}
 \usage{
-calibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m,
-  theta = NULL, Ftheta = NULL, scoring = "Z",
-  Chi2corrector = "None", dist, mu, sigma, dist.par = c(0, 1, 1),
-  chart, chart.par, replicates = 50000, isParallel = TRUE,
-  maxIter = 20, progress = TRUE, alignment = "unadjusted",
-  constant = NULL, absolute = FALSE, isFixed = FALSE)
+calibrateControlLimit(
+  targetARL = NULL,
+  targetMRL = NULL,
+  n,
+  m,
+  theta = NULL,
+  Ftheta = NULL,
+  scoring = "Z",
+  Chi2corrector = "None",
+  dist,
+  mu,
+  sigma,
+  dist.par = c(0, 1, 1),
+  chart,
+  chart.par,
+  replicates = 50000,
+  isParallel = TRUE,
+  maxIter = 20,
+  progress = TRUE,
+  alignment = "unadjusted",
+  constant = NULL,
+  absolute = FALSE,
+  isFixed = FALSE,
+  rounding.factor = NULL
+)
 }
 \arguments{
 \item{targetARL}{scalar. is the target ARL to calibrate. By default is set to NULL}
@@ -90,6 +109,8 @@ number of cores in the computer,otherwise the code runs sequentially. Default \c
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
 
 \item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated whenever the batch is in control.}
+
+\item{rounding.factor}{scalar. positive value that determine the range between two consecutive rounded values.}
 }
 \description{
 The methodology used to calibrate the control limit

@@ -4,13 +4,15 @@
 \name{example71}
 \alias{example71}
 \title{Data from Example 7.1 Qiu (2014).}
-\format{The data (X1,X2,X3) consist of 30 observations each variable.
+\format{
+The data (X1,X2,X3) consist of 30 observations each variable.
 
 \describe{
  \item{X}{1st batch.}
  \item{X.1}{2nd batch.}
  \item{X.2}{3rd batch.}
-}}
+}
+}
 \source{
 \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example71.dat}
 }

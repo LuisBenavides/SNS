@@ -4,8 +4,17 @@
 \alias{getDist}
 \title{Random Observations Generetor}
 \usage{
-getDist(n, dist, mu, sigma, par.location = 0, par.scale = 1,
-  par.shape = 1, dist.par = NULL)
+getDist(
+  n,
+  dist,
+  mu,
+  sigma,
+  par.location = 0,
+  par.scale = 1,
+  par.shape = 1,
+  dist.par = NULL,
+  rounding.factor = NULL
+)
 }
 \arguments{
 \item{n}{scalar. Number of observations to be generated.}
@@ -45,6 +54,8 @@ getDist(n, dist, mu, sigma, par.location = 0, par.scale = 1,
   \item{"Weibull": c(shape, scale).}
   \item{"t": c(degrees of freedom).}
 }}
+
+\item{rounding.factor}{scalar. positive value that determine the range between two consecutive rounded values.}
 }
 \value{
 A vector \code{x} with \code{n} observations generated following the selected distribution with its parameters.

@@ -4,11 +4,28 @@
 \alias{mgetRL}
 \title{Multivariate Run Length}
 \usage{
-mgetRL(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL, dists, mu,
-  sigma = NULL, dists.par = NULL, correlation = 0, s = NULL,
-  chart = "T2", chart.par = c(0.005), null.dist = "Chi",
-  alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  calibrate = FALSE, arl0 = 370)
+mgetRL(
+  replica = 1,
+  n,
+  m,
+  nv,
+  theta = NULL,
+  Ftheta = NULL,
+  dists,
+  mu,
+  sigma = NULL,
+  dists.par = NULL,
+  correlation = 0,
+  s = NULL,
+  chart = "T2",
+  chart.par = c(0.005),
+  null.dist = "Chi",
+  alignment = "unadjusted",
+  constant = NULL,
+  absolute = FALSE,
+  calibrate = FALSE,
+  arl0 = 370
+)
 }
 \arguments{
 \item{replica}{scalar. It is used for the parallel version of the function (\code{parallel=TRUE}). Default \code{1}.}

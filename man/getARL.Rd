@@ -4,12 +4,31 @@
 \alias{getARL}
 \title{Average Run Length (ARL)}
 \usage{
-getARL(n, m, theta = NULL, Ftheta = NULL, dist, mu, sigma,
-  dist.par = c(0, 1, 1), chart, chart.par, scoring = "Z",
-  Chi2corrector = "None", replicates = 10000, isParallel = TRUE,
-  print.RL = FALSE, progress = FALSE, calibrate = FALSE,
-  arl0 = 370, alignment = "unadjusted", constant = NULL,
-  absolute = FALSE, isFixed = FALSE)
+getARL(
+  n,
+  m,
+  theta = NULL,
+  Ftheta = NULL,
+  dist,
+  mu,
+  sigma,
+  dist.par = c(0, 1, 1),
+  chart,
+  chart.par,
+  scoring = "Z",
+  Chi2corrector = "None",
+  replicates = 10000,
+  isParallel = TRUE,
+  print.RL = FALSE,
+  progress = FALSE,
+  calibrate = FALSE,
+  arl0 = 370,
+  alignment = "unadjusted",
+  constant = NULL,
+  absolute = FALSE,
+  isFixed = FALSE,
+  rounding.factor = NULL
+)
 }
 \arguments{
 \item{n}{scalar. Subroup size}
@@ -90,6 +109,8 @@ number of cores in the computer,otherwise the code runs sequentially. Default \c
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
 
 \item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated whenever the batch is in control.}
+
+\item{rounding.factor}{scalar. positive value that determine the range between two consecutive rounded values.}
 }
 \description{
 Get the ARL \code{\link{getRL}}

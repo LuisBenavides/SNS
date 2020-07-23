@@ -4,12 +4,30 @@
 \alias{mgetARL}
 \title{Multivariate Average Run Length (ARL)}
 \usage{
-mgetARL(n, m, nv, theta = NULL, Ftheta = NULL, dists,
-  dists.par = NULL, mu, sigma = NULL, chart = "T2",
-  chart.par = c(0.005), correlation = 0, s = NULL,
-  replicates = 10000, isParallel = TRUE, print.RL = FALSE,
-  progress = FALSE, calibrate = FALSE, arl0 = 370,
-  alignment = "unadjusted", constant = NULL, absolute = FALSE)
+mgetARL(
+  n,
+  m,
+  nv,
+  theta = NULL,
+  Ftheta = NULL,
+  dists,
+  dists.par = NULL,
+  mu,
+  sigma = NULL,
+  chart = "T2",
+  chart.par = c(0.005),
+  correlation = 0,
+  s = NULL,
+  replicates = 10000,
+  isParallel = TRUE,
+  print.RL = FALSE,
+  progress = FALSE,
+  calibrate = FALSE,
+  arl0 = 370,
+  alignment = "unadjusted",
+  constant = NULL,
+  absolute = FALSE
+)
 }
 \arguments{
 \item{n}{scalar. Subroup size}

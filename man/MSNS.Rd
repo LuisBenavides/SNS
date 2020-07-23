@@ -4,10 +4,21 @@
 \alias{MSNS}
 \title{Multivariate Sequential Normal Scores}
 \usage{
-MSNS(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
-  alignment = "unadjusted", constant = NULL, absolute = FALSE,
-  chart = "T2", chart.par = c(0.005), null.dist = "Chi",
-  isFixed = FALSE)
+MSNS(
+  X,
+  X.id,
+  Y = NULL,
+  theta = NULL,
+  Ftheta = NULL,
+  scoring = "Z",
+  alignment = "unadjusted",
+  constant = NULL,
+  absolute = FALSE,
+  chart = "T2",
+  chart.par = c(0.005),
+  null.dist = "Chi",
+  isFixed = FALSE
+)
 }
 \arguments{
 \item{X}{matrix or data.frame. New observations to obtain the N¡normal scores.}

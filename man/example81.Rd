@@ -4,11 +4,13 @@
 \name{example81}
 \alias{example81}
 \title{Data from Example 8.1 on page 319 Qiu (2014).}
-\format{A data frame with 300 rows (30 batches of size equals to 10)
+\format{
+A data frame with 300 rows (30 batches of size equals to 10)
 \describe{
  \item{X}{observations of all batches}
  \item{X.id}{id of each observation of the batch}
-}}
+}
+}
 \source{
 \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example81.dat}
 }

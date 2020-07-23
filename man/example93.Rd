@@ -4,12 +4,14 @@
 \name{example93}
 \alias{example93}
 \title{Data from Example 9.3 Qiu (2014).}
-\format{The data (X,Y) consist of 20 batches with 10 observations in each batch.
+\format{
+The data (X,Y) consist of 20 batches with 10 observations in each batch.
 
 \describe{
  \item{X}{1st batch.}
  \item{X.1}{2nd batch.}
-}}
+}
+}
 \source{
 \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example93.dat}
 }

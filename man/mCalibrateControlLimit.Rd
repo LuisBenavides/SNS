@@ -4,13 +4,29 @@
 \alias{mcalibrateControlLimit}
 \title{Calibration of the control limit for the selected chart}
 \usage{
-mcalibrateControlLimit(targetARL = NULL, targetMRL = NULL, n, m, nv,
-  theta = NULL, Ftheta = NULL, dists = c("Normal", "Normal"),
-  mu = c(0, 0), sigma = NULL, dists.par = matrix(c(0, 1, 1, 0, 1, 1),
-  ncol = 2), correlation = 0, chart = "T2", chart.par = c(10),
-  replicates = 50000, isParallel = FALSE, maxIter = 20,
-  progress = TRUE, alignment = "unadjusted", constant = NULL,
-  absolute = FALSE)
+mcalibrateControlLimit(
+  targetARL = NULL,
+  targetMRL = NULL,
+  n,
+  m,
+  nv,
+  theta = NULL,
+  Ftheta = NULL,
+  dists = c("Normal", "Normal"),
+  mu = c(0, 0),
+  sigma = NULL,
+  dists.par = matrix(c(0, 1, 1, 0, 1, 1), ncol = 2),
+  correlation = 0,
+  chart = "T2",
+  chart.par = c(10),
+  replicates = 50000,
+  isParallel = FALSE,
+  maxIter = 20,
+  progress = TRUE,
+  alignment = "unadjusted",
+  constant = NULL,
+  absolute = FALSE
+)
 }
 \arguments{
 \item{targetARL}{scalar. is the target ARL to calibrate. By default is set to NULL}

@@ -4,8 +4,16 @@
 \alias{getQuantile}
 \title{Obtain Quantile from Distribution Function}
 \usage{
-getQuantile(Ftheta, mu, sigma, dist, par.location = 0, par.scale = 1,
-  par.shape = 1, dist.par = NULL)
+getQuantile(
+  Ftheta,
+  mu,
+  sigma,
+  dist,
+  par.location = 0,
+  par.scale = 1,
+  par.shape = 1,
+  dist.par = NULL
+)
 }
 \arguments{
 \item{Ftheta}{scalar. Quantile of the data distribution. The values that take are between (0,1).}

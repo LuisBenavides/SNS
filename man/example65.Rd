@@ -4,14 +4,16 @@
 \name{example65}
 \alias{example65}
 \title{Data from Example 6.5 on page 246 Qiu (2014).}
-\format{A data frame with 30 rows and 5 columns:
+\format{
+A data frame with 30 rows and 5 columns:
 \describe{
  \item{x}{first 9 observations are the reference sample. Batch size equals to 1.}
  \item{Wn}{Wn}
  \item{Sn2}{Sn2}
  \item{Bmax}{Bmax}
  \item{hn}{hn}
-}}
+}
+}
 \source{
 \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example65.dat}
 }

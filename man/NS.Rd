@@ -4,9 +4,17 @@
 \alias{NS}
 \title{Normal Scores}
 \usage{
-NS(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
-  Chi2corrector = "None", alignment = "unadjusted", constant = NULL,
-  absolute = FALSE)
+NS(
+  X,
+  Y = NULL,
+  theta = NULL,
+  Ftheta = NULL,
+  scoring = "Z",
+  Chi2corrector = "None",
+  alignment = "unadjusted",
+  constant = NULL,
+  absolute = FALSE
+)
 }
 \arguments{
 \item{X}{vector. New observations to obtain the N¡normal scores.}
