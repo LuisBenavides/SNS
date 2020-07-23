@@ -18,6 +18,7 @@
 #' @param par.location scalar. Location parameter of the desired distribution. Default 0**.
 #' @param par.scale scalar. Scale parameter of the desired distribution. Default 1**.
 #' @param par.shape scalar. Shape parameter of the desired distribution, Default 1.
+#' @param rounding.factor scalar. positive value that determine the range between two consecutive rounded values.
 #' @section **Note:
 #' \itemize{
 #'   \item{For "Lognormal", \code{par.location} and \code{par.scale} correspond to the location and scale parameters of the normal
@@ -44,7 +45,8 @@
 #' @examples
 #' getDist(1, "Normal", 0, 1)
 getDist <- function(n, dist, mu, sigma,
-                    par.location = 0, par.scale = 1, par.shape = 1, dist.par = NULL) {
+                    par.location = 0, par.scale = 1, par.shape = 1, dist.par = NULL,
+                    rounding.factor = NULL) {
   switch(dist,
     Uniform  = {
       a <- 0
@@ -160,5 +162,8 @@ getDist <- function(n, dist, mu, sigma,
   )
   z <- (xtemp - EX) / VarX^(0.5)
   x <- mu + sigma * z
+  if(!is.null(rounding.factor)){
+    x <- round(x/rounding.factor) * rounding.factor
+  }
   return(x)
 }

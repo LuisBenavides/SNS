@@ -53,7 +53,7 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                                   chart, chart.par, replicates = 50000,
                                   isParallel = TRUE, maxIter = 20, progress = TRUE,
                                   alignment="unadjusted", constant=NULL, absolute=FALSE,
-                                  isFixed=FALSE) {
+                                  isFixed=FALSE, rounding.factor = NULL) {
   # Check for errors
   if (is.null(targetARL) && is.null(targetMRL)) {
     print("ERROR: Target ARL or target mRL missing")
@@ -108,7 +108,7 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                           chart = chart, chart.par = chart.par, replicates = replicates,
                           isParallel = isParallel, calibrate = TRUE, arl0 = ARL0,
                           alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,
-                          scoring=scoring,Chi2corrector=Chi2corrector)
+                          scoring=scoring,Chi2corrector=Chi2corrector, rounding.factor = rounding.factor)
     if (!is.null(targetARL)) {
       y[i] <- result$ARL
       target <- targetARL

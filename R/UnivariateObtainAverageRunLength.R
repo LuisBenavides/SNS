@@ -64,12 +64,12 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
                   dist, mu, sigma, dist.par = c(0,1,1), scoring = "Z",
                   chart, chart.par, calibrate = FALSE, arl0 = 370,
                   alignment = "unadjusted", constant = NULL, absolute=FALSE,
-                  isFixed=FALSE,Chi2corrector="None") {
+                  isFixed=FALSE,Chi2corrector="None", rounding.factor = NULL) {
   # initilize the reference sample
   Y <- NULL
   if (m > 0) { # if there are reference sample
     # generate the reference sample
-    Y <- SNS::getDist(n = m, dist = dist, mu = mu[1], sigma = sigma[1], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
+    Y <- SNS::getDist(n = m, dist = dist, mu = mu[1], sigma = sigma[1], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3], rounding.factor = rounding.factor)
   }
   RL <- 0
   in.Control <- TRUE
@@ -110,7 +110,7 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
     RL <- RL + 1
 
     # generate the subgroup to monitor
-    X <- SNS::getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3])
+    X <- SNS::getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3], rounding.factor = rounding.factor)
 
     # get the normal scores
     ns <- SNS::NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant, scoring = scoring, Chi2corrector=Chi2corrector)
@@ -244,7 +244,7 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
                    print.RL = FALSE, progress = FALSE,
                    calibrate = FALSE, arl0 = 370,
                    alignment = "unadjusted", constant = NULL, absolute=FALSE,
-                   isFixed=FALSE) {
+                   isFixed=FALSE, rounding.factor = NULL) {
 
   type = chart.par[length(chart.par)]
   if(type == 3 && scoring == "Z-SQ"){
@@ -258,12 +258,12 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
     parallel::clusterExport(cluster, "NS")
     parallel::clusterExport(cluster, "getDist")
     parallel::clusterExport(cluster, "getRL")
-    RLs <- parallel::parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring,Chi2corrector=Chi2corrector)
+    RLs <- parallel::parSapply(cluster, 1:replicates, getRL, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring,Chi2corrector=Chi2corrector, rounding.factor = rounding.factor)
     parallel::stopCluster(cluster)
   } else {
     t0 <- Sys.time()
     for (r in 1:replicates) {
-      RL <- SNS::getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring,Chi2corrector=Chi2corrector)
+      RL <- SNS::getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring,Chi2corrector=Chi2corrector, rounding.factor = rounding.factor)
 
       RLs <- c(RLs, RL)
 
