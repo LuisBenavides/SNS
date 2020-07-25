@@ -1,4 +1,4 @@
-#' @title Random Observations Generetor
+#' @title Random Observations Generator
 #' @description Random observations generator selected from several distributions with user defined mean and variance.
 #' @param n scalar. Number of observations to be generated.
 #' @param dist character string. Select from:
