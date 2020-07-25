@@ -2,7 +2,7 @@
 % Please edit documentation in R/UnivariateRandomNumberGenerator.R
 \name{getDist}
 \alias{getDist}
-\title{Random Observations Generetor}
+\title{Random Observations Generator}
 \usage{
 getDist(
   n,
