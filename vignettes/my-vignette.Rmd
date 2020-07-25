@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette  
 bibliography: bibliography.bib
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{SNS Packages}
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{SNS}
   %\VignetteEngine{knitr::rmarkdown}
