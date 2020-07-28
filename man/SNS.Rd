@@ -18,7 +18,8 @@ SNS(
   chart = "Shewhart",
   chart.par = c(3),
   snsRaw = FALSE,
-  isFixed = FALSE
+  isFixed = FALSE,
+  omit.id = NULL
 )
 }
 \arguments{
@@ -72,6 +73,8 @@ If "approx" () (default). If "exact" (normal scores squared).}
 \item{snsRaw}{logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.}
 
 \item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated whenever the batch is in control.}
+
+\item{omit.id}{vector. Elements of the vector are the id which are omitted in the analysis.}
 }
 \description{
 Transform a vector \code{X} into SNS using initial observations \code{Y} if available

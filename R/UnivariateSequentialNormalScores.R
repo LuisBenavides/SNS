@@ -8,6 +8,7 @@
 #' @inheritParams getRL
 #' @param X.id vector. The id of the vector \code{X}.
 #' @param snsRaw logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.
+#' @param omit.id vector. Elements of the vector are the id which are omitted in the analysis.
 #' @export
 #' @examples
 #' # EXAMPLE CONDITIONAL WITH REFERENCE SAMPLE
@@ -53,7 +54,8 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
                 scoring = "Z", Chi2corrector="None",
                 alignment = "unadjusted", constant = NULL, absolute = FALSE,
                 chart="Shewhart", chart.par=c(3),
-                snsRaw = FALSE, isFixed = FALSE) {
+                snsRaw = FALSE, isFixed = FALSE,
+                omit.id = NULL) {
 
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
     print("ERROR, theta or Ftheta missing")
@@ -62,13 +64,16 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
     print("ERROR, observations (X) have different length of the observations id (X.id)")
     return()
   }
-
+  if(!is.null(omit.id)){#check which groups are omitted
+    omit.id = which(unique(X.id) %in% omit.id)
+  }
   # detect the changes in the observation id vector
   changes.in.X.id = c(1, as.numeric(X.id[1:(length(X.id) - 1)] != X.id[2:(length(X.id))]))
   #change the observation id
   Xb.id = cumsum(changes.in.X.id)
   #get the different groups of the id
   groups = unique(Xb.id)
+
   z = rep(NA, length(groups)) # preallocate memory to initialize the SNS (one for group)
   r = rep(NA, length(groups)) # preallocate memory to initialize the ranks (one for group)
   if(snsRaw){
@@ -80,6 +85,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
   if(!is.null(Yb)){
     Yb = Yb[!is.na(Yb)] # initialize reference sample (remove na values)
   }
+
 
 
   UCL = rep(NA, length(groups))
@@ -186,7 +192,10 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
 
 
     if (updateSample && !isFixed){# if the subgroup is in control (updateSample change to TRUE)
-      Yb = c(Yb, Xb) # add to reference sample the new observations
+      if (!(i %in% omit.id)){#and if the id of the group is not omitted
+        Yb = c(Yb, Xb) # add to reference sample the new observations
+      }
+
     }
     i = i + 1 # continue with the next group
   }

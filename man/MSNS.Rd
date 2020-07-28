@@ -17,7 +17,8 @@ MSNS(
   chart = "T2",
   chart.par = c(0.005),
   null.dist = "Chi",
-  isFixed = FALSE
+  isFixed = FALSE,
+  omit.id = NULL
 )
 }
 \arguments{
@@ -59,6 +60,8 @@ MSNS(
 \item{null.dist}{character string. It is the null distribution choose from \code{"Chi"} or \code{"F"}.}
 
 \item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.}
+
+\item{omit.id}{vector. Elements of the vector are the id which are omitted in the analysis.}
 }
 \description{
 Transform a matrix \code{X} into SNS using initial observations \code{Y} if available
