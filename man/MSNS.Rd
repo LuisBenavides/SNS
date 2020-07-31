@@ -18,7 +18,8 @@ MSNS(
   chart.par = c(0.005),
   null.dist = "Chi",
   isFixed = FALSE,
-  omit.id = NULL
+  omit.id = NULL,
+  auto.omit.alarm = TRUE
 )
 }
 \arguments{
@@ -28,7 +29,7 @@ MSNS(
 
 \item{Y}{matrix or data.frame. If \code{Y} is not defined (no previous observation available, \code{NULL}), NS is relative to \code{X}. Default \code{NULL}.}
 
-\item{theta}{vector. Value corresponig with the \code{Ftheta} quantile.}
+\item{theta}{vector. Value corresponding with the \code{Ftheta} quantile.}
 
 \item{Ftheta}{vector. Quantile of the data distribution. The values that take are between (0,1).}
 
@@ -62,6 +63,8 @@ MSNS(
 \item{isFixed}{logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.}
 
 \item{omit.id}{vector. Elements of the vector are the id which are omitted in the analysis.}
+
+\item{auto.omit.alarm}{logical. Determine if OC signals are added (or not) to reference sample. By default is set to TRUE.}
 }
 \description{
 Transform a matrix \code{X} into SNS using initial observations \code{Y} if available
