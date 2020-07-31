@@ -9,6 +9,7 @@
 #' @param X.id vector. The id of each column (variable) of the matrix \code{X}.
 #' @param isFixed logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated when the batch is in control.
 #' @param omit.id vector. Elements of the vector are the id which are omitted in the analysis.
+#' @param auto.omit.alarm logical. Determine if OC signals are added (or not) to reference sample. By default is set to TRUE.
 #' @export
 #' @examples
 #' X = cbind(example91$X1, example91$X2)
@@ -17,7 +18,7 @@
 MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
                 alignment = "unadjusted", constant = NULL, absolute = FALSE,
                 chart="T2", chart.par = c(0.005), null.dist="Chi", isFixed = FALSE,
-                omit.id = NULL) {
+                omit.id = NULL, auto.omit.alarm = TRUE) {
 
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
     print("ERROR, theta or Ftheta missing")
@@ -26,8 +27,20 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     print("ERROR, observations (X) have different length of the observations id (X.id)")
     return()
   }
+
   if(!is.null(omit.id)){#check which groups are omitted
-    omit.id = which(unique(X.id) %in% omit.id)
+    ids = unique(X.id)
+    omit.id = which(ids %in% omit.id)
+    auto.omit.alarm = FALSE
+    if(is.null(omit.id) || length(omit.id) == 0){
+      print("ERROR, omitted ids not found, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
+      auto.omit.alarm = TRUE
+    }
+  }else{
+    if(length(omit.id) == 0){
+      print("ERROR, omitted ids not found, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
+      auto.omit.alarm = TRUE
+    }
   }
   # detect the changes in the observation id vector
   changes.in.X.id = c(1, as.numeric(X.id[1:(length(X.id) - 1)] != X.id[2:(length(X.id))]))
@@ -77,7 +90,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
               }
              }
              # known mean, unknown covariance matrix
-             ucl = ((nv*(m-1))/(m-nv))*qf(1-alpha, nv, m-n) # control limit
+             ucl = ((nv*(m-1))/(m-nv))*qf(1-alpha, nv, m-nv) # control limit
 
              # Montgomery, normal T2
              # unknown mean, unknown covariance matrix
@@ -107,7 +120,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
            if (null.dist == "F"){
              #M <- M + 1 #add the subgroup
-             ucl = ((nv*(m-1))/(m-nv))*qf(1-alpha, nv, m-n) # dist F
+             ucl = ((nv*(m-1))/(m-nv))*qf(1-alpha, nv, m-nv) #control limit
              #ucl <- nv*(M+1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
            }
            if (T2[i] <= ucl){
@@ -118,14 +131,19 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     }
     UCL[i] = ucl
 
-    if ((updateSample || is.null(Yb)) && !isFixed){# if the subgroup is in control (updateSample change to TRUE)
-      if (!(i %in% omit.id)){#and if the id of the group is not omitted
+    if (auto.omit.alarm){
+      if ((updateSample || is.null(Yb)) && !isFixed){# if the subgroup is in control (updateSample change to TRUE)
+          Yb = rbind(Yb, Xb) # add to reference sample the new observations
+          Zm = rbind(Zm, Zb) #update the sns in control
+      }
+    }else{
+      if ((!(i %in% omit.id) || is.null(Yb)) && !isFixed){#and if the id of the group is not omitted
         Yb = rbind(Yb, Xb) # add to reference sample the new observations
         Zm = rbind(Zm, Zb) #update the sns in control
       }
     }
 
-    Z = rbind(Z, Zb) #update the sns all in control and outou control
+    Z = rbind(Z, Zb) #update the sns all in control and out of control
 
     i = i + 1 # continue with the next group
   }
@@ -180,7 +198,7 @@ plot.msns <- function(x,...){
   switch(chart,
          T2 = {
            plot(o.id,T2,type="o",lty=2, lwd=1.5,pch=19,xlab="Batch",ylab=expression(T[SNS]^2),
-                ylim=c(ymin, ymax),cex.lab=2.5, cex.axis=1.5, cex=2, ...=...)
+                ylim=c(ymin, ymax),cex.lab=2.5, cex.axis=1.5, cex=2, ...=..., col = ifelse(T2 > UCL, "red", "black"))
          }
   )
 

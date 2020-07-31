@@ -9,6 +9,7 @@
 #' @param X.id vector. The id of the vector \code{X}.
 #' @param snsRaw logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.
 #' @param omit.id vector. Elements of the vector are the id which are omitted in the analysis.
+#' @param auto.omit.alarm logical. Determine if OC signals are added (or not) to reference sample. By default is set to TRUE.
 #' @export
 #' @examples
 #' # EXAMPLE CONDITIONAL WITH REFERENCE SAMPLE
@@ -55,7 +56,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
                 alignment = "unadjusted", constant = NULL, absolute = FALSE,
                 chart="Shewhart", chart.par=c(3),
                 snsRaw = FALSE, isFixed = FALSE,
-                omit.id = NULL) {
+                omit.id = NULL, auto.omit.alarm = TRUE) {
 
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
     print("ERROR, theta or Ftheta missing")
@@ -65,7 +66,18 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
     return()
   }
   if(!is.null(omit.id)){#check which groups are omitted
-    omit.id = which(unique(X.id) %in% omit.id)
+    ids = unique(X.id)
+    omit.id = which(ids %in% omit.id)
+    auto.omit.alarm = FALSE
+    if(is.null(omit.id) || length(omit.id) == 0){
+      print("ERROR, omitted ids not found, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
+      auto.omit.alarm = TRUE
+    }
+  }else{
+    if(length(omit.id) == 0){
+      print("ERROR, omitted ids not found, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
+      auto.omit.alarm = TRUE
+    }
   }
   # detect the changes in the observation id vector
   changes.in.X.id = c(1, as.numeric(X.id[1:(length(X.id) - 1)] != X.id[2:(length(X.id))]))
@@ -190,12 +202,14 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
       LCL[i] = 0
     }
 
-
-    if (updateSample && !isFixed){# if the subgroup is in control (updateSample change to TRUE)
-      if (!(i %in% omit.id)){#and if the id of the group is not omitted
+    if (auto.omit.alarm){
+      if (updateSample && !isFixed){# if the subgroup is in control (updateSample change to TRUE)
         Yb = c(Yb, Xb) # add to reference sample the new observations
       }
-
+    }else{
+      if (!(i %in% omit.id) && !isFixed){#and if the id of the group is not omitted
+        Yb = c(Yb, Xb) # add to reference sample the new observations
+      }
     }
     i = i + 1 # continue with the next group
   }
@@ -278,23 +292,23 @@ plot.SNS <- function(x,...){
             ymin = 0
             ylab = expression(Z^2)
           }
-           plot(o.id, Z, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=ylab,cex.lab=2.5, cex.axis=1.5, cex=2)
+           plot(o.id, Z, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=ylab,cex.lab=2.5, cex.axis=1.5, cex=2, col = ifelse((LCL > Z) | (Z > UCL), "red", "black"))
            lines(o.id, Z, lt=2, lwd=3)
          },
          CUSUM = {
            type = chart.par[3]
            switch(type,
                   "1" = {
-                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"+"),cex.lab=2.5, cex.axis=1.5, cex=2)
+                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"+"),cex.lab=2.5, cex.axis=1.5, cex=2, col = ifelse(Cplus > UCL, "red", "black"))
                     lines(o.id, Cplus, lt=2, lwd=3)
                   },
                   "2" = {
-                    plot(o.id, Cminus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"-"),cex.lab=2.5, cex.axis=1.5, cex=2)
+                    plot(o.id, Cminus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"-"),cex.lab=2.5, cex.axis=1.5, cex=2, col = ifelse(Cminus < LCL, "red", "black"))
                     lines(o.id, Cminus, lt=2, lwd=3)
                   },
                   "3" = {
-                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"+"/C^"-"),cex.lab=2.5, cex.axis=1.5, cex=2)
-                    points(o.id, Cminus, pch=15, cex=2)
+                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"+"/C^"-"),cex.lab=2.5, cex.axis=1.5, cex=2, col = ifelse(Cplus > UCL, "red", "black"))
+                    points(o.id, Cminus, pch=15, cex=2, col = ifelse(Cminus < LCL, "red", "black"))
                     lines(o.id, Cplus, lt=2, lwd=3)
                     lines(o.id, Cminus, lt=2, lwd=3)
                     legend("topleft", c(expression(C^"+"), expression(C^"-")), pch=c(19, 15))
@@ -302,7 +316,7 @@ plot.SNS <- function(x,...){
            )
          },
          EWMA = {
-           plot(o.id, E, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="E",cex.lab=2.5, cex.axis=1.5, cex=2)
+           plot(o.id, E, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="E",cex.lab=2.5, cex.axis=1.5, cex=2, col = ifelse(E > UCL, "red", "black"))
            lines(o.id, E, lt=2, lwd=3)
          }
   )
