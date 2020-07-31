@@ -38,16 +38,17 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
   ng = length(groups) #get the number of groups
   T2 = rep(NA, ng) #preallocate memory to the statistic T2
-  Z = NULL #preallocate memory for sns
-
+  Z = NULL #preallocate memory for sns (IC and OC)
+  Zm = NULL #preallocate memory for sns (IC)
   i = 1 # initialize the group index of the observation id vector
   Yb = Y
   if(!is.null(Yb)){
-    #Yb = Yb[!is.na(Yb),] # initialize reference sample (remove na values)
+    #Yb = Yb[!is.na(Yb),] # initialize reference sample (remove NA values)
 
     #get the normal scores of the reference sample
     ns = SNS::MNS(X = Yb, Y = NULL, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
     Z = ns$Z
+    Zm = Z
   }
 
 
@@ -55,56 +56,76 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
   alpha <- chart.par[1]
   nv <- ncol(X)
+
   switch(chart,
          T2 = {
            if(null.dist == "Chi"){
              ucl <- qchisq(1-alpha,nv) #control limit
-           }else if(null.dist=="F"){
-             M <- 1
-             n <- length(Xb.id) / ng
-             if(!is.null(Yb)){#if there is reference sample
-              m <- nrow(Yb) / ng
-              M <- ceiling(m / n)
+           }else if(null.dist == "F"){
+             if(FALSE){#check depending on if is known mean or not
+               M <- 1
+               n <- length(Xb.id) / ng
              }
-             ucl <- nv*(M+1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
+
+             m <- 30 # check if it is correct
+             # m is the number of observations of the reference sample
+             if(!is.null(Yb)){#if there is reference sample
+              m <- nrow(Yb)
+              if (FALSE){#check depending on if is known mean or not
+                m <- mnrow(Yb) / ng
+                M <- ceiling(m / n)
+              }
+             }
+             # known mean, unknown covariance matrix
+             ucl = ((nv*(m-1))/(m-nv))*qf(1-alpha, nv, m-n) # control limit
+
+             # Montgomery, normal T2
+             # unknown mean, unknown covariance matrix
+             #ucl <- nv*(M+1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
            }
          }
   )
 
-  while (i <= ng) { # repeat until the total groups are analized
-    Xb = X[which(Xb.id == groups[i]),] # get the observations to evalute from the positions
+  while (i <= ng) { # repeat until the total groups are analyzed
+    Xb = X[which(Xb.id == groups[i]),] # get the observations to evaluate from the positions
     ns = SNS::MNS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
     Zb = ns$Z
     n = nrow(Xb) #get the number of observation per group
-
     if (is.null(Yb)) { # if there is not reference sample
       updateSample <- TRUE
       T2[i] = 0 # it does not give any information and is considered the reference sample
     }else{
       mu = apply(Zb, 2, mean) #obtain the mean for each variable in the batch
+      m = nrow(Yb) #obtain the number of observations of the reference sample
+
       # check if the subgroup is in control according to each scheme
       # the reference sample is updated
       updateSample <- FALSE
       switch(chart,
          T2 = {
-           T2[i] = n*(mu%*%chol2inv(chol(cor(Z, method = "pearson")))%*%mu) #get the T2 statistic
+           T2[i] = n*(mu%*%chol2inv(chol(cor(Zm, method = "pearson")))%*%mu) #get the T2 statistic
 
            if (null.dist == "F"){
-             M <- M + 1 #add the subgroup
-             ucl <- nv*(M+1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
+             #M <- M + 1 #add the subgroup
+             ucl = ((nv*(m-1))/(m-nv))*qf(1-alpha, nv, m-n) # dist F
+             #ucl <- nv*(M+1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
            }
-           if (T2[i] <= ucl) updateSample <- TRUE
+           if (T2[i] <= ucl){
+             updateSample <- TRUE
+           }
          }
       )
     }
     UCL[i] = ucl
 
-    if ( (updateSample || is.null(Yb)) && !isFixed){# if the subgroup is in control (updateSample change to TRUE)
+    if ((updateSample || is.null(Yb)) && !isFixed){# if the subgroup is in control (updateSample change to TRUE)
       if (!(i %in% omit.id)){#and if the id of the group is not omitted
         Yb = rbind(Yb, Xb) # add to reference sample the new observations
+        Zm = rbind(Zm, Zb) #update the sns in control
       }
     }
-    Z = rbind(Z, Zb) #update the sns
+
+    Z = rbind(Z, Zb) #update the sns all in control and outou control
 
     i = i + 1 # continue with the next group
   }
@@ -113,7 +134,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       n=n,
       chart = chart
     ),
-    X = Xb,
+    X = X,
     Z = Z,
     T2 = T2,
     X.id = X.id,
@@ -159,7 +180,7 @@ plot.msns <- function(x,...){
   switch(chart,
          T2 = {
            plot(o.id,T2,type="o",lty=2, lwd=1.5,pch=19,xlab="Batch",ylab=expression(T[SNS]^2),
-                ylim=c(ymin, ymax),cex.lab=2.5, cex.axis=1.5, cex=2)
+                ylim=c(ymin, ymax),cex.lab=2.5, cex.axis=1.5, cex=2, ...=...)
          }
   )
 
