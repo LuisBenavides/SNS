@@ -36,7 +36,7 @@ mgetRL(
 
 \item{nv}{scalar. Number of variables to be generated.}
 
-\item{theta}{vector. Value corresponig with the \code{Ftheta} quantile.}
+\item{theta}{vector. Value corresponding with the \code{Ftheta} quantile.}
 
 \item{Ftheta}{vector. Quantile of the data distribution. The values that take are between (0,1).}
 

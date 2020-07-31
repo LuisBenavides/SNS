@@ -20,7 +20,7 @@ MNS(
 
 \item{Y}{matrix or data.frame. If \code{Y} is not defined (no previous observation available, \code{NULL}), NS is relative to \code{X}. Default \code{NULL}.}
 
-\item{theta}{vector. Value corresponig with the \code{Ftheta} quantile.}
+\item{theta}{vector. Value corresponding with the \code{Ftheta} quantile.}
 
 \item{Ftheta}{vector. Quantile of the data distribution. The values that take are between (0,1).}
 
