@@ -4,7 +4,7 @@
 #' @inheritParams dataAlignment
 #' @param X matrix or data.frame. New observations to obtain the N¡normal scores.
 #' @param Y matrix or data.frame. If \code{Y} is not defined (no previous observation available, \code{NULL}), NS is relative to \code{X}. Default \code{NULL}.
-#' @param theta vector. Value corresponig with the \code{Ftheta} quantile.
+#' @param theta vector. Value corresponding with the \code{Ftheta} quantile.
 #' @param Ftheta vector. Quantile of the data distribution. The values that take are between (0,1).
 #' @param scoring character string. If "Z" (normal scores) (default). If "Z-SQ" (normal scores squared).
 #' @return Multiple output. Select by \code{output$}
@@ -37,10 +37,9 @@ MNS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
   X <- ad$X
   Y <- ad$Y
 
-
   nv = ncol(X) #get the number of variables
   n <- nrow(X) # get the number of observations
-  if (is.null(theta) | is.null(Ftheta)) { # if descriptive data is not vailable
+  if (is.null(theta) | is.null(Ftheta)) { # if descriptive data is not available
     # such as a quantil (theta)
     if (is.null(Y)) { # if previous data is not available
       R <- apply(X, 2, rank) # rank the observations with general wanking function
@@ -49,12 +48,12 @@ MNS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       for(i in 1:n){#for each observation in the batch
         for (j in 1:nv){#for each variable
           #for each observation, by index.
-          #obtain the rank by comparing each obsarvation
+          #obtain the rank by comparing each observation
           #depending on if is greater or equals to previous data
           R[i,j] = sum(Y[,j] < X[i,j]) + (sum(Y[,j] == X[i,j]) + 2)/2
         }
       }
-      n <- nrow(Y) + 1 # uptade number of observations and add one unit
+      n <- nrow(Y) + 1 # update number of observations and add one unit
     }
     P <- (R - 0.5) / n # obtain the probability of the ranks
   } else {
