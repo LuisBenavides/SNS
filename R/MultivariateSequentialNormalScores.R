@@ -174,6 +174,8 @@ plot.msns <- function(x,...){
   UCL = x$UCL
   difMaxZ = 0
   difMinZ = 0
+
+  CEX = 1.5
   switch(chart,
          T2 = {
            difMaxZ = abs(max(T2) - max(UCL))
@@ -198,7 +200,7 @@ plot.msns <- function(x,...){
   switch(chart,
          T2 = {
            plot(o.id,T2,type="o",lty=2, lwd=1.5,pch=19,xlab="Batch",ylab=expression(T[SNS]^2),
-                ylim=c(ymin, ymax),cex.lab=2.5, cex.axis=1.5, cex=2, ...=..., col = ifelse(T2 > UCL, "red", "black"))
+                ylim=c(ymin, ymax),cex.lab=2.5, cex.axis=1.5, cex=CEX, ...=..., col = ifelse(T2 > UCL, "red", "black"))
          }
   )
 
@@ -206,7 +208,7 @@ plot.msns <- function(x,...){
   if(o.id[1] > o.id[length(o.id)]){
     change = -1
   }
-  lines(o.id, UCL,lt=4, lwd=3)
+  lines(o.id, UCL,lt=4, lwd=CEX*1.5, col = "gray48")
 }
 
 

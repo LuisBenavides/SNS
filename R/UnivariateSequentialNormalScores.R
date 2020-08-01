@@ -260,6 +260,7 @@ plot.SNS <- function(x,...){
   Cminus = x$Cminus
   E = x$E
   scoring = x$scoring
+  CEX = 1.5
   switch(chart,
          Shewhart = {
            difMaxZ = abs(max(Z) - max(UCL))
@@ -292,32 +293,32 @@ plot.SNS <- function(x,...){
             ymin = 0
             ylab = expression(Z^2)
           }
-           plot(o.id, Z, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=ylab,cex.lab=2.5, cex.axis=1.5, cex=2, col = ifelse((LCL > Z) | (Z > UCL), "red", "black"))
-           lines(o.id, Z, lt=2, lwd=3)
+           plot(o.id, Z, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=ylab,cex.lab=2.5, cex.axis=1.5, cex=CEX, col = ifelse((LCL > Z) | (Z > UCL), "red", "black"))
+           lines(o.id, Z, lt=2, lwd=CEX*1.5)
          },
          CUSUM = {
            type = chart.par[3]
            switch(type,
                   "1" = {
-                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"+"),cex.lab=2.5, cex.axis=1.5, cex=2, col = ifelse(Cplus > UCL, "red", "black"))
-                    lines(o.id, Cplus, lt=2, lwd=3)
+                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"+"),cex.lab=2.5, cex.axis=1.5, cex=CEX, col = ifelse(Cplus > UCL, "red", "black"))
+                    lines(o.id, Cplus, lt=2, lwd=CEX*1.5)
                   },
                   "2" = {
-                    plot(o.id, Cminus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"-"),cex.lab=2.5, cex.axis=1.5, cex=2, col = ifelse(Cminus < LCL, "red", "black"))
-                    lines(o.id, Cminus, lt=2, lwd=3)
+                    plot(o.id, Cminus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"-"),cex.lab=2.5, cex.axis=1.5, cex=CEX, col = ifelse(Cminus < LCL, "red", "black"))
+                    lines(o.id, Cminus, lt=2, lwd=CEX*1.5)
                   },
                   "3" = {
-                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"+"/C^"-"),cex.lab=2.5, cex.axis=1.5, cex=2, col = ifelse(Cplus > UCL, "red", "black"))
-                    points(o.id, Cminus, pch=15, cex=2, col = ifelse(Cminus < LCL, "red", "black"))
-                    lines(o.id, Cplus, lt=2, lwd=3)
-                    lines(o.id, Cminus, lt=2, lwd=3)
+                    plot(o.id, Cplus, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab=expression(C^"+"/C^"-"),cex.lab=2.5, cex.axis=1.5, cex=CEX, col = ifelse(Cplus > UCL, "red", "black"))
+                    points(o.id, Cminus, pch=15, cex=CEX, col = ifelse(Cminus < LCL, "red", "black"))
+                    lines(o.id, Cplus, lt=2, lwd=CEX*1.5)
+                    lines(o.id, Cminus, lt=2, lwd=CEX*1.5)
                     legend("topleft", c(expression(C^"+"), expression(C^"-")), pch=c(19, 15))
                   }
            )
          },
          EWMA = {
-           plot(o.id, E, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="E",cex.lab=2.5, cex.axis=1.5, cex=2, col = ifelse(E > UCL, "red", "black"))
-           lines(o.id, E, lt=2, lwd=3)
+           plot(o.id, E, pch=19, ylim=c(ymin, ymax), xlab = "Batch",ylab="E",cex.lab=2.5, cex.axis=1.5, cex=CEX, col = ifelse(E > UCL, "red", "black"))
+           lines(o.id, E, lt=2, lwd=CEX*1.5)
          }
   )
 
@@ -325,6 +326,6 @@ plot.SNS <- function(x,...){
   if(o.id[1] > o.id[length(o.id)]){
     change = -1
   }
-  lines(o.id, UCL,lt=4, lwd=3)
-  if(sum(LCL) != 0)  lines(o.id, LCL,lt=4, lwd=3)
+  lines(o.id, UCL,lt=4, lwd=CEX*1.5, col = "gray48")
+  if(sum(LCL) != 0)  lines(o.id, LCL,lt=4, lwd=CEX*1.5, col = "gray48")
 }
