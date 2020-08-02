@@ -37,8 +37,8 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
       auto.omit.alarm = TRUE
     }
   }else{
-    if(length(omit.id) == 0){
-      print("ERROR, omitted ids not found, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
+    if(!auto.omit.alarm){
+      print("ERROR, omitted ids is NULL and auto omit alarm is FALSE, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
       auto.omit.alarm = TRUE
     }
   }
@@ -175,7 +175,7 @@ plot.msns <- function(x,...){
   difMaxZ = 0
   difMinZ = 0
 
-  CEX = 1.5
+  CEX = 0.75
   switch(chart,
          T2 = {
            difMaxZ = abs(max(T2) - max(UCL))
