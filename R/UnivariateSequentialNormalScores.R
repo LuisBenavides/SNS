@@ -67,16 +67,18 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
   }
   if(!is.null(omit.id)){#check which groups are omitted
     ids = unique(X.id)
-    omit.id = which(ids %in% omit.id)
-    auto.omit.alarm = FALSE
-    if(is.null(omit.id) || length(omit.id) == 0){
-      print("ERROR, omitted ids not found, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
-      auto.omit.alarm = TRUE
+    omit.id.found = which(ids %in% omit.id)
+    omit.id.missing = omit.id[!(omit.id %in% ids)]
+    if(!is.null(omit.id.missing)){
+      cat("WARNING, ids to omit not found:", omit.id.missing, "\n")
     }
-  }else{
-    if(!auto.omit.alarm){
-      print("ERROR, omitted ids is NULL and auto omit alarm is FALSE, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
-      auto.omit.alarm = TRUE
+    if(auto.omit.alarm){
+      auto.omit.alarm = FALSE
+      print("WARNING, auto.omit.alarm = FALSE make omit.id = NULL to enable.")
+    }
+
+    if(is.null(omit.id.found) || length(omit.id.found) == 0){
+      print("WARNING, omitted ids not found, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
     }
   }
   # detect the changes in the observation id vector
@@ -207,7 +209,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
         Yb = c(Yb, Xb) # add to reference sample the new observations
       }
     }else{
-      if (!(i %in% omit.id) && !isFixed){#and if the id of the group is not omitted
+      if (!(i %in% omit.id.found) && !isFixed){#and if the id of the group is not omitted
         Yb = c(Yb, Xb) # add to reference sample the new observations
       }
     }
