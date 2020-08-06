@@ -105,32 +105,43 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     ns = SNS::MNS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
     Zb = ns$Z
     n = nrow(Xb) #get the number of observation per group
-    if (is.null(Yb)) { # if there is not reference sample
+    if (is.null(Yb)){ # if there is not reference sample
       updateSample <- TRUE
-      T2[i] = 0 # it does not give any information and is considered the reference sample
+
+      T2[i] = NA # it does not give any information and is considered the reference sample
     }else{
-      mu = apply(Zb, 2, mean) #obtain the mean for each variable in the batch
-      m = nrow(Yb) #obtain the number of observations of the reference sample
+      #by default there is an update
+      updateSample <- TRUE
 
-      # check if the subgroup is in control according to each scheme
-      # the reference sample is updated
-      updateSample <- FALSE
-      switch(chart,
-         T2 = {
-           T2[i] = n*(mu%*%chol2inv(chol(cor(Zm, method = "pearson")))%*%mu) #get the T2 statistic
+      corZm = cor(Zm)
+      #function to get if the matrix is singular
 
-           if (null.dist == "F"){
-             #M <- M + 1 #add the subgroup
-             ucl = ((nv*(m-1))/(m-nv))*qf(1-alpha, nv, m-nv) #control limit
-             #ucl <- nv*(M+1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
+      isNotSingular <- class(try(chol2inv(chol(corZm)),silent=T))[1] == "matrix"
+
+      if(isNotSingular){#check if the matrix Zm is not is Singular
+        mu = apply(Zb, 2, mean) #obtain the mean for each variable in the batch
+        m = nrow(Yb) #obtain the number of observations of the reference sample
+
+        # check if the subgroup is in control according to each scheme
+        # the reference sample is updated
+        updateSample <- FALSE
+        switch(chart,
+           T2 = {
+             T2[i] = n*(mu%*%chol2inv(chol(corZm))%*%mu) #get the T2 statistic
+
+             if (null.dist == "F"){
+               #M <- M + 1 #add the subgroup
+               ucl = ((nv*(m-1))/(m-nv))*qf(1-alpha, nv, m-nv) #control limit
+               #ucl <- nv*(M+1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
+             }
+             if (T2[i] <= ucl){
+               updateSample <- TRUE
+             }
            }
-           if (T2[i] <= ucl){
-             updateSample <- TRUE
-           }
-         }
-      )
+        )
+        UCL[i] = ucl
+      }
     }
-    UCL[i] = ucl
 
     if (auto.omit.alarm){
       if ((updateSample || is.null(Yb)) && !isFixed){# if the subgroup is in control (updateSample change to TRUE)
@@ -175,33 +186,34 @@ plot.msns <- function(x,...){
   UCL = x$UCL
   difMaxZ = 0
   difMinZ = 0
-
+  zoom = 0.1
   CEX = 0.75
   switch(chart,
          T2 = {
-           difMaxZ = abs(max(T2) - max(UCL))
-           difMinZ = abs(min(T2))
+           difMaxZ = abs(max(T2, na.rm = TRUE) - max(UCL[5:length(UCL)], na.rm = TRUE))
+           difMinZ = abs(min(T2, na.rm = TRUE))
          }
   )
 
-  ymax = max(UCL)
+  ymax = max(UCL[5:length(UCL)], na.rm = TRUE)
   if(difMaxZ > difMinZ){
     ymax = ymax + difMaxZ
   }else{
     ymax = ymax + difMinZ
   }
-
+  ymax = ymax * (1+zoom)
   ymin = 0
   if(difMaxZ < difMinZ){
     ymin = ymin - difMaxZ
   }else{
     ymin = ymin - difMinZ
   }
-
+  ymin = ymin * (1-zoom)
   switch(chart,
          T2 = {
            plot(o.id,T2,type="o",lty=2, lwd=1.5,pch=19,xlab="Batch",ylab=expression(T[SNS]^2),
-                ylim=c(ymin, ymax),cex.lab=2.5, cex.axis=1.5, cex=CEX, ...=..., col = ifelse(T2 > UCL, "red", "black"))
+                ylim=c(ymin, ymax),cex.lab=CEX*2, cex.axis=CEX*1.25, cex=CEX, col = ifelse(T2 > UCL, "red", "black"))
+           lines(o.id, T2, lt=2, lwd=CEX*1.5)
          }
   )
 
