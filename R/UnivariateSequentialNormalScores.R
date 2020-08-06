@@ -70,7 +70,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
     ids = unique(X.id)
     omit.id.found = which(ids %in% omit.id)
     omit.id.missing = omit.id[!(omit.id %in% ids)]
-    if(!is.null(omit.id.missing)){
+    if(!is.null(omit.id.missing) || length(omit.id.missing) > 0 ){
       cat("WARNING, ids to omit not found:", omit.id.missing, "\n")
     }
     if(auto.omit.alarm){
