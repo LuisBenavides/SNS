@@ -100,8 +100,6 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
     Yb = Yb[!is.na(Yb)] # initialize reference sample (remove na values)
   }
 
-
-
   UCL = rep(NA, length(groups))
   LCL = rep(NA, length(groups))
   switch(chart,
