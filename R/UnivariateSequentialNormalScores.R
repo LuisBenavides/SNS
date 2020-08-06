@@ -65,6 +65,7 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
     print("ERROR, observations (X) have different length of the observations id (X.id)")
     return()
   }
+  omit.id.found = NULL
   if(!is.null(omit.id)){#check which groups are omitted
     ids = unique(X.id)
     omit.id.found = which(ids %in% omit.id)
@@ -76,7 +77,6 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
       auto.omit.alarm = FALSE
       print("WARNING, auto.omit.alarm = FALSE make omit.id = NULL to enable.")
     }
-
     if(is.null(omit.id.found) || length(omit.id.found) == 0){
       print("WARNING, omitted ids not found, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
     }
