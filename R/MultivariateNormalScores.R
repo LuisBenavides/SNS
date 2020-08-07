@@ -2,7 +2,7 @@
 #' @description Get conditional or unconditional multivariate normal score (NS) of observations (\code{X})
 #' relative to previous observations (\code{Y}).
 #' @inheritParams dataAlignment
-#' @param X matrix or data.frame. New observations to obtain the N¡normal scores.
+#' @param X matrix or data.frame. New observations to obtain the normal scores.
 #' @param Y matrix or data.frame. If \code{Y} is not defined (no previous observation available, \code{NULL}), NS is relative to \code{X}. Default \code{NULL}.
 #' @param theta vector. Value corresponding with the \code{Ftheta} quantile.
 #' @param Ftheta vector. Quantile of the data distribution. The values that take are between (0,1).
