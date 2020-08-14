@@ -23,7 +23,7 @@ MSNS(
 )
 }
 \arguments{
-\item{X}{matrix or data.frame. New observations to obtain the N¡normal scores.}
+\item{X}{matrix or data.frame. New observations to obtain the normal scores.}
 
 \item{X.id}{vector. The id of each column (variable) of the matrix \code{X}.}
 

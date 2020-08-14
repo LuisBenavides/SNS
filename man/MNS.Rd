@@ -16,7 +16,7 @@ MNS(
 )
 }
 \arguments{
-\item{X}{matrix or data.frame. New observations to obtain the N¡normal scores.}
+\item{X}{matrix or data.frame. New observations to obtain the normal scores.}
 
 \item{Y}{matrix or data.frame. If \code{Y} is not defined (no previous observation available, \code{NULL}), NS is relative to \code{X}. Default \code{NULL}.}
 
