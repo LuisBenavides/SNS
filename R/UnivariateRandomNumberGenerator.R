@@ -47,7 +47,9 @@
 getDist <- function(n, dist, mu, sigma,
                     par.location = 0, par.scale = 1, par.shape = 1, dist.par = NULL,
                     rounding.factor = NULL) {
-  rounding.factor = if(rounding.factor == 0) NULL
+
+  if(rounding.factor == 0 || is.null(rounding.factor)){rounding.factor = NULL}
+
   switch(dist,
     Uniform  = {
       a <- 0
