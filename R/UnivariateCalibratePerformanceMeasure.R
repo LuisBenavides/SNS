@@ -15,7 +15,7 @@
 #' sigma <- c(1, 1) # c(reference sample sd, monitoring sample sd)
 #'
 #' #### Distribution parameters
-#' dist.par <- c(0, 1, 1) # c(location, scale, shape)
+#' dist.par <- c(0, 1) # c(location, scale)
 #'
 #' #### Other Parameters
 #' replicates <- 2
