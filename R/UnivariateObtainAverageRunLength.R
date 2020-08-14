@@ -7,7 +7,7 @@
 #' @param m scalar. Reference sample size
 #' @param mu vector. Two elements, the first one is the mean of the reference sample and the second one is the mean of the monitoring sample.
 #' @param sigma vector. Two elements, the first one is the sd of the reference sample and the second one is the sd of the monitoring sample.
-#' @param dist.par vector. Distribution parameters. \code{c(par.location, par.scale, par.shape)}. Default \code{c(0,1,1)}.
+#' @param dist.par vector. Distribution parameters. \code{c(par.a, par.b)}. Default \code{c(0,1)}.
 #' @param chart character string. Selected type of chart. Three options are available: Shewhart, CUSUM, EWMA
 #' @param chart.par vector. The size depends on the selected chart:
 #' \describe{
@@ -69,8 +69,10 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
   Y <- NULL
   if (m > 0) { # if there are reference sample
     # generate the reference sample
-    Y <- SNS::getDist(n = m, dist = dist, mu = mu[1], sigma = sigma[1], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3], rounding.factor = rounding.factor)
+    Y <- SNS::getDist(n = m, dist = dist, mu = mu[1], sigma = sigma[1], dist.par = dist.par, rounding.factor = rounding.factor)
+
   }
+
   RL <- 0
   in.Control <- TRUE
 
@@ -104,13 +106,12 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
     }
   )
 
-
   while (in.Control) {
     # add one iteration to run length
     RL <- RL + 1
 
     # generate the subgroup to monitor
-    X <- SNS::getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], par.location = dist.par[1], par.scale = dist.par[2], par.shape = dist.par[3], rounding.factor = rounding.factor)
+    X <- SNS::getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], dist.par = dist.par, rounding.factor = rounding.factor)
 
     # get the normal scores
     ns <- SNS::NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant, scoring = scoring, Chi2corrector=Chi2corrector)
@@ -199,8 +200,8 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
 #' mu <- c(0, 0) # c(reference sample mean, monitoring sample mean)
 #' sigma <- c(1, 1) # c(reference sample sd, monitoring sample sd)
 #'
-#' #### Distribution parameters
-#' dist.par <- c(0, 1, 1) # c(location, scale, shape)
+#' #### Normal distribution parameters
+#' dist.par <- c(0, 1) # c(location, scale)
 #'
 #' #### Other Parameters
 #' replicates <- 2
