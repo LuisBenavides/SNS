@@ -55,7 +55,7 @@ getRL(
 
 \item{sigma}{vector. Two elements, the first one is the sd of the reference sample and the second one is the sd of the monitoring sample.}
 
-\item{dist.par}{vector. Distribution parameters. \code{c(par.location, par.scale, par.shape)}. Default \code{c(0,1,1)}.}
+\item{dist.par}{vector. Distribution parameters. \code{c(par.a, par.b)}. Default \code{c(0,1)}.}
 
 \item{scoring}{character string. If "Z" (normal scores) (default). If "Z-SQ" (normal scores squared).}
 

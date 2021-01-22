@@ -60,7 +60,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     #Yb = Yb[!is.na(Yb),] # initialize reference sample (remove NA values)
 
     #get the normal scores of the reference sample
-    ns = SNS::MNS(X = Yb, Y = NULL, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
+    ns = SNSchart::MNS(X = Yb, Y = NULL, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
     Z = ns$Z
     Zm = Z
   }
@@ -102,7 +102,7 @@ MSNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
 
   while (i <= ng) { # repeat until the total groups are analyzed
     Xb = X[which(Xb.id == groups[i]),] # get the observations to evaluate from the positions
-    ns = SNS::MNS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
+    ns = SNSchart::MNS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, alignment = alignment, constant = constant) # calculate the normal score
     Zb = ns$Z
     n = nrow(Xb) #get the number of observation per group
     if (is.null(Yb)){ # if there is not reference sample

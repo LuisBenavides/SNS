@@ -103,7 +103,7 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
   while (i < maxIter) {
     chart.par[index.par] <- x[i]
 
-    result <- SNS::getARL(n = n, m = m, theta = theta, Ftheta = Ftheta,
+    result <- SNSchart::getARL(n = n, m = m, theta = theta, Ftheta = Ftheta,
                           dist = dist, mu = mu, sigma = sigma, dist.par = dist.par,
                           chart = chart, chart.par = chart.par, replicates = replicates,
                           isParallel = isParallel, calibrate = TRUE, arl0 = ARL0,

@@ -44,7 +44,7 @@ NS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL,
     return()
   }
 
-  ad <- SNS::dataAlignment(X, Y, alignment = alignment, constant = constant) # Alignment of the data
+  ad <- SNSchart::dataAlignment(X, Y, alignment = alignment, constant = constant) # Alignment of the data
   X <- ad$X
   Y <- ad$Y
 

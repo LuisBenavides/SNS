@@ -30,8 +30,8 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 
   if (m > 0) { # if there are reference sample
     # generate the reference sample
-    Y <- SNS::mgetDist(n = m, nv = nv, mu = mu[1], sigma = sigma, correlation=correlation, s=s, dists = dists, dists.par = dists.par)
-    ns <- SNS::MNS(X = Y, Y = NULL, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
+    Y <- SNSchart::mgetDist(n = m, nv = nv, mu = mu[1], sigma = sigma, correlation=correlation, s=s, dists = dists, dists.par = dists.par)
+    ns <- SNSchart::MNS(X = Y, Y = NULL, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
     Z <- ns$Z
   }
 
@@ -50,7 +50,7 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
     RL <- RL + 1
 
     # generate the subgroup to monitor
-    X <- SNS::mgetDist(n = n, nv = nv, mu = mu[2],sigma=sigma, dists = dists, dists.par = dists.par, correlation=correlation, s=s)
+    X <- SNSchart::mgetDist(n = n, nv = nv, mu = mu[2],sigma=sigma, dists = dists, dists.par = dists.par, correlation=correlation, s=s)
 
     # get the normal scores
     ns <- MNS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant)
@@ -125,7 +125,7 @@ mgetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
   } else {
     t0 <- Sys.time()
     for (r in 1:replicates) {
-      RL <- SNS::mgetRL(replica=1, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, chart.par=chart.par,correlation=correlation, s=s, alignment=alignment, constant=constant,absolute=absolute)
+      RL <- SNSchart::mgetRL(replica=1, n = n, m = m, nv = nv, theta = theta, Ftheta = Ftheta, dists = dists, mu = mu, dists.par = dists.par, chart = chart, chart.par=chart.par,correlation=correlation, s=s, alignment=alignment, constant=constant,absolute=absolute)
 
       RLs <- c(RLs, RL)
 

@@ -42,7 +42,7 @@ mcalibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
   x[i] <- chart.par[index.par]
   while (i < maxIter) {
     chart.par[index.par] <- x[i]
-    result <- SNS::mgetARL(n = n, m = m, nv = nv,
+    result <- SNSchart::mgetARL(n = n, m = m, nv = nv,
                       theta = theta, Ftheta = Ftheta,
                       dists = dists, mu = mu, sigma = sigma, dists.par = dists.par,
                       correlation=correlation, chart = chart, chart.par = chart.par,

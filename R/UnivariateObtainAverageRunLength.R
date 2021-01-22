@@ -69,7 +69,7 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
   Y <- NULL
   if (m > 0) { # if there are reference sample
     # generate the reference sample
-    Y <- SNS::getDist(n = m, dist = dist, mu = mu[1], sigma = sigma[1], dist.par = dist.par, rounding.factor = rounding.factor)
+    Y <- SNSchart::getDist(n = m, dist = dist, mu = mu[1], sigma = sigma[1], dist.par = dist.par, rounding.factor = rounding.factor)
 
   }
 
@@ -111,10 +111,10 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
     RL <- RL + 1
 
     # generate the subgroup to monitor
-    X <- SNS::getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], dist.par = dist.par, rounding.factor = rounding.factor)
+    X <- SNSchart::getDist(n = n, dist = dist, mu = mu[2], sigma = sigma[2], dist.par = dist.par, rounding.factor = rounding.factor)
 
     # get the normal scores
-    ns <- SNS::NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant, scoring = scoring, Chi2corrector=Chi2corrector)
+    ns <- SNSchart::NS(X = X, Y = Y, theta = theta, Ftheta = Ftheta, alignment = alignment, constant = constant, scoring = scoring, Chi2corrector=Chi2corrector)
     Z <- ns$Z
 
     switch(scoring,
@@ -264,7 +264,7 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
   } else {
     t0 <- Sys.time()
     for (r in 1:replicates) {
-      RL <- SNS::getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring,Chi2corrector=Chi2corrector, rounding.factor = rounding.factor)
+      RL <- SNSchart::getRL(1, n = n, m = m, theta = theta, Ftheta = Ftheta, dist = dist, mu = mu, sigma = sigma, dist.par = dist.par, chart = chart, chart.par = chart.par, calibrate = calibrate, arl0 = arl0, alignment=alignment, constant=constant,absolute=absolute,isFixed=isFixed,scoring=scoring,Chi2corrector=Chi2corrector, rounding.factor = rounding.factor)
 
       RLs <- c(RLs, RL)
 

@@ -27,13 +27,13 @@ The methods discussed in this package are new nonparametric methods based on *se
 You can install the released version of SNS from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("SNS")
+install.packages("SNSchart")
 ```
 
-or install from the package hosted in [github](https://github.com/LuisBenavides/sns).
+or install from the package hosted in [github](https://github.com/LuisBenavides/snsinspm).
 
 ``` r
-install_github("LuisBenavides/SNS")
+install_github("LuisBenavides/SNSchart")
 ```
 
 **Note**: To use `install_github` it is needed the library devtools.
@@ -58,7 +58,7 @@ SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
 ```
 Output
 ```{r, echo = FALSE}
-library("SNS")
+library("SNSchart")
 Y = c(10,20,30,40,50,60,70,80,90,100)
 X = c(30, 35, 45)
 theta = 40
@@ -78,7 +78,7 @@ SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
 ```
 Output
 ```{r, echo = FALSE}
-library("SNS")
+library("SNSchart")
 #EXAMPLE UNCONDITIONAL WITH REFERENCE SAMPLE
 Y = c(10,20,30,40,50,60,70,80,90,100)
 X = c(30, 35, 45)
@@ -100,7 +100,7 @@ SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
 ```
 Output
 ```{r, echo = FALSE}
-library("SNS")
+library("SNSinSPM")
 #EXAMPLE CONDITIONAL WITHOUT REFERENCE SAMPLE
 Y = NULL#c(10,20,30,40,50,60,70,80,90,100)
 X = c(30, 35, 45)

@@ -133,10 +133,10 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
   while (i <= length(groups)) { # repeat until the total groups are analized
     Xb = X[which(Xb.id == groups[i])] # get the observations to evalute from the positions
     n = length(Xb)
-    ad = SNS::dataAlignment(Xb, Yb, alignment = alignment)
+    ad = SNSchart::dataAlignment(Xb, Yb, alignment = alignment)
     Xb = ad$X
     Yb = ad$Y
-    ns = SNS::NS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, Chi2corrector = Chi2corrector, alignment = alignment, constant = constant) # calculate the normal score
+    ns = SNSchart::NS(X = Xb, Y = Yb, theta = theta, Ftheta = Ftheta, scoring = scoring, Chi2corrector = Chi2corrector, alignment = alignment, constant = constant) # calculate the normal score
 
     r[i] = mean(ns$R)
     if(snsRaw){#save raw data

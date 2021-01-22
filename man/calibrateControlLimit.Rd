@@ -70,7 +70,7 @@ If "approx" () (default). If "exact" (normal scores squared).}
 
 \item{sigma}{vector. Two elements, the first one is the sd of the reference sample and the second one is the sd of the monitoring sample.}
 
-\item{dist.par}{vector. Distribution parameters. \code{c(par.location, par.scale, par.shape)}. Default \code{c(0,1,1)}.}
+\item{dist.par}{vector. Distribution parameters. \code{c(par.a, par.b)}. Default \code{c(0,1)}.}
 
 \item{chart}{character string. Selected type of chart. Three options are available: Shewhart, CUSUM, EWMA}
 

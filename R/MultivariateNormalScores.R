@@ -33,7 +33,7 @@ MNS <- function(X, Y = NULL, theta = NULL, Ftheta = NULL, scoring = "Z",
     return()
   }
 
-  ad <- SNS::dataAlignment(X=X, Y=Y, alignment = alignment, constant = constant) # Alignment of the data
+  ad <- SNSchart::dataAlignment(X=X, Y=Y, alignment = alignment, constant = constant) # Alignment of the data
   X <- ad$X
   Y <- ad$Y
 
