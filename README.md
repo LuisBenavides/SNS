@@ -1,26 +1,38 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-Sequential Normal Scores
-========================
 
-The methods discussed in this package are new nonparametric methods based on *sequential normal scores* (SNS), designed for sequences of observations, usually time series data, which may occur singly or in batches, and may be univariate or multivariate. These methods are designed to detect changes in the process, which may occur as changes in *location* (mean or median), changes in *scale* (standard deviation, or variance), or other changes of interest in the distribution of the observations, over the time observed. They usually apply to large data sets, so computations need to be simple enough to be done in a reasonable time on a computer, and easily updated as each new observation (or batch of observations) becomes available.
+# Sequential Normal Scores
 
-Installation
-------------
+The methods discussed in this package are new nonparametric methods
+based on *sequential normal scores* (SNS), designed for sequences of
+observations, usually time series data, which may occur singly or in
+batches, and may be univariate or multivariate. These methods are
+designed to detect changes in the process, which may occur as changes in
+*location* (mean or median), changes in *scale* (standard deviation, or
+variance), or other changes of interest in the distribution of the
+observations, over the time observed. They usually apply to large data
+sets, so computations need to be simple enough to be done in a
+reasonable time on a computer, and easily updated as each new
+observation (or batch of observations) becomes available.
 
-You can install the released version of SNS from [CRAN](https://CRAN.R-project.org) with:
+## Installation
+
+You can install the released version of SNS from
+[CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("SNS")
+install.packages("SNSchart")
 ```
 
-or install from the package hosted in [github](https://github.com/LuisBenavides/sns).
+or install from the package hosted in
+[github](https://github.com/LuisBenavides/snsinspm).
 
 ``` r
-install_github("LuisBenavides/SNS")
+install_github("LuisBenavides/SNSchart")
 ```
 
-**Note**: To use `install_github` it is needed the library devtools. \#\# Univariate Analysis
+**Note**: To use `install_github` it is needed the library devtools.
+\#\# Univariate Analysis
 
 ### Using SNS function
 
@@ -54,6 +66,9 @@ Output
     #> $coefficients$chart.par
     #> [1] 3
     #> 
+    #> 
+    #> $R
+    #> [1] 3.5 5.0 1.0
     #> 
     #> $Z
     #> [1] -0.52440051 -0.31863936  0.08964235
@@ -97,6 +112,9 @@ Output
     #> [1] 3
     #> 
     #> 
+    #> $R
+    #> [1] 3.5 5.0 7.0
+    #> 
     #> $Z
     #> [1] -0.6045853 -0.3186394  0.0000000
     #> 
@@ -139,8 +157,11 @@ Output
     #> [1] 3
     #> 
     #> 
+    #> $R
+    #> [1] 1.5 2.0 1.0
+    #> 
     #> $Z
-    #> [1] -0.6744898 -0.2104284  0.6744898
+    #> [1] -0.6744898 -0.3186394  0.6744898
     #> 
     #> $X.id
     #> [1] "a" "b" "c"
@@ -181,8 +202,11 @@ Output
     #> [1] 3
     #> 
     #> 
+    #> $R
+    #> [1] 1 2 3
+    #> 
     #> $Z
-    #> [1] 0.0000000 0.9674216 1.1503494
+    #> [1] 0.0000000 0.6744898 0.9674216
     #> 
     #> $X.id
     #> [1] "a" "b" "c"

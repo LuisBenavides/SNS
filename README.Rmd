@@ -100,7 +100,7 @@ SNS(X = X, X.id = sample.id, Y = Y, theta = theta, Ftheta = Ftheta)
 ```
 Output
 ```{r, echo = FALSE}
-library("SNSinSPM")
+library("SNSchart")
 #EXAMPLE CONDITIONAL WITHOUT REFERENCE SAMPLE
 Y = NULL#c(10,20,30,40,50,60,70,80,90,100)
 X = c(30, 35, 45)
