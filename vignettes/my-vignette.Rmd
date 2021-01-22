@@ -149,7 +149,7 @@ Y = example49$Y2
 ```
 Table with the dataset using dataframe of \code{R} (first 10 rows).
 ```{r, echo=FALSE, results='asis'}
-knitr::kable(head(SNS::example49, 10))
+knitr::kable(head(SNSchart::example49, 10))
 ```
 
 Get the SNS^2 of the dataset using a Shewhart scheme. In the example the reference sample is fixed therefore \code{isFixed=TRUE}.

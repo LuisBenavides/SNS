@@ -1,4 +1,4 @@
-library("SNS")
+library("SNSchart")
 
 context("test-sns")
 

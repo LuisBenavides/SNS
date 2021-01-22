@@ -1,4 +1,4 @@
 library(testthat)
-library(SNS)
+library(SNSchart)
 
-test_check("SNS")
+test_check("SNSchart")
