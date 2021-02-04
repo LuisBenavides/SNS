@@ -25,7 +25,7 @@ install.packages("SNSchart")
 ```
 
 or install from the package hosted in
-[github](https://github.com/LuisBenavides/snsinspm).
+[github](https://github.com/LuisBenavides/SNSchart).
 
 ``` r
 install_github("LuisBenavides/SNSchart")
