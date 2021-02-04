@@ -28,11 +28,7 @@ mgetDist(
 
 \item{s}{matrix. Correlation matrix of the variables}
 
-\item{dists}{vector of character string. Distribution of each variable. The length mus be the same as the number of variables. Select from:
-\itemize{
-  \item{"Normal": Normal distribution (default).}
-  \item{"Gamma": Gamma distribution.}
-}}
+\item{dists}{list.  Select the}
 
 \item{dists.par}{matrix  For each variable (column), specify
 \itemize{

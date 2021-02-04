@@ -13,7 +13,7 @@ The data (X,Y) consist of 20 batches with 10 observations in each batch.
 }
 }
 \source{
-\url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example93.dat}
+\url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example93.dat}
 }
 \usage{
 example93

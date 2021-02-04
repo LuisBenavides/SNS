@@ -12,7 +12,7 @@ A data frame with 300 rows (30 batches of size equals to 10)
 }
 }
 \source{
-\url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example81.dat}
+\url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example81.dat}
 }
 \usage{
 example81

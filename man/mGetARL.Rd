@@ -40,11 +40,7 @@ mgetARL(
 
 \item{Ftheta}{vector. Quantile of the data distribution. The values that take are between (0,1).}
 
-\item{dists}{vector of character string. Distribution of each variable. The length mus be the same as the number of variables. Select from:
-\itemize{
-  \item{"Normal": Normal distribution (default).}
-  \item{"Gamma": Gamma distribution.}
-}}
+\item{dists}{list.  Select the}
 
 \item{dists.par}{matrix  For each variable (column), specify
 \itemize{
@@ -102,7 +98,7 @@ number of cores in the computer,otherwise the code runs sequentially. Default \c
 Get the ARL \code{\link{getRL}}
 }
 \examples{
-mgetARL(replicates=50,n=5,m=100,nv=2,mu=c(0,0),
+mgetARL(replicates=5,n=5,m=100,nv=2,mu=c(0,0),
 dists = c("Normal", "Normal"), dists.par = matrix(c(0,1,1,0,1,1), ncol=2),
 isParallel=FALSE)
 }

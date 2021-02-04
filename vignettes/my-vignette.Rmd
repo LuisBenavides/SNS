@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Install the package `SNSchart` hosted in [github](https://github.com/LuisBenavides/snsinspm).
+Install the package `SNSchart` hosted in [github](https://github.com/LuisBenavides/SNSchart).
 ```{r, eval=FALSE, echo=T, results='hide',message=F, warning=F}
 install_github("LuisBenavides/SNSchart")
 ```

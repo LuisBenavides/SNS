@@ -7,7 +7,7 @@
 #'  \item{X}{observations of all batches}
 #'  \item{X.id}{id of each observation of the batch}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example82.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example82.dat}
 "example82"
 
 #' Data from Example 8.4 Qiu (2014).
@@ -19,7 +19,7 @@
 #'  \item{X}{observations of all batches}
 #'  \item{X.id}{id of each observation of the batch}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example84.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example84.dat}
 "example84"
 
 #' Data from Example 8.7 on page 339 Qiu (2014).
@@ -32,7 +32,7 @@
 #'  \item{X.id}{id of each observation of the batch}
 #'  \item{Y}{reference sample of size equals to 14}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example87.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example87.dat}
 "example87"
 
 #' Data from Example 6.5 on page 246 Qiu (2014).
@@ -47,7 +47,7 @@
 #'  \item{Bmax}{Bmax}
 #'  \item{hn}{hn}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example65.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example65.dat}
 "example65"
 
 #' Data from Example 4.9 Qiu (2014).
@@ -62,7 +62,7 @@
 #'  \item{X2}{Monitoring sample of the second data set. 10 batches are N(0,2^2).}
 #'  \item{X.id}{id of each observation of the batch for the second data set.}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example49.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example49.dat}
 "example49"
 
 #' Data from Example 8.1 on page 319 Qiu (2014).
@@ -74,7 +74,7 @@
 #'  \item{X}{observations of all batches}
 #'  \item{X.id}{id of each observation of the batch}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example81.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example81.dat}
 "example81"
 
 #It consists of 30 batches of observations where each batch has 6 observations
@@ -88,7 +88,7 @@
 #'  \item{X}{observations of all batches}
 #'  \item{X.id}{id of each observation of the batch}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example81.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example81.dat}
 "example83"
 
 #' Data from Example 8.5 Qiu (2014).
@@ -100,7 +100,7 @@
 #'  \item{X}{observations of all batches}
 #'  \item{X.id}{id of each observation of the batch}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example85.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example85.dat}
 "example85"
 
 #' Data from Example 9.1 on page 369 Qiu (2014).
@@ -113,7 +113,7 @@
 #'  \item{V1}{1st batch.}
 #'  \item{V2}{2nd batch.}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example91.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example91.dat}
 "example91"
 
 #' Data from Example 9.3 Qiu (2014).
@@ -126,7 +126,7 @@
 #'  \item{X}{1st batch.}
 #'  \item{X.1}{2nd batch.}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example93.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example93.dat}
 "example93"
 
 #' Data from Example 7.1 Qiu (2014).
@@ -140,7 +140,7 @@
 #'  \item{X.1}{2nd batch.}
 #'  \item{X.2}{3rd batch.}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example71.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example71.dat}
 "example71"
 
 #' Data from Example 7.4(a) Qiu (2014).
@@ -154,7 +154,7 @@
 #'  \item{X.1}{2nd batch.}
 #'  \item{X.2}{3rd batch.}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example74a.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example74a.dat}
 "example74a"
 
 #' Data from Example 7.4(b) Qiu (2014).
@@ -168,7 +168,7 @@
 #'  \item{X.1}{2nd batch.}
 #'  \item{X.2}{3rd batch.}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example74b.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example74b.dat}
 "example74b"
 
 #' Data from Example 7.4(c) Qiu (2014).
@@ -182,5 +182,5 @@
 #'  \item{X.1}{2nd batch.}
 #'  \item{X.2}{3rd batch.}
 #' }
-#' @source \url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example74c.dat}
+#' @source \url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example74c.dat}
 "example74c"

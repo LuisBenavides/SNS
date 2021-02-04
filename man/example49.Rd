@@ -15,7 +15,7 @@ A data frame with 50 rows and 6 columns:
 }
 }
 \source{
-\url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example49.dat}
+\url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example49.dat}
 }
 \usage{
 example49

@@ -43,11 +43,7 @@ mcalibrateControlLimit(
 
 \item{Ftheta}{vector. Quantile of the data distribution. The values that take are between (0,1).}
 
-\item{dists}{vector of character string. Distribution of each variable. The length mus be the same as the number of variables. Select from:
-\itemize{
-  \item{"Normal": Normal distribution (default).}
-  \item{"Gamma": Gamma distribution.}
-}}
+\item{dists}{list.  Select the}
 
 \item{mu}{vector. Two elements of the vector the first one is the mean of the reference sample and the second one is the mean of the monitoring sample.}
 
@@ -101,4 +97,25 @@ for the SNS chart depending on the selected chart
 }
 \note{
 The argument \code{chart.par} in this function correspond to the initial parameters to start the calibration.
+}
+\examples{
+n <- 5 # subgroup size
+m <- 10 # reference-sample size
+dists <- c("Normal", "Normal") # distribution
+mu <- c(0, 0) # c(reference sample mean, monitoring sample mean)
+nv <- 2 # number of variables
+#### Other Parameters
+replicates <- 50
+targetARL <- 200
+isParallel = FALSE
+maxIter <- 1
+#### Control chart parameters
+chart <- "T2"
+chart.par <- c(10)
+t2 <- mcalibrateControlLimit(n = n, m = m, nv = nv, theta = NULL,
+  Ftheta = NULL, dists = dists, mu = mu, chart.par = chart.par,
+  replicates = replicates, chart = chart, isParallel = isParallel,
+  maxIter = maxIter
+)
+
 }

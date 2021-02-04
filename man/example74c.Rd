@@ -14,7 +14,7 @@ The data (X1,X2,X3) consist of 30 observations each variable.
 }
 }
 \source{
-\url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example74c.dat}
+\url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example74c.dat}
 }
 \usage{
 example74c

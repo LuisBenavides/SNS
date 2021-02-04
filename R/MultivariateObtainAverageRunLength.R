@@ -44,7 +44,6 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
        if(null.dist == "Chi") ucl <- qchisq(1-alpha,nv) #control limit
      }
   )
-
   while (in.Control) {
     # add one iteration to run length
     RL <- RL + 1
@@ -68,7 +67,7 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
       T2 <- n*(muZ%*%chol2inv(chol(cor(Z, method = "spearman")))%*%muZ) #get the T2 statistic
     }
 
-
+    print(T2)
     # if the subgroup is out of the limits
     # an alarm is detected
     switch(chart,
@@ -77,6 +76,7 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
            M <- M + 1 #add the subgroup
            ucl <- nv*(M-1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
          }
+
          # if the subgroup is out of the limits an alarm is detected
          if (T2 > ucl) in.Control <- FALSE
        }
@@ -104,7 +104,7 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 #' @import parallel
 #' @import stats
 #' @examples
-#' mgetARL(replicates=50,n=5,m=100,nv=2,mu=c(0,0),
+#' mgetARL(replicates=5,n=5,m=100,nv=2,mu=c(0,0),
 #' dists = c("Normal", "Normal"), dists.par = matrix(c(0,1,1,0,1,1), ncol=2),
 #' isParallel=FALSE)
 mgetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,

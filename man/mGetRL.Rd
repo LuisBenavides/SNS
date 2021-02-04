@@ -40,11 +40,7 @@ mgetRL(
 
 \item{Ftheta}{vector. Quantile of the data distribution. The values that take are between (0,1).}
 
-\item{dists}{vector of character string. Distribution of each variable. The length mus be the same as the number of variables. Select from:
-\itemize{
-  \item{"Normal": Normal distribution (default).}
-  \item{"Gamma": Gamma distribution.}
-}}
+\item{dists}{list.  Select the}
 
 \item{mu}{vector. Two elements of the vector the first one is the mean of the reference sample and the second one is the mean of the monitoring sample.}
 

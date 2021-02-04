@@ -7,6 +7,26 @@
 #' @param maxIter scalar. is a numeric. The maximum number of iteration to take the calibration before stops
 #' @note The argument \code{chart.par} in this function correspond to the initial parameters to start the calibration.
 #' @export
+#' @examples
+#' n <- 5 # subgroup size
+#' m <- 10 # reference-sample size
+#' dists <- c("Normal", "Normal") # distribution
+#' mu <- c(0, 0) # c(reference sample mean, monitoring sample mean)
+#' nv <- 2 # number of variables
+#' #### Other Parameters
+#' replicates <- 50
+#' targetARL <- 200
+#' isParallel = FALSE
+#' maxIter <- 1
+#' #### Control chart parameters
+#' chart <- "T2"
+#' chart.par <- c(10)
+#' t2 <- mcalibrateControlLimit(n = n, m = m, nv = nv, theta = NULL,
+#'   Ftheta = NULL, dists = dists, mu = mu, chart.par = chart.par,
+#'   replicates = replicates, chart = chart, isParallel = isParallel,
+#'   maxIter = maxIter
+#' )
+#'
 mcalibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                                   n, m, nv, theta = NULL, Ftheta = NULL,
                                   dists=c("Normal", "Normal"), mu=c(0,0), sigma=NULL, dists.par = matrix(c(0,1,1,0,1,1), ncol=2), correlation=0,
@@ -34,7 +54,6 @@ mcalibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
            index.par <- 1
          }
   )
-
   x <- rep(NA, maxIter)
   y <- x
 

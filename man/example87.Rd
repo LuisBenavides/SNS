@@ -13,7 +13,7 @@ A data frame with 86 rows (86 batches of size equals to 1)
 }
 }
 \source{
-\url{http://users.phhp.ufl.edu/pqiu/research/book/spc/data/example87.dat}
+\url{https://users.phhp.ufl.edu/pqiu/research/book/spc/data/example87.dat}
 }
 \usage{
 example87
