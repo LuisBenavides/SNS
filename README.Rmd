@@ -30,7 +30,7 @@ You can install the released version of SNS from [CRAN](https://CRAN.R-project.o
 install.packages("SNSchart")
 ```
 
-or install from the package hosted in [github](https://github.com/LuisBenavides/snsinspm).
+or install from the package hosted in [github](https://github.com/LuisBenavides/SNSchart).
 
 ``` r
 install_github("LuisBenavides/SNSchart")
