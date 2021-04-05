@@ -113,7 +113,7 @@ dists <- c("Normal", "Normal") # distribution
 mu <- c(0, 0) # c(reference sample mean, monitoring sample mean)
 nv <- 2 # number of variables
 #### Other Parameters
-replicates <- 50
+replicates <- 2
 targetARL <- 200
 isParallel = FALSE
 maxIter <- 2
