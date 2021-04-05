@@ -82,14 +82,22 @@ number of cores in the computer,otherwise the code runs sequentially. Default \c
   \item "overallmedian": overall median is sustracted from \code{X} and \code{Y}.
   \item "samplemean": mean from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
   \item "samplemedian": median from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
-  \item "referencemean": mean from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "referencemedian": median from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "constantvalue": a constant value is sustracted from \code{X} and \code{Y}.
+  \item "referencemean": mean from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "referencemedian": median from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "constantvalue": a constant value is subtracted from \code{X} and \code{Y}.
 }}
 
 \item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
 
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
+}
+\value{
+Multiple output. Select by \code{output$}
+\itemize{
+  \item \code{objective.function}: scalar. The best solution obtained, in terms of the target ARL or MRL
+  \item \code{par.value}: scalar. Which parameter of the chart reach this best solution
+  \item \code{found}: boolean. Is TRUE if in the \code{maxIter} is reached the desired +-5% of target ARL, or MRL.
+}
 }
 \description{
 The methodology used to calibrate the control limit
@@ -108,11 +116,11 @@ nv <- 2 # number of variables
 replicates <- 50
 targetARL <- 200
 isParallel = FALSE
-maxIter <- 1
+maxIter <- 2
 #### Control chart parameters
 chart <- "T2"
-chart.par <- c(10)
-t2 <- mcalibrateControlLimit(n = n, m = m, nv = nv, theta = NULL,
+chart.par <- c(0.005)
+t2 <- mcalibrateControlLimit(targetARL = targetARL,n = n, m = m, nv = nv, theta = NULL,
   Ftheta = NULL, dists = dists, mu = mu, chart.par = chart.par,
   replicates = replicates, chart = chart, isParallel = isParallel,
   maxIter = maxIter

@@ -20,6 +20,7 @@
 #' @param calibrate logical. If \code{TRUE} the RL is limit to 10 times the target ARL.
 #' @param arl0 scalar. Expected value of the RL. Default \code{370}.
 #' @param isFixed logical. If \code{TRUE} the reference sample does not update, otherwise the reference sample is updated whenever the batch is in control.
+#' @return \code{RL} vector. The run length of the chart for the parameter setting.
 #' @export
 #' @import stats
 #' @examples
@@ -190,6 +191,13 @@ getRL <- function(replica = 1, n, m, theta = NULL, Ftheta = NULL,
 #' @param progress logical. If \code{TRUE} it shows the progress in the console.
 #' @param isParallel logical. If \code{TRUE} the code runs in parallel according to the
 #' number of cores in the computer,otherwise the code runs sequentially. Default \code{TRUE}.
+#' @return Multiple output. Select by \code{output$}
+#' \itemize{
+#'   \item \code{ARL}: scalar. Average Run Length for the \code{RL}s of all the \code{replicates}.
+#'   \item \code{SDRL}: scalar. Standard Deviation Run Length for the \code{RL} in all the \code{replicates}.
+#'   \item \code{MRL}: bolean. Median Run Length for the \code{RL}s of all the \code{replicates}.
+#'   \item \code{QRL}: vector. It retrieve the quantiles (0.05, 0.1, 0.2, 0.25, 0.5, 0.75, 0.8, 0.9, 0.95) for all the \code{RL}s.
+#' }
 #' @export
 #' @import parallel
 #' @import stats
@@ -274,7 +282,7 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
           t1 <- Sys.time()
           remaining.iterations <- replicates - r
           remaining.time <- remaining.iterations * difftime(t1, t0, units = "min") / r
-          cat("ARL", round(mean(RLs), digits = 1), "-- SDRL", round(sd(RLs), digits = 1), "--> Time remaining", remaining.time, "in minutes to complete", remaining.iterations, "iterations", "\n", sep = " ")
+          message("ARL", round(mean(RLs), digits = 1), "-- SDRL", round(sd(RLs), digits = 1), "--> Time remaining", remaining.time, "in minutes to complete", remaining.iterations, "iterations", "\n", sep = " ")
         }
       }
     }
@@ -288,7 +296,7 @@ getARL <- function(n, m, theta = NULL, Ftheta = NULL,
   )
   if (print.RL) output$RL <- RLs
 
-  if (progress) cat("Final ARL", round(mean(RLs), digits = 1), "-- SDRL", round(sd(RLs), digits = 1), "\n", "See output variable for more.\n\n", sep = " ")
+  if (progress) message("Final ARL", round(mean(RLs), digits = 1), "-- SDRL", round(sd(RLs), digits = 1), "\n", "See output variable for more.\n\n", sep = " ")
 
   return(output)
 }

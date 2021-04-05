@@ -24,14 +24,21 @@ dataAlignment(
   \item "overallmedian": overall median is sustracted from \code{X} and \code{Y}.
   \item "samplemean": mean from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
   \item "samplemedian": median from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
-  \item "referencemean": mean from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "referencemedian": median from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "constantvalue": a constant value is sustracted from \code{X} and \code{Y}.
+  \item "referencemean": mean from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "referencemedian": median from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "constantvalue": a constant value is subtracted from \code{X} and \code{Y}.
 }}
 
 \item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
 
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
+}
+\value{
+Multiple output. Select by \code{output$}
+\itemize{
+  \item \code{X}: vector. Monitor sample with the alignment selected.
+  \item \code{Y}: vector. Reference sample with the alignment selected.
+}
 }
 \description{
 Align the monitoring sample \code{X} and the reference sample \code{Y}.

@@ -51,9 +51,9 @@ If "approx" () (default). If "exact" (normal scores squared).}
   \item "overallmedian": overall median is sustracted from \code{X} and \code{Y}.
   \item "samplemean": mean from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
   \item "samplemedian": median from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
-  \item "referencemean": mean from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "referencemedian": median from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "constantvalue": a constant value is sustracted from \code{X} and \code{Y}.
+  \item "referencemean": mean from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "referencemedian": median from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "constantvalue": a constant value is subtracted from \code{X} and \code{Y}.
 }}
 
 \item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
@@ -78,6 +78,19 @@ If "approx" () (default). If "exact" (normal scores squared).}
 \item{omit.id}{vector. Elements of the vector are the id which are omitted in the analysis.}
 
 \item{auto.omit.alarm}{logical. Determine if OC signals are added (or not) to reference sample. By default is set to TRUE.}
+}
+\value{
+Multiple output. Select by \code{output$}
+\itemize{
+  \item \code{coefficients}: list. Three elements: \code{n} the number of observation per group in \code{X}, \code{chart} the selected chart to perform the analysis, and \code{chart.par} the parameters of the selected chart.
+  \item \code{R}: vector. Ranks for the new observations (Monitoring sample).
+  \item \code{X}: vector. New observations (Monitoring sample) to obtain the SNS.
+  \item \code{Z}: vector. SNS of the \code{X} monitoring sample.
+  \item \code{X.id}: vector. The id of each column (variable) of the matrix \code{X}.
+  \item \code{UCL}: vector. Upper control limit for each group in \code{X}.
+  \item \code{LCL}: vector. Lower control limit for each group in \code{X}.
+  \item \code{scoring}: string. Selected score to evaluate SNS.
+}
 }
 \description{
 Transform a vector \code{X} into SNS using initial observations \code{Y} if available

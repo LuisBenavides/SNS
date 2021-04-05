@@ -74,9 +74,9 @@ The number of columns must be the same as the number of variables.}
   \item "overallmedian": overall median is sustracted from \code{X} and \code{Y}.
   \item "samplemean": mean from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
   \item "samplemedian": median from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
-  \item "referencemean": mean from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "referencemedian": median from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "constantvalue": a constant value is sustracted from \code{X} and \code{Y}.
+  \item "referencemean": mean from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "referencemedian": median from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "constantvalue": a constant value is subtracted from \code{X} and \code{Y}.
 }}
 
 \item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
@@ -86,6 +86,9 @@ The number of columns must be the same as the number of variables.}
 \item{calibrate}{logical. If \code{TRUE} the RL is limit to 10 times the target ARL.}
 
 \item{arl0}{scalar. Expected value of the RL. It is only used for stop the RL if exceeds 10 times its value. Default \code{370}.}
+}
+\value{
+\code{RL} vector. The run length of the chart for the parameter setting.
 }
 \description{
 Get the run length

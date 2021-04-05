@@ -14,6 +14,7 @@
 #' @param null.dist character string. It is the null distribution choose from \code{"Chi"} or \code{"F"}.
 #' @param calibrate logical. If \code{TRUE} the RL is limit to 10 times the target ARL.
 #' @param arl0 scalar. Expected value of the RL. It is only used for stop the RL if exceeds 10 times its value. Default \code{370}.
+#' @return \code{RL} vector. The run length of the chart for the parameter setting.
 #' @export
 #' @import stats
 #' @examples
@@ -67,7 +68,6 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
       T2 <- n*(muZ%*%chol2inv(chol(cor(Z, method = "spearman")))%*%muZ) #get the T2 statistic
     }
 
-    print(T2)
     # if the subgroup is out of the limits
     # an alarm is detected
     switch(chart,
@@ -76,12 +76,12 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
            M <- M + 1 #add the subgroup
            ucl <- nv*(M-1)*(n-1)/(M*n-M-nv+1)*qf(1-alpha, nv, M*n-M-nv+1) #control limit
          }
-
+         print(T2)
+         print(ucl)
          # if the subgroup is out of the limits an alarm is detected
          if (T2 > ucl) in.Control <- FALSE
        }
     )
-    #cat("RL=",RL, " T2=",T2," ucl",ucl, "\n")
     if (calibrate) if (RL >= arl0 * 50) in.Control <- FALSE
     if (RL >= arl0 * 1000) in.Control <- FALSE
 
@@ -100,6 +100,13 @@ mgetRL <- function(replica = 1, n, m, nv, theta = NULL, Ftheta = NULL,
 #' @param progress logical. If \code{TRUE} it shows the progress in the console.
 #' @param isParallel logical. If \code{TRUE} the code runs in parallel according to the
 #' number of cores in the computer,otherwise the code runs sequentially. Default \code{TRUE}.
+#' @return Multiple output. Select by \code{output$}
+#' \itemize{
+#'   \item \code{ARL}: scalar. Average Run Length for the \code{RL}s of all the \code{replicates}.
+#'   \item \code{SDRL}: scalar. Standard Deviation Run Length for the \code{RL} in all the \code{replicates}.
+#'   \item \code{MRL}: bolean. Median Run Length for the \code{RL}s of all the \code{replicates}.
+#'   \item \code{QRL}: vector. It retrieve the quantiles (0.05, 0.1, 0.2, 0.25, 0.5, 0.75, 0.8, 0.9, 0.95) for all the \code{RL}s.
+#' }
 #' @export
 #' @import parallel
 #' @import stats
@@ -135,7 +142,7 @@ mgetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
           t1 <- Sys.time()
           remaining.iterations <- replicates - r
           remaining.time <- remaining.iterations * difftime(t1, t0, units = "min") / r
-          cat("ARL", round(mean(RLs), digits = 1), "-- SDRL", round(sd(RLs), digits = 1), "--> Time remaining", remaining.time, "in minutes to complete", remaining.iterations, "iterations", "\n", sep = " ")
+          message("ARL", round(mean(RLs), digits = 1), "-- SDRL", round(sd(RLs), digits = 1), "--> Time remaining", remaining.time, "in minutes to complete", remaining.iterations, "iterations", "\n", sep = " ")
         }
       }
     }
@@ -149,7 +156,7 @@ mgetARL <- function(n, m, nv, theta = NULL, Ftheta = NULL,
   )
   if (print.RL) output$RL <- RLs
 
-  if (progress) cat("Final ARL", round(mean(RLs), digits = 1), "-- SDRL", round(sd(RLs), digits = 1), "\n", "See output variable for more.\n\n", sep = " ")
+  if (progress) message("Final ARL", round(mean(RLs), digits = 1), "-- SDRL", round(sd(RLs), digits = 1), "\n", "See output variable for more.\n\n", sep = " ")
 
   return(output)
 }

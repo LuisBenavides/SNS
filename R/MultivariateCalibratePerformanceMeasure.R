@@ -6,6 +6,12 @@
 #' @param targetMRL scalar. is the target ARL to calibrate. By default is set to NULL
 #' @param maxIter scalar. is a numeric. The maximum number of iteration to take the calibration before stops
 #' @note The argument \code{chart.par} in this function correspond to the initial parameters to start the calibration.
+#' @return Multiple output. Select by \code{output$}
+#' \itemize{
+#'   \item \code{objective.function}: scalar. The best solution obtained, in terms of the target ARL or MRL
+#'   \item \code{par.value}: scalar. Which parameter of the chart reach this best solution
+#'   \item \code{found}: boolean. Is TRUE if in the \code{maxIter} is reached the desired +-5% of target ARL, or MRL.
+#' }
 #' @export
 #' @examples
 #' n <- 5 # subgroup size
@@ -17,11 +23,11 @@
 #' replicates <- 50
 #' targetARL <- 200
 #' isParallel = FALSE
-#' maxIter <- 1
+#' maxIter <- 2
 #' #### Control chart parameters
 #' chart <- "T2"
-#' chart.par <- c(10)
-#' t2 <- mcalibrateControlLimit(n = n, m = m, nv = nv, theta = NULL,
+#' chart.par <- c(0.005)
+#' t2 <- mcalibrateControlLimit(targetARL = targetARL,n = n, m = m, nv = nv, theta = NULL,
 #'   Ftheta = NULL, dists = dists, mu = mu, chart.par = chart.par,
 #'   replicates = replicates, chart = chart, isParallel = isParallel,
 #'   maxIter = maxIter
@@ -35,10 +41,10 @@ mcalibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                                   alignment="unadjusted", constant=NULL, absolute=FALSE) {
   # Check for errors
   if (is.null(targetARL) && is.null(targetMRL)) {
-    print("ERROR: Target ARL or target mRL missing")
+    stop("Target ARL or target mRL missing")
     return()
   } else if (!is.null(targetARL) && !is.null(targetMRL)) {
-    print("ERROR: Two targets defined, delete one")
+    stop("Two targets defined, delete one")
     return()
   }
   p <- 0.1
@@ -67,6 +73,8 @@ mcalibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                       correlation=correlation, chart = chart, chart.par = chart.par,
                       replicates = replicates, isParallel = isParallel, calibrate = TRUE, arl0 = targetARL,
                       alignment=alignment, constant=constant,absolute=absolute)
+
+    target <- NULL
     if (!is.null(targetARL)) {
       y[i] <- result$ARL
       target <- targetARL
@@ -76,9 +84,9 @@ mcalibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
       target <- targetMRL
       name <- "MRL"
     }
-
+    print(target)
     if (abs(y[i] - target) <= 0.05 * target) {
-      if (progress) cat("Convergence found with", name.par, "=", x[i], "--", name, "=", y[i], "\n", sep = " ")
+      if (progress) message("Convergence found with", name.par, "=", x[i], "--", name, "=", y[i], "\n", sep = " ")
       output <- list(
         objective.function = y[i],
         par.value = x[i],
@@ -108,14 +116,14 @@ mcalibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
         } else {
           x[i + 1] <- x[i] * (1 - p)
         }
-        if (progress) cat("obtained=", y[i], " target=", target, " Change h=", x[i], " to h=", x[i + 1], "\n", sep = "")
+        if (progress) message("obtained=", y[i], " target=", target, " Change h=", x[i], " to h=", x[i + 1], "\n", sep = "")
       }
     }
     i <- i + 1
   }
 
   posMin <- which.min(abs(target - y))
-  if (progress) cat("Best", name.par, "found ", x[posMin], "--", name, "=", y[posMin], "\n", sep = " ")
+  if (progress) message("Best ", name.par, " found ", x[posMin], "--", name, "=", y[posMin], "\n", sep = " ")
 
   output <- list(
     objective.function = y[posMin],

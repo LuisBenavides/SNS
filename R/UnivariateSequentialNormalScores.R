@@ -10,6 +10,17 @@
 #' @param snsRaw logical. If \code{TRUE} return also the sns for each observation in vector \code{X}.
 #' @param omit.id vector. Elements of the vector are the id which are omitted in the analysis.
 #' @param auto.omit.alarm logical. Determine if OC signals are added (or not) to reference sample. By default is set to TRUE.
+#' @return Multiple output. Select by \code{output$}
+#' \itemize{
+#'   \item \code{coefficients}: list. Three elements: \code{n} the number of observation per group in \code{X}, \code{chart} the selected chart to perform the analysis, and \code{chart.par} the parameters of the selected chart.
+#'   \item \code{R}: vector. Ranks for the new observations (Monitoring sample).
+#'   \item \code{X}: vector. New observations (Monitoring sample) to obtain the SNS.
+#'   \item \code{Z}: vector. SNS of the \code{X} monitoring sample.
+#'   \item \code{X.id}: vector. The id of each column (variable) of the matrix \code{X}.
+#'   \item \code{UCL}: vector. Upper control limit for each group in \code{X}.
+#'   \item \code{LCL}: vector. Lower control limit for each group in \code{X}.
+#'   \item \code{scoring}: string. Selected score to evaluate SNS.
+#' }
 #' @export
 #' @examples
 #' # EXAMPLE CONDITIONAL WITH REFERENCE SAMPLE
@@ -59,10 +70,10 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
                 omit.id = NULL, auto.omit.alarm = TRUE) {
 
   if (is.null(theta) != is.null(Ftheta)) { # in case one is NULL and not the other
-    print("ERROR, theta or Ftheta missing")
+    stop("theta or Ftheta missing")
     return()
   } else if (length(X) != length(X.id)) {
-    print("ERROR, observations (X) have different length of the observations id (X.id)")
+    stop("observations (X) have different length of the observations id (X.id)")
     return()
   }
   omit.id.found = NULL
@@ -71,14 +82,14 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
     omit.id.found = which(ids %in% omit.id)
     omit.id.missing = omit.id[!(omit.id %in% ids)]
     if(!is.null(omit.id.missing) || length(omit.id.missing) > 0 ){
-      cat("WARNING, ids to omit not found:", omit.id.missing, "\n")
+      warning("ids to omit not found:", omit.id.missing, "\n")
     }
     if(auto.omit.alarm){
       auto.omit.alarm = FALSE
-      print("WARNING, auto.omit.alarm = FALSE make omit.id = NULL to enable.")
+      warning("auto.omit.alarm = FALSE make omit.id = NULL to enable.")
     }
     if(is.null(omit.id.found) || length(omit.id.found) == 0){
-      print("WARNING, omitted ids not found, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
+      warning("omitted ids not found, OC signals not added to reference sample (auto.omit.alarm = TRUE).")
     }
   }
   # detect the changes in the observation id vector
@@ -247,8 +258,10 @@ SNS <- function(X, X.id, Y = NULL, theta = NULL, Ftheta = NULL,
 #' @import graphics
 #' @export
 plot.SNS <- function(x, ...){
-  par(mar = c(6,6,4,2))
-
+  #Recommended margins
+  #par(mar = c(6,6,4,2))
+  args = list(...)
+  names.args = names(args)
   Z = x$Z
   n = x$n
   o.id = unique(x$X.id) # original id

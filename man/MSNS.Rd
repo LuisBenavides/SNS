@@ -42,9 +42,9 @@ MSNS(
   \item "overallmedian": overall median is sustracted from \code{X} and \code{Y}.
   \item "samplemean": mean from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
   \item "samplemedian": median from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
-  \item "referencemean": mean from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "referencemedian": median from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "constantvalue": a constant value is sustracted from \code{X} and \code{Y}.
+  \item "referencemean": mean from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "referencemedian": median from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "constantvalue": a constant value is subtracted from \code{X} and \code{Y}.
 }}
 
 \item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
@@ -66,6 +66,17 @@ MSNS(
 
 \item{auto.omit.alarm}{logical. Determine if OC signals are added (or not) to reference sample. By default is set to TRUE.}
 }
+\value{
+Multiple output. Select by \code{output$}
+\itemize{
+  \item \code{coefficients}: list. Two elements: \code{n} the number of observation per group in \code{X} and \code{chart} the selected chart to perform the analysis.
+  \item \code{X}: vector. New observations (Monitoring sample) to obtain the SNS.
+  \item \code{Z}: vector. SNS of the \code{X} monitoring sample.
+  \item \code{T2}: vector. T2 statistic for each of the groups in \code{X}.
+  \item \code{X.id}: vector. The id of each column (variable) of the matrix \code{X}.
+  \item \code{UCL}: vector. Upper control limit for each group in \code{X}.
+}
+}
 \description{
 Transform a matrix \code{X} into SNS using initial observations \code{Y} if available
 SNS follow the order of \code{X}.
@@ -77,7 +88,7 @@ If ties, average ranks are used.
 
 \examples{
 X = cbind(example91$X1, example91$X2)
-X.id = example91$X1.id
+X.id = example91$X.id
 msns = MSNS(X, X.id)
 }
 \seealso{

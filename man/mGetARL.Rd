@@ -85,14 +85,23 @@ number of cores in the computer,otherwise the code runs sequentially. Default \c
   \item "overallmedian": overall median is sustracted from \code{X} and \code{Y}.
   \item "samplemean": mean from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
   \item "samplemedian": median from corresponding group (\code{X} and \code{Y}) is sustracted from its corresponing vector.
-  \item "referencemean": mean from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "referencemedian": median from \code{Y} is sustracted from \code{X} and \code{Y}.
-  \item "constantvalue": a constant value is sustracted from \code{X} and \code{Y}.
+  \item "referencemean": mean from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "referencemedian": median from \code{Y} is subtracted from \code{X} and \code{Y}.
+  \item "constantvalue": a constant value is subtracted from \code{X} and \code{Y}.
 }}
 
 \item{constant}{scalar. Only used when the \code{alignment} is selected "constantvalue". Default \code{NULL}.}
 
 \item{absolute}{logical. If \code{TRUE}, the absolute aligned values are obtained. (Default \code{FALSE})}
+}
+\value{
+Multiple output. Select by \code{output$}
+\itemize{
+  \item \code{ARL}: scalar. Average Run Length for the \code{RL}s of all the \code{replicates}.
+  \item \code{SDRL}: scalar. Standard Deviation Run Length for the \code{RL} in all the \code{replicates}.
+  \item \code{MRL}: bolean. Median Run Length for the \code{RL}s of all the \code{replicates}.
+  \item \code{QRL}: vector. It retrieve the quantiles (0.05, 0.1, 0.2, 0.25, 0.5, 0.75, 0.8, 0.9, 0.95) for all the \code{RL}s.
+}
 }
 \description{
 Get the ARL \code{\link{getRL}}

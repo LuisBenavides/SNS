@@ -6,6 +6,13 @@
 #' @param targetMRL scalar. is the target ARL to calibrate. By default is set to NULL
 #' @param maxIter scalar. is a numeric. The maximum number of iteration to take the calibration before stops
 #' @note The argument \code{chart.par} in this function correspond to the initial parameters to start the calibration.
+#' @return Multiple output. Select by \code{output$}
+#' \itemize{
+#'   \item \code{objective.function}: scalar. The best solution obtained, in terms of the target ARL or MRL
+#'   \item \code{par.value}: scalar. Which parameter of the chart reach this best solution
+#'   \item \code{iter}: scalar. In which iteration is found the objective function.
+#'   \item \code{found}: boolean. Is TRUE if in the \code{maxIter} is reached the desired +-5% of target ARL, or MRL.
+#' }
 #' @export
 #' @examples
 #' n <- 2 # subgroup size
@@ -56,10 +63,10 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
                                   isFixed=FALSE, rounding.factor = NULL) {
   # Check for errors
   if (is.null(targetARL) && is.null(targetMRL)) {
-    print("ERROR: Target ARL or target mRL missing")
+    stop("Target ARL or target mRL missing")
     return()
   } else if (!is.null(targetARL) && !is.null(targetMRL)) {
-    print("ERROR: Two targets defined, delete one")
+    stop("Two targets defined, delete one")
     return()
   }
   #auxiliar variable to control when the interpolation start
@@ -122,7 +129,7 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
     if (abs(y[i] - target) <= 0.05 * target) {
       #if the obtained value is in its 5% from target
       #return the par.value and the obtained value
-      if (progress) cat("Convergence found with", name.par, "=", x[i], "--", name, "=", y[i], "\n", sep = " ")
+      if (progress) message("Convergence found with", name.par, "=", x[i], "--", name, "=", y[i], "\n", sep = " ")
       output <- list(
         objective.function = y[i],
         par.value = x[i],
@@ -191,7 +198,7 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
           #decrease p percent its value
           x[i + 1] <- x[i] * (1 - p)
         }
-        if (progress) cat("obtained=", y[i], " target=", target, " Change h=", x[i], " to h=", x[i + 1], "\n", sep = "")
+        if (progress) message("obtained=", y[i], " target=", target, " Change h=", x[i], " to h=", x[i + 1], "\n", sep = "")
       }
     }
     i <- i + 1
@@ -200,7 +207,7 @@ calibrateControlLimit <- function(targetARL = NULL, targetMRL = NULL,
   #if run out of itertations (target value not encountered)
   #get the par.value that has the closest value to the target
   posMin <- which.min(abs(target - y))
-  if (progress) cat("Best", name.par, "found ", x[posMin], "--", name, "=", y[posMin], "\n", sep = " ")
+  if (progress) message("Best", name.par, "found ", x[posMin], "--", name, "=", y[posMin], "\n", sep = " ")
 
   output <- list(
     objective.function = y[posMin],
